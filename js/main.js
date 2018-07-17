@@ -11,6 +11,12 @@ $.ui.autocomplete.filter = function (array, term) {
 
 };
 
+function onload() {
+
+
+    document.getElementById("location").value = geoplugin_city()+", "+geoplugin_countryName();
+
+}
 
 function initialIsCapital( word ){
     return word[0] !== word[0].toLowerCase();
@@ -76,7 +82,7 @@ $(function() {
         .on("keydown", function(event) {
 
             if (event.keyCode === 190) {
-                console.log("pressed dot");
+                //console.log("pressed dot");
                 $('#tags').autocomplete('close');
 
                 //break;

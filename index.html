@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/main.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script language="JavaScript" src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
@@ -18,7 +19,7 @@
 
 </head>
 
-<body>
+<body onload="onload()">
 
 
 
@@ -33,11 +34,11 @@
 
     <!-- Add your site or application content here -->
 
-    <br><br>
+    <br>
     <h1>Text Entry Assistive Cloud-Based Platform (Alpha 1.0)</h1>
 
-    <small><p style="text-align: center;">The primary goal of this alpha prototype prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry process, as well as improve user experience and overall user productivity.
-    </p></small>
+    <small style="text-align: center;">The primary goal of this alpha prototype prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry process, as well as improve user experience and overall user productivity.    </small>
+    <br><br>
 
     <table style="table-layout: fixed">
         <tr>
@@ -52,8 +53,8 @@
                     <table>
                         <tbody>
                         <tr>
-                            <td>Entry: </td>
-                            <td><input value=2 type="text" onkeyup="calculateTotals()" id="A-letter" style="width:20px"></td>
+                            <td>Your Location: <br>
+                                <input id="location" type="text" style="width:100%"></td>
                         </tr>
                     </table>
 
@@ -86,7 +87,7 @@
 
 
             </td>
-            <td style="width: 500px;vertical-align:top;padding: 25px;background: #eafff8;">
+            <td style="width: 650px;vertical-align:top;padding: 25px;background: #eafff8;">
 
 
                 <table>
@@ -94,7 +95,7 @@
                     <tr>
                         <td>
 
-                            <div id="config" style="width: 480px;background: #fffef2;padding: 5px;max-width: 480px;word-wrap:break-word;">
+                            <div id="config" style="width: 650px;background: #fffef2;padding: 5px;max-width: 480px;word-wrap:break-word;">
 
                                 <medium>
                                     Enter text into box below:
@@ -107,47 +108,18 @@
 
                             <div class="ui-widget">
                                 <label for="tags"></label>
-                                <textarea id="tags" style="color: black;font-size:18px;margin: 0px; width: 500px; height: 200px;"></textarea>
+                                <textarea id="tags" style="color: black;font-size:18px;margin: 0px; width: 650px; height: 200px;"></textarea>
                             </div>
 
 
-                                <label id="01Grid"></label>
-                                <br>
-                                <b>Block Tester:</b> X: <label id="xPos"></label> | Y: <label id="yPos"></label> |
-                                Block:
-                                <label id="pixColor"></label><br>
+
                             </div>
-                    </tr>
-                    </tbody>
+
+
                 </table>
 
 
-                <table>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <button id="calculate_button" class="button" style="vertical-align:middle"
-                                    onclick="calculate()"><span id="calcText">Solve </span></button>
-                        </td>
-                        <td>
-                            <button id="clean_button" class="buttonClean" type="submit" onclick="reload();test();">Reset
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
 
-                            <div style="word-wrap:break-word;min-width:200px;max-width:500px">
-                                <label id="result" style="color:red;"></label>
-                            </div>
-
-                            <button class="buttonStop" id="stop_button" type="submit" onclick="stopworker();">STOP
-                            </button>
-
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
             </td>
         </tr>
         <tr>
@@ -167,7 +139,7 @@
     <small style="position: fixed;bottom: 0;right: 0;padding:10px;color:black">
         ©
         <script>document.write(new Date().getFullYear())</script>
-        - Jozef Jarosciak - Open Source on <a href="https://github.com/JozefJarosciak/textentry/" target="_blank">GitHub</a> under <a href="https://github.com/JozefJarosciak/textentry/blob/master/LICENSE" target="_blank">AGPL-3.0</a> license.
+        - Jozef Jarosciak - Open Source on <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">GitHub</a> under <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform/blob/master/LICENSE.md" target="_blank">AGPL-3.0</a> license.
         <br>
     </small>
 
