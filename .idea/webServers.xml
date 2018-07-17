@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="be95c0d8-ded0-4759-ad1f-9b65c58c876b" name="jarosciak.com/textentry" url="http://www.jarosciak.com/textentry">
+        <fileTransfer host="13.59.206.31" port="22" privateKey="C:\amazon\amazon-aws-joe0-private-key.ppk" rootFolder="/var/www/html/jarosciak.com/textentry" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

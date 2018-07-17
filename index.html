@@ -1,0 +1,188 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Text Entry Assistive Cloud-Based Platform</title>
+    <meta name="description"
+          content="This is an alpha prototype of the text entry assistive technology. The primary goal of the prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions back to the end user. The project claim is that smart predictive technologies can speed up the text entry process, as well as improve user experience and overall productivity. UOL Dissertation Project by Jozef Jarosciak (H00058995). Licensing: GNU Affero General Public License v3.0.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
+
+</head>
+
+<body>
+
+
+
+<div class="content">
+
+
+    <!--[if lte IE 9]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a
+            href="https://browsehappy.com/">upgrade
+        your browser</a> to improve your experience and security.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+
+    <br><br>
+    <h1>Text Entry Assistive Cloud-Based Platform (Alpha 1.0)</h1>
+
+    <small><p style="text-align: center;">The primary goal of this alpha prototype prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry process, as well as improve user experience and overall user productivity.
+    </p></small>
+
+    <table style="table-layout: fixed">
+        <tr>
+            <td rowspan="2"
+                style="width: 192px;background: #fffef2;padding: 10px;max-width: 192px;word-wrap:break-word; vertical-align: top;text-align: left;">
+
+                <div id="configuration">
+
+                    <h4>1# Configuration</h4>
+
+
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>Entry: </td>
+                            <td><input value=2 type="text" onkeyup="calculateTotals()" id="A-letter" style="width:20px"></td>
+                        </tr>
+                    </table>
+
+
+
+                    <br>
+
+                    <h4>#2 Configuration</h4>
+
+                    <select id="calculation_Type">
+                        <option value="all">All Combinations [slow]</option>
+                        <option selected value="random">Random [faster]</option>
+                    </select>
+                    <br>
+
+                    <h4>Error Rate</h4>
+                    <select id="errorRate" onkeyup="calculateTotals()">
+                        <option selected value=0>0</option>
+                        <option value=4>4</option>
+                        <option value=8>8</option>
+                        <option value=12>12</option>
+                        <option value=16>16</option>
+                        <option value=20>20</option>
+                    </select>
+
+
+
+                    <br>
+                </div>
+
+
+            </td>
+            <td style="width: 500px;vertical-align:top;padding: 25px;background: #eafff8;">
+
+
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>
+
+                            <div id="config" style="width: 480px;background: #fffef2;padding: 5px;max-width: 480px;word-wrap:break-word;">
+
+                                <medium>
+                                    Enter text into box below:
+                                </medium>
+                            </div>
+
+                            <br>
+
+
+
+                            <div class="ui-widget">
+                                <label for="tags"></label>
+                                <textarea id="tags" style="color: black;font-size:18px;margin: 0px; width: 500px; height: 200px;"></textarea>
+                            </div>
+
+
+                                <label id="01Grid"></label>
+                                <br>
+                                <b>Block Tester:</b> X: <label id="xPos"></label> | Y: <label id="yPos"></label> |
+                                Block:
+                                <label id="pixColor"></label><br>
+                            </div>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <button id="calculate_button" class="button" style="vertical-align:middle"
+                                    onclick="calculate()"><span id="calcText">Solve </span></button>
+                        </td>
+                        <td>
+                            <button id="clean_button" class="buttonClean" type="submit" onclick="reload();test();">Reset
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            <div style="word-wrap:break-word;min-width:200px;max-width:500px">
+                                <label id="result" style="color:red;"></label>
+                            </div>
+
+                            <button class="buttonStop" id="stop_button" type="submit" onclick="stopworker();">STOP
+                            </button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle;padding: 20px;background: #fff2f9;">
+
+               <small> Dissertation Project by JJ(H00058995). Licensing: GNU Affero General Public License v3.0.</small>
+
+
+            </td>
+        </tr>
+
+    </table>
+
+
+    <br><br><br>
+    <hr style="text-align:right;width:364px;position: fixed;padding:10px;bottom: 0;right: 0;">
+    <small style="position: fixed;bottom: 0;right: 0;padding:10px;color:black">
+        ©
+        <script>document.write(new Date().getFullYear())</script>
+        - Jozef Jarosciak - Open Source on <a href="https://github.com/JozefJarosciak/textentry/" target="_blank">GitHub</a> under <a href="https://github.com/JozefJarosciak/textentry/blob/master/LICENSE" target="_blank">AGPL-3.0</a> license.
+        <br>
+    </small>
+
+
+
+    <noscript>
+        <div class="statcounter"><a title="Web Analytics
+Made Easy - StatCounter" href="http://statcounter.com/"
+                                    target="_blank"><img class="statcounter"
+                                                         src="//c.statcounter.com/11598702/0/b9249090/1/" alt="Web
+Analytics Made Easy - StatCounter"></a></div>
+    </noscript>
+    <!-- End of StatCounter Code for Default Guide -->
+
+
+</div>
+</body>
+</html>
