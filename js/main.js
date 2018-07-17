@@ -116,7 +116,7 @@ $(function() {
                         // console.log("JOE: " + extractLast(request.term) );
 
                         $.ajax({
-                            url: 'https://suggestqueries.google.com/complete/search?client=chrome&q='+lastWord,
+                            url: 'https://suggestqueries.google.com/complete/search?client=chrome&cp=1&q='+lastWord,
                             type: 'GET',
                             dataType: 'jsonp',
                             dataSrc: '0.Members',
