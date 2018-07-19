@@ -24,6 +24,39 @@ html {
  * Customize the background color to match your design.
  */
 
+.dropdown-menu {
+    border: 1px solid #ddd;
+    background-color: white;
+}
+
+.dropdown-menu li {
+    border-top: 1px solid #ddd;
+    padding: 2px 5px;
+}
+
+.dropdown-menu li:first-child {
+    border-top: none;
+}
+
+.dropdown-menu li:hover,
+.dropdown-menu .active {
+    background-color: #999;
+}
+
+/* SHOULD not modify */
+
+.dropdown-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-menu a:hover {
+    cursor: pointer;
+}
+
+
+
 ::selection {
     background: #b3d4fc;
     text-shadow: none;
@@ -87,10 +120,32 @@ h2 {
     height: 35px;
 }
 
+input[type="text"]
+{
+    font-size:14px;
+}
+
+option[type="text"] { font-size:14px; }
 
 h3 {
     color: #ff560d;
 }
+
+div#textentry {
+    width: 650px;
+    height: 200px;
+    max-height: 200px;
+    border: 2px solid #cccccc;
+    padding: 5px;
+    font-family: Tahoma, sans-serif;
+    background-position: bottom right;
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    font-size:14px;
+    resize: none;
+    overflow: auto;
+}
+
 
 
 /* ==========================================================================

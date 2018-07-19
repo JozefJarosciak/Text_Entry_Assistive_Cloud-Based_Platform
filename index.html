@@ -5,12 +5,20 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Text Entry Assistive Cloud-Based Platform</title>
     <meta name="description"
-          content="This is an alpha prototype of the text entry assistive technology. The primary goal of the prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions back to the end user. The project claim is that smart predictive technologies can speed up the text entry process, as well as improve user experience and overall productivity. UOL Dissertation Project by Jozef Jarosciak (H00058995). Licensing: GNU Affero General Public License v3.0.">
+          content="The primary goal of this alpha prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions to the end user.
+The project claims that the smart predictive technologies can speed up the text entry process, as well as improve user experience and overall user productivity.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+    <link rel="stylesheet" href="http://yandex.st/jquery/fancybox/2.1.4/jquery.fancybox.css">
+
     <link rel="stylesheet" href="css/main.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="http://yandex.st/jquery/fancybox/2.1.4/jquery.fancybox.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYiBxFUWWBDSjx5MLgfTZl6Icl7aPE16k"></script>
+
+
     <script language="JavaScript" src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -35,9 +43,9 @@
     <!-- Add your site or application content here -->
 
     <br>
-    <h1>Text Entry Assistive Cloud-Based Platform (Alpha 1.0)</h1>
+    <h4>Text Entry Assistive Cloud-Based Platform (Alpha 1.0)</h4>
 
-    <small style="text-align: center;">The primary goal of this alpha prototype prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry process, as well as improve user experience and overall user productivity.    </small>
+    <small style="text-align: center;">The primary goal of this alpha prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry process, as well as improve user experience and overall user productivity.    </small>
     <br><br>
 
     <table style="table-layout: fixed">
@@ -47,22 +55,30 @@
 
                 <div id="configuration">
 
-                    <h4>1# Configuration</h4>
+                    <h4>Approx. Location</h4>
 
 
                     <table>
                         <tbody>
                         <tr>
-                            <td>Your Location: <br>
-                                <input id="location" type="text" style="width:100%"></td>
+                                <input id="location" type="text" style="width:100%" disabled>
+                            <br>
+                            Lat:<input id="latit" type="text" style="width:30%" disabled>
+                             Long:<input id="longi" type="text" style="width:30%" disabled></td>
                         </tr>
+
+                        <input type="button" disabled id="fancybutton" value="Show Map" />
+                        <div style="width:0px;height:0px">
+                            <div id="map_canvas" style="width:100%;height:100%"></div>
+                        </div>
+
                     </table>
 
 
 
                     <br>
 
-                    <h4>#2 Configuration</h4>
+                    <h4>Configuration</h4>
 
                     <select id="calculation_Type">
                         <option value="all">All Combinations [slow]</option>
@@ -107,13 +123,15 @@
 
 
                             <div class="ui-widget">
-                                <label for="tags"></label>
-                                <textarea id="tags" style="color: black;font-size:18px;margin: 0px; width: 650px; height: 200px;"></textarea>
+
+                                <!–                   <div id='textentry' contentEditable='true'></div>
+
+                                <textarea id="myTextArea" cols="70" rows="15"></textarea>
+
                             </div>
 
 
 
-                            </div>
 
 
                 </table>
