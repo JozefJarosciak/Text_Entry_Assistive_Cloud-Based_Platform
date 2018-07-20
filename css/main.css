@@ -114,10 +114,12 @@ body {
 
 div#header {
     color: #2558ff;
-    border-bottom: 6px solid #ff560d;
+    border-bottom: 5px solid #ff560d;
     background-color: #eeeeee;
-    width: 600px;
+    width: 480px;
     height: 25px;
+    font-size: 20px;
+    text-align: center;
 }
 
 input[type="text"]
