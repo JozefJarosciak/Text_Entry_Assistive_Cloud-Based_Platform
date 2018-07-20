@@ -221,10 +221,8 @@ $(function() {
             select: function(event, ui) {
 
                 var str = document.getElementById("textentry").innerText;
-                console.log("IN BOX:" + str);
-                console.log("LAST WORD:" + lastWord);
 
-                str = str.substring(0, (str.length - lastWord.length));
+                str = str.substring(0, (str.length - lastWord.length)-1);
 
 
 
@@ -236,9 +234,12 @@ $(function() {
                     capitalizedResponse = (ui.item.value);
                 }
 
-                document.getElementById("textentry").innerText = str + capitalizedResponse + " " ;
+                if (str.endsWith(" ")===true) {
+                document.getElementById("textentry").innerText = str + capitalizedResponse  ;
+                } else {
+                    document.getElementById("textentry").innerText = str + " " + capitalizedResponse ;
+                }
 
-                //document.getElementById("textentry").value = str + capitalizedResponse + " " ;
                 $('#textentry').autocomplete('close');
                 placeCaretAtEnd(document.getElementById("textentry"));
 

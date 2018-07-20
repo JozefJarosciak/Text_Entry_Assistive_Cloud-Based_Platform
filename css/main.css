@@ -112,12 +112,12 @@ body {
     margin-left: 0px;
 }
 
-h2 {
+div#header {
     color: #2558ff;
     border-bottom: 6px solid #ff560d;
     background-color: #eeeeee;
-    width: 400px;
-    height: 35px;
+    width: 600px;
+    height: 25px;
 }
 
 input[type="text"]
@@ -127,9 +127,7 @@ input[type="text"]
 
 option[type="text"] { font-size:14px; }
 
-h3 {
-    color: #ff560d;
-}
+
 
 div#textentry {
     width: 650px;
