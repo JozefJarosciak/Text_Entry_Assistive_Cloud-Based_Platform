@@ -97,10 +97,10 @@ $(function() {
             }
 
             // $("label[for='helper']").text(word + " ==> " + word.length + " ==>" + word.indexOf("."));
-
-            var wordlist = word.split(/[^A-Za-z]/);
+            //console.log("Before:"+word)
+            var wordlist = word.split(/[^A-Za-z-']/);
             word = wordlist[wordlist.length - 1];
-
+            //console.log("After:"+word)
             return word;
 
         }
@@ -156,10 +156,6 @@ $(function() {
             source: function(request, response) {
                 // delegate back to autocomplete, but extract the last term
 
-                position: {
-                    offset: '20 4' // Shift 20px to the left, 4px down.
-                }
-
 
 
 
@@ -188,17 +184,20 @@ $(function() {
                             dataType: 'json',
                             dataSrc: '0.Members',
                             success: function (data) {
-                                //console.log(data );
+
 
                                   availableTags = data;
-                                //console.log(availableTags);
-                                    response($.ui.autocomplete.filter(availableTags, lastWord));
+                               // console.log(availableTags);
+                                   if (availableTags[0].indexOf(lastWord)>=0) {
+                                       console.log("ONE: " + lastWord);
+                                       response($.ui.autocomplete.filter(availableTags, lastWord));
+                                   } else {
+                                       console.log("TWO: " + lastWord);
+                                       response($.ui.autocomplete.filter(availableTags, ''));
+                                   }
 
-                            },
-                            error: function(jqXHR, textStatus, errorThrown){
-                                 // console.log(jqXHR);
-                                 // console.log(textStatus);
-                                 // console.log(errorThrown);
+
+                                availableTags = [];
                             }
                         });
 
@@ -224,7 +223,8 @@ $(function() {
 
                 str = str.substring(0, (str.length - lastWord.length)-1);
 
-
+              //  console.log("IN BOX:" + str);
+              //  console.log("LAST WORD:" + lastWord);
 
                 //  $("label[for='helper2']").text(str);
 
