@@ -1,46 +1,13 @@
-// Overrides the default autocomplete filter function to
-// search only from the beginning of the string
-
-/*
-$.ui.autocomplete.filter = function (array, term) {
-    var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
-
-    if (array) {
-        return $.grep(array, function (value) {
-            return matcher.test(value.label || value.value || value);
-        });
-    }
-
-};
-*/
-
 function onload() {
-
-   // document.getElementById('myTextArea').style.cursor = 'none';
     // location
     if (geoplugin_city() && geoplugin_countryName()) {
     document.getElementById("location").value = geoplugin_city()+", "+geoplugin_countryName();
     } else if (geoplugin_countryName()) {
         document.getElementById("location").value = geoplugin_countryName();
     }
-
     // latitude longitude
     document.getElementById("latit").value = geoplugin_latitude();
     document.getElementById("longi").value = geoplugin_longitude();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 function initialIsCapital( word ){
@@ -58,217 +25,180 @@ function lowerFirstLetter(string) {
 
 
 $(function() {
-    var availableTags;
-    var word;
-    var capitalizedResponse;
-    var lastWord;
+    google.maps.event.addDomListener(window, 'load', initialize);
+    document.getElementById('textentry').focus();
 
-    // Getter
-    var minLength = $(".selector").autocomplete("option", "minLength");
 
-    // Setter
-    $(".selector").autocomplete("option", "minLength", 2);
+    $("#textentry").keyup(function(e) {
+        var code = e.keyCode || e.which;
 
-    function split(val) {
-        // return val.split(/\s/mgi);
-        return val.split(/ \s*/);
+        lastWordFinal = "";
+        elementFinal = "";
+        lastWord = "";
+        element = "";
+        availableTags = [];
 
-    }
 
-    function extractLast(term) {
-        /*
+        textEntryContent = document.getElementById("textentry").innerText;
+        lastWord = getLastWord(textEntryContent);
+        console.log(lastWord);
 
-        var n = term.split(" ");
-        var word = n[n.length - 1];
+        if (lastWord.length>=3) {
 
-        */
-        word = split(term).pop();
+            $.ajax({
+                url: 'api/dictionary.php?q=' + lastWord,
+                type: 'GET',
+                dataType: 'json',
+                dataSrc: '0.Members',
+                success: function (data) {
+                    availableTags = data;
+                     console.log(availableTags);
 
-        if (word.length <= 2) {
-            n = term.split(".");
-            word = n[n.length - 1];
-            word = "-----";
-            $('#textentry').autocomplete('close');
-        } else if (word.length >= 2) {
 
-            if (word.includes(".") === true) {
-                word = word.replace(/\r?\n|\r/,"");
-                word = word.substring(word.indexOf(".") + 1);
-            }
+                    // WIRE INTO DB for Suggestions
+                    availableTags.forEach(function(element) {
+                        if (lastWord.length>=4) {
+                            var lastWordFinal = lastWord.toLowerCase();
+                            var elementFinal = element.toLowerCase();
+                            if (elementFinal.startsWith(lastWordFinal) === true) {
+                                console.log(elementFinal);
+                                pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length));
 
-            // $("label[for='helper']").text(word + " ==> " + word.length + " ==>" + word.indexOf("."));
-            //console.log("Before:"+word)
-            var wordlist = word.split(/[^A-Za-z-']/);
-            word = wordlist[wordlist.length - 1];
-            //console.log("After:"+word)
-            return word;
+                            }
+                        }
 
+                        if ((e.which == '32') || (e.which == '8') || (e.which == '13'))  {
+                            replaceSelectionWithHtml(" ");
+                            lastWordFinal = "";
+                            elementFinal = "";
+                            lastWord = "";
+                            element = "";
+                            availableTags = [];
+
+                        }
+
+
+                    });
+
+
+
+
+                    /*
+                    if (availableTags[0].indexOf(lastWord) >= 0) {
+                        console.log("ONE: " + lastWord);
+                        response($.ui.autocomplete.filter(availableTags, lastWord));
+                    } else {
+                        console.log("TWO: " + lastWord);
+                        response($.ui.autocomplete.filter(availableTags, ''));
+                    }
+                    //availableTags = [];
+                    */
+                }
+            });
         }
 
 
 
 
+
+
+
+    });
+
+
+    $("#textentry").keydown(function(e) {
+        var code = e.keyCode || e.which;
+        if (code == '9') {
+            e.preventDefault();
+            placeCaretAtEnd(document.getElementById("textentry"));
+            pasteHtmlAtCaret (" ");
+            return false;
+        }
+
+    });
+
+
+
+    function pasteHtmlAtCaret(html) {
+        var sel, range;
+        if (window.getSelection) {
+            // IE9 and non-IE
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                range = sel.getRangeAt(0);
+                range.deleteContents();
+
+                // Range.createContextualFragment() would be useful here but is
+                // only relatively recently standardized and is not supported in
+                // some browsers (IE9, for one)
+                var el = document.createElement("div");
+                el.innerHTML = html;
+                var frag = document.createDocumentFragment(),
+                    node, lastNode;
+                while ((node = el.firstChild)) {
+                    lastNode = frag.appendChild(node);
+                }
+                var firstNode = frag.firstChild;
+                range.insertNode(frag);
+            }
+        } else if ((sel = document.selection) && sel.type != "Control") {
+            // IE < 9
+            var originalRange = sel.createRange();
+            originalRange.collapse(true);
+            sel.createRange().pasteHTML(html);
+            range = sel.createRange();
+            range.setEndPoint("StartToStart", originalRange);
+            range.select();
+        }
     }
 
 
-    function getLastWord(str){
+    function getLastWord(str) {
         // strip punctuations
-        str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g,' ');
+        str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
+        str = str.replace(/(\r\n\t|\n|\r\t)/gm," ");
         // get the last word
-        return str.trim().split(' ').reverse()[0];
+        return str.trim().split(" ").reverse()[0];
     }
 
 
 
-    $("#textentry")
-    // don't navigate away from the field on tab when selecting an item
-        .on("keydown", function(event) {
+    function placeCaretAtEnd(el) {
+        el.focus();
+        if (typeof window.getSelection != "undefined" &&
+            typeof document.createRange != "undefined") {
+            var range = document.createRange();
+            range.selectNodeContents(el);
+            range.collapse(false);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+        } else if (typeof document.body.createTextRange != "undefined") {
+            var textRange = document.body.createTextRange();
+            textRange.moveToElementText(el);
+            textRange.collapse(false);
+            textRange.select();
+        }
+    }
 
-            if (event.keyCode === 190) {
-                //console.log("pressed dot");
-                $('#textentry').autocomplete('close');
 
-                //break;
-            } else if (event.keyCode === 32) {
-                //console.log("pressed dot");
-                $('#textentry').autocomplete('close');
-
-                //break;
-            } else {
-
-                if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
-                    event.preventDefault();
-                }
-
+    function replaceSelectionWithHtml(html) {
+        var range;
+        if (window.getSelection && window.getSelection().getRangeAt) {
+            range = window.getSelection().getRangeAt(0);
+            range.deleteContents();
+            var div = document.createElement("div");
+            div.innerHTML = html;
+            var frag = document.createDocumentFragment(), child;
+            while ( (child = div.firstChild) ) {
+                frag.appendChild(child);
             }
-
-
-
-
-
-
-        })
-        .autocomplete({
-            delay: 50,
-            minLength: 2,
-            multiline: true,
-            autoFocus: true,
-            source: function(request, response) {
-                // delegate back to autocomplete, but extract the last term
-
-
-
-
-                lastWord = extractLast(request.term);
-
-
-
-            /*
-                var sample = document.getElementById("textentry").value;
-                var words= sample.split(" ");
-                var lastButStr= words.pop();
-                var lastStr = words.pop(); // removed the last.
-                console.log(lastStr + " " + lastButStr  );
-            */
-
-
-
-                if (lastWord) {
-                    if (lastWord.length >= 2) {
-                        // console.log("JOE: " + extractLast(request.term) );
-                        var urlsuggest = 'api/dictionary.php?q='+lastWord;
-
-                        $.ajax({
-                            url: urlsuggest,
-                            type: 'GET',
-                            dataType: 'json',
-                            dataSrc: '0.Members',
-                            success: function (data) {
-
-
-                                  availableTags = data;
-                               // console.log(availableTags);
-                                   if (availableTags[0].indexOf(lastWord)>=0) {
-                                       console.log("ONE: " + lastWord);
-                                       response($.ui.autocomplete.filter(availableTags, lastWord));
-                                   } else {
-                                       console.log("TWO: " + lastWord);
-                                       response($.ui.autocomplete.filter(availableTags, ''));
-                                   }
-
-
-                                availableTags = [];
-                            }
-                        });
-
-
-
-
-
-                    }
-                }
-
-
-
-
-
-            },
-            focus: function() {
-                // prevent value inserted on focus
-                return false;
-            },
-            select: function(event, ui) {
-
-                var str = document.getElementById("textentry").innerText;
-
-                str = str.substring(0, (str.length - lastWord.length)-1);
-
-              //  console.log("IN BOX:" + str);
-              //  console.log("LAST WORD:" + lastWord);
-
-                //  $("label[for='helper2']").text(str);
-
-                if (initialIsCapital(lastWord) === true) {
-                    capitalizedResponse = capitalizeFirstLetter(ui.item.value);
-                } else {
-                    capitalizedResponse = (ui.item.value);
-                }
-
-                if (str.endsWith(" ")===true) {
-                document.getElementById("textentry").innerText = str + capitalizedResponse  ;
-                } else {
-                    document.getElementById("textentry").innerText = str + " " + capitalizedResponse ;
-                }
-
-                $('#textentry').autocomplete('close');
-                placeCaretAtEnd(document.getElementById("textentry"));
-
-
-
-
-
-
-
-                /*
-                var terms = split(this.value);
-
-
-
-                 // remove the current input
-                 terms.pop();
-
-                 // add the selected item
-                 terms.push(ui.item.value);
-
-                      $("label[for='helper2']").text(ui.item.value);
-
-                 // add placeholder to get the comma-and-space at the end
-                 terms.push("");
-                 this.value = terms.join(" ");
-                 */
-                return false;
-            }
-        });
+            range.insertNode(frag);
+        } else if (document.selection && document.selection.createRange) {
+            range = document.selection.createRange();
+            range.pasteHTML(html);
+        }
+    }
 });
 
 
@@ -341,23 +271,5 @@ function initialize() {
 }
 
 
-function placeCaretAtEnd(el) {
-    el.focus();
-    if (typeof window.getSelection != "undefined"
-        && typeof document.createRange != "undefined") {
-        var range = document.createRange();
-        range.selectNodeContents(el);
-        range.collapse(false);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(range);
-    } else if (typeof document.body.createTextRange != "undefined") {
-        var textRange = document.body.createTextRange();
-        textRange.moveToElementText(el);
-        textRange.collapse(false);
-        textRange.select();
-    }
-}
 
 
-google.maps.event.addDomListener(window, 'load', initialize);

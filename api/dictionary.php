@@ -18,7 +18,7 @@ if ($conn->connect_error) {
 //$sql = 'select * from textentry where word like "'.$q.'%" and word not like "'.$q.'"  order by LENGTH(word) ASC, rank ASC limit 10';
 //$sql = 'select * from textentry where word like "'.$q.'%" and word not like "'.$q.'"  order by rank ASC limit 3';
 
-$sql = 'select word from en_english479k where word like "'.$q.'%" and word not like "'.$q.'" order by -rank DESC limit 10';
+$sql = 'select word from en_english479k where word like "'.$q.'%" and word not like "'.$q.'" order by -rank DESC limit 1';
 
 
 $result = $conn->query($sql);
@@ -36,7 +36,7 @@ print json_encode($rows);
 } else {
 
 
-$sql = 'select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)>=CHAR_LENGTH("'.$q.'") order by CHAR_LENGTH(word) ASC, -rank DESC limit 10';
+$sql = 'select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)>=CHAR_LENGTH("'.$q.'") order by CHAR_LENGTH(word) ASC, -rank DESC limit 1';
 
 $result = $conn->query($sql);
 $rows = array();
