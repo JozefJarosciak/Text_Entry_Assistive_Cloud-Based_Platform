@@ -41,10 +41,10 @@ $(function() {
 
         textEntryContent = document.getElementById("textentry").innerText;
         lastWord = getLastWord(textEntryContent);
-        console.log(lastWord);
 
-        if (lastWord.length>=3) {
 
+            if (lastWord.length>=5) {
+            console.log("Last Word: "+lastWord);
             $.ajax({
                 url: 'api/dictionary.php?q=' + lastWord,
                 type: 'GET',
@@ -52,29 +52,32 @@ $(function() {
                 dataSrc: '0.Members',
                 success: function (data) {
                     availableTags = data;
-                     console.log(availableTags);
+                     //console.log(availableTags);
 
 
                     // WIRE INTO DB for Suggestions
                     availableTags.forEach(function(element) {
-                        if (lastWord.length>=4) {
+
                             var lastWordFinal = lastWord.toLowerCase();
                             var elementFinal = element.toLowerCase();
                             if (elementFinal.startsWith(lastWordFinal) === true) {
-                                console.log(elementFinal);
-                                pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length));
+                                console.log("Found: "+elementFinal);
 
+                                if (e.which != '9') {
+                                    pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
+                                }
+                                //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
                             }
-                        }
 
-                        if ((e.which == '32') || (e.which == '8') || (e.which == '13'))  {
+
+                        if ((e.which == '32') || (e.which == '8') || (e.which == '13') || (e.which == '188') || (e.which == '186') || (e.which == '190'))  {
                             replaceSelectionWithHtml(" ");
                             lastWordFinal = "";
                             elementFinal = "";
                             lastWord = "";
                             element = "";
                             availableTags = [];
-
+                            replaceSelectionWithHtml(" ");
                         }
 
 
@@ -110,8 +113,16 @@ $(function() {
         var code = e.keyCode || e.which;
         if (code == '9') {
             e.preventDefault();
+            //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerHTML.replace("<br>","");
+            //replaceSelectionWithHtml("");
             placeCaretAtEnd(document.getElementById("textentry"));
-            pasteHtmlAtCaret (" ");
+            //$('#textentry').trigger(jQuery.Event('keypress', { keycode: 39 }));
+         //  pasteHtmlAtCaret ("");
+            //placeCaretAtEnd(document.getElementById("textentry"));
+
+          //  $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
+//            $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
+
             return false;
         }
 
