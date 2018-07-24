@@ -63,7 +63,7 @@ $(function() {
                             if (elementFinal.startsWith(lastWordFinal) === true) {
                                 console.log("Found: "+elementFinal);
 
-                                if (e.which != '9') {
+                                if ((e.which != '9') && (e.which != '20')) {
                                     pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
                                 }
                                 //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
