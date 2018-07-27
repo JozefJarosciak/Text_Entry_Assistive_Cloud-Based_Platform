@@ -112,15 +112,74 @@ body {
     margin-left: 0px;
 }
 
+
+
+.containers {
+    width: 660px;
+    margin: 0 auto;
+    background: #F2F2F2;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 2px #fff inset,
+    -1px -1px 2px #fff inset;
+    border-radius: 3px/6px;
+    height: 148px;
+}
+
+.labelbox {
+    float: left;
+    border: 1px solid #ccc;
+    width: 218px;
+    height: 20px;
+    background: #f0f2b6;
+    text-align: center;
+    font-weight: bold;
+}
+
+#spelling {
+    float: left;
+    width: 213px;
+    height: 122px;
+    padding-left: 5px;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    pointer-events:none
+}
+
+#people {
+    float: left;
+    width: 213px;
+    height: 122px;
+    padding-left: 5px;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    pointer-events:none
+}
+
+#places {
+    float: left;
+    width: 213px;
+    height: 122px;
+    padding-left: 5px;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    pointer-events:none
+}
+
+
 div#header {
     color: #2558ff;
     border-bottom: 5px solid #ff560d;
     background-color: #eeeeee;
-    width: 480px;
+    width: 500px;
     height: 25px;
     font-size: 20px;
     text-align: center;
 }
+
+
 
 input[type="text"]
 {

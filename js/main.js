@@ -1,7 +1,7 @@
 function onload() {
     // location
     if (geoplugin_city() && geoplugin_countryName()) {
-    document.getElementById("location").value = geoplugin_city()+", "+geoplugin_countryName();
+        document.getElementById("location").value = geoplugin_city() + ", " + geoplugin_countryName();
     } else if (geoplugin_countryName()) {
         document.getElementById("location").value = geoplugin_countryName();
     }
@@ -10,7 +10,7 @@ function onload() {
     document.getElementById("longi").value = geoplugin_longitude();
 }
 
-function initialIsCapital( word ){
+function initialIsCapital(word) {
     return word[0] !== word[0].toLowerCase();
 }
 
@@ -23,14 +23,15 @@ function lowerFirstLetter(string) {
 }
 
 
-
-$(function() {
+$(function () {
     google.maps.event.addDomListener(window, 'load', initialize);
     document.getElementById('textentry').focus();
 
 
-    $("#textentry").keyup(function(e) {
+    $("#textentry").keyup(function (e) {
         var code = e.keyCode || e.which;
+
+       // document.getElementById("justText").innerText = document.getElementById('textentry').innerText;
 
         lastWordFinal = "";
         elementFinal = "";
@@ -43,8 +44,8 @@ $(function() {
         lastWord = getLastWord(textEntryContent);
 
 
-            if (lastWord.length>=5) {
-            console.log("Last Word: "+lastWord);
+        if (lastWord.length >= 5) {
+            console.log("Last Word: " + lastWord);
             $.ajax({
                 url: 'api/dictionary.php?q=' + lastWord,
                 type: 'GET',
@@ -52,38 +53,105 @@ $(function() {
                 dataSrc: '0.Members',
                 success: function (data) {
                     availableTags = data;
-                     //console.log(availableTags);
+                    //console.log(availableTags);
 
 
                     // WIRE INTO DB for Suggestions
-                    availableTags.forEach(function(element) {
+                    availableTags.forEach(function (element) {
 
-                            var lastWordFinal = lastWord.toLowerCase();
-                            var elementFinal = element.toLowerCase();
-                            if (elementFinal.startsWith(lastWordFinal) === true) {
-                                console.log("Found: "+elementFinal);
+                        var lastWordFinal = lastWord.toLowerCase();
+                        var elementFinal = element.toLowerCase();
+                        if (elementFinal.startsWith(lastWordFinal) === true) {
+                            console.log("Found: " + elementFinal);
 
-                                if ((e.which != '9') && (e.which != '20')) {
-                                    pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
-                                }
-                                //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
+                            if ((e.which != '9') && (e.which != '20')) {
+                                pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
                             }
+                            //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
+                        } else {
 
 
-                        if ((e.which == '32') || (e.which == '8') || (e.which == '13') || (e.which == '188') || (e.which == '186') || (e.which == '190'))  {
+
+
+
+
+                            // Try Spelling if the word is not found in DB
+                            //if ((e.which == '32') && (availableTags.length === 0)) {
+                             if (e.which == '32') {
+
+                                //
+                                // use Microsoft Spellcheck
+                                // console.log(lastWord)
+                                $.getJSON('api/bing-spellcheck.php?q=' + lastWord, function (result) {
+                                    //$.each(result, function(i, field){
+                                    //$("div").append(field + " ");
+                                    //pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
+                                    //});
+
+                                    //var parsed = JSON.parse(result);
+                                    //console.log("SECOND: " + result["flaggedTokens"][0]["suggestions"][0]["suggestion"]);
+
+
+
+
+                                    try{
+                                        var element2 = "";
+                                        console.log(result);
+                                        if (result["flaggedTokens"][0]["suggestions"][0]["suggestion"]) {
+
+                                            document.getElementById("spelling").innerHTML = "";
+
+                                            if (result["flaggedTokens"][0]["suggestions"][0]["suggestion"]) {
+                                                element2 = result["flaggedTokens"][0]["suggestions"][0]["suggestion"];
+                                                if (lastWord.toLowerCase().indexOf(element2) < 0) {
+                                                    document.getElementById("spelling").innerHTML = lastWord + " &#x2192; <b>" + element2 + "</b>"
+                                                }
+                                            }
+
+                                            if (result["flaggedTokens"][0]["suggestions"][1]["suggestion"]) {
+                                                element2 = result["flaggedTokens"][0]["suggestions"][1]["suggestion"];
+                                                if (lastWord.toLowerCase().indexOf(element2) < 0) {
+                                                    document.getElementById("spelling").innerHTML = document.getElementById("spelling").innerHTML + "<br>" + lastWord + " &#x2192; <b>" + element2 + "</b>"
+                                                }
+                                            }
+
+                                            if (result["flaggedTokens"][0]["suggestions"][2]["suggestion"]) {
+                                                element2 = result["flaggedTokens"][0]["suggestions"][2]["suggestion"];
+                                                if (lastWord.toLowerCase().indexOf(element2) < 0) {
+                                                    document.getElementById("spelling").innerHTML = document.getElementById("spelling").innerHTML + "<br>" + lastWord + " &#x2192; <b>" + element2 + "</b>"
+                                                }
+                                            }
+
+                                            //console.log("RESULT: " + element);
+                                        }
+
+                                    }catch(e){
+                                        //console.log("YO",e)
+                                    }
+
+
+
+
+                                    //pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + element + "</span>");
+                                    //flaggedTokens["0"].suggestions["0"].suggestion
+
+
+                                });
+                        }
+
+
+                        }
+
+                        if ((e.which == '32') || (e.which == '8') || (e.which == '13') || (e.which == '188') || (e.which == '186') || (e.which == '190')) {
                             replaceSelectionWithHtml(" ");
                             lastWordFinal = "";
                             elementFinal = "";
-                            lastWord = "";
+                            //lastWord = "";
                             element = "";
                             availableTags = [];
                             replaceSelectionWithHtml(" ");
                         }
-
-
                     });
-
-
 
 
                     /*
@@ -98,18 +166,17 @@ $(function() {
                     */
                 }
             });
+
+
+
+
         }
-
-
-
-
-
 
 
     });
 
 
-    $("#textentry").keydown(function(e) {
+    $("#textentry").keydown(function (e) {
         var code = e.keyCode || e.which;
         if (code == '9') {
             e.preventDefault();
@@ -117,17 +184,18 @@ $(function() {
             //replaceSelectionWithHtml("");
             placeCaretAtEnd(document.getElementById("textentry"));
             //$('#textentry').trigger(jQuery.Event('keypress', { keycode: 39 }));
-         //  pasteHtmlAtCaret ("");
+            //  pasteHtmlAtCaret ("");
             //placeCaretAtEnd(document.getElementById("textentry"));
 
-          //  $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
+            //  $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
 //            $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
 
             return false;
         }
 
-    });
 
+
+    });
 
 
     function pasteHtmlAtCaret(html) {
@@ -167,11 +235,10 @@ $(function() {
     function getLastWord(str) {
         // strip punctuations
         str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
-        str = str.replace(/(\r\n\t|\n|\r\t)/gm," ");
+        str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
         // get the last word
         return str.trim().split(" ").reverse()[0];
     }
-
 
 
     function placeCaretAtEnd(el) {
@@ -201,7 +268,7 @@ $(function() {
             var div = document.createElement("div");
             div.innerHTML = html;
             var frag = document.createDocumentFragment(), child;
-            while ( (child = div.firstChild) ) {
+            while ((child = div.firstChild)) {
                 frag.appendChild(child);
             }
             range.insertNode(frag);
@@ -219,7 +286,7 @@ function initialize() {
             zoom: 14,
             center: new goo.LatLng(geoplugin_latitude(), geoplugin_longitude()),
             mapTypeId: goo.MapTypeId.ROADMAP,
-            disableDefaultUI:true
+            disableDefaultUI: true
         },
         map = new goo.Map(document.getElementById('map_canvas'),
             mapOptions),
@@ -227,7 +294,6 @@ function initialize() {
             map: map,
             position: map.getCenter()
         });
-
 
 
     $('#fancybutton')
@@ -241,7 +307,7 @@ function initialize() {
                 {
                     width: 600,
                     height: 400,
-                    margin:50,
+                    margin: 50,
                     autoSize: false,
                     afterShow: function (a, z) {
                         map.setOptions({
@@ -275,8 +341,6 @@ function initialize() {
                 });
 
         });
-
-
 
 
 }

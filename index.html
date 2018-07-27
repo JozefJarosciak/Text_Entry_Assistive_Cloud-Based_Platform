@@ -30,7 +30,6 @@ The project claims that the smart predictive technologies can speed up the text 
 <body onload="onload()" spellcheck="false">
 
 
-
 <div class="content">
 
 
@@ -44,8 +43,10 @@ The project claims that the smart predictive technologies can speed up the text 
 
     <br>
     <div id="header"><b>Text Entry Assistive Cloud-Based Platform (1.1)</b></div>
-    <small style="text-align: center;">The primary goal of this alpha prototype is to create a real-time text analysis engine that based on inspection of entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry process, as well as improve user experience and overall user productivity.
-     <br>   <b>Supported Browsers: </b>Google Chrome Version 67 and higher.
+    <small style="text-align: center;">The primary goal of this alpha prototype is to create a real-time text analysis engine that based on inspection of
+        entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry
+        process, as well as improve user experience and overall user productivity.
+        <br> <b>Supported Browsers: </b>Google Chrome Version 67 and higher.
     </small>
     <br><br>
 
@@ -62,13 +63,13 @@ The project claims that the smart predictive technologies can speed up the text 
                     <table>
                         <tbody>
                         <tr>
-                                <input id="location" type="text" style="width:100%" disabled>
+                            <input id="location" type="text" style="width:100%" disabled>
                             <br>
                             Lat:<input id="latit" type="text" style="width:30%" disabled>
-                             Long:<input id="longi" type="text" style="width:30%" disabled></td>
+                            Long:<input id="longi" type="text" style="width:30%" disabled></td>
                         </tr>
 
-                        <input type="button" disabled id="fancybutton" value="Show Map" />
+                        <input type="button" disabled id="fancybutton" value="Show Map"/>
                         <div style="width:0px;height:0px">
                             <div id="map_canvas" style="width:100%;height:100%"></div>
                         </div>
@@ -97,7 +98,6 @@ The project claims that the smart predictive technologies can speed up the text 
                     </select>
 
 
-
                     <br>
                 </div>
 
@@ -111,30 +111,60 @@ The project claims that the smart predictive technologies can speed up the text 
                     <tr>
                         <td>
 
-                            <div id="config" style="width: 650px;background: #fffef2;padding: 5px;max-width: 480px;word-wrap:break-word;">
+                            <br><b>Enter text into box below:</b>
 
-                                <medium>
-                                    Enter text into box below:
-                                </medium>
-                            </div>
 
                             <br>
 
 
-
                             <div class="ui-widget">
 
-                                                  <div id="textentry" contentEditable="true"></div>
-
+                                <div id="textentry" contentEditable="true"></div>
+                                <br>
+                                <!--<lable id="justText" style="visibility:hidden"></lable>-->
 
                             </div>
 
 
 
+                               <br><b>Real-Time Text Analysis:</b><br>
+
+
+                            <div>
+                                <div class="labelbox">Detected Spelling Errors
+
+                                </div>
+
+                                <div class="labelbox">People
+
+                                </div>
+
+                                <div class="labelbox">Places
+
+                                </div>
+
+
+
+
+                                <div id="spelling">
+
+                                </div>
+
+                                <div id="people">
+
+                                </div>
+
+                                <div id="places">
+
+                                </div>
+                            </div>
+
+
+
+                            <lable id="textAnalysis"></lable>
 
 
                 </table>
-
 
 
             </td>
@@ -142,7 +172,7 @@ The project claims that the smart predictive technologies can speed up the text 
         <tr>
             <td style="vertical-align:middle;padding: 20px;background: #fff2f9;">
 
-               <small> Dissertation Project by JJ(H00058995). Licensing: GNU Affero General Public License v3.0.</small>
+                <small> Dissertation Project by JJ(H00058995). Licensing: GNU Affero General Public License v3.0.</small>
 
 
             </td>
@@ -156,10 +186,10 @@ The project claims that the smart predictive technologies can speed up the text 
     <small style="position: fixed;bottom: 0;right: 0;padding:10px;color:black">
         ©
         <script>document.write(new Date().getFullYear())</script>
-        - Jozef Jarosciak - Open Source on <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">GitHub</a> under <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform/blob/master/LICENSE.md" target="_blank">AGPL-3.0</a> license.
+        - Jozef Jarosciak - Open Source on <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">GitHub</a>
+        under <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform/blob/master/LICENSE.md" target="_blank">AGPL-3.0</a> license.
         <br>
     </small>
-
 
 
     <noscript>

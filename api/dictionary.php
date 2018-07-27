@@ -31,7 +31,9 @@ if ($result->num_rows > 0) {
 print json_encode($rows);
 
 
-} else {
+
+}
+ else {
 
 
 $sql = 'select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)>=CHAR_LENGTH("'.$q.'") and word not like "%-%" order by CHAR_LENGTH(word) ASC, -rank DESC limit 1';
