@@ -1,3 +1,8 @@
+<?php
+// Google Api key is in the below file in variable: $google_maps_api
+include("api/credentials.php");
+
+?>
 <!doctype html>
 <html class="no-js" lang="">
 <head>
@@ -14,12 +19,11 @@ The project claims that the smart predictive technologies can speed up the text 
     <link rel="stylesheet" href="css/main.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
     <script src="http://yandex.st/jquery/fancybox/2.1.4/jquery.fancybox.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYiBxFUWWBDSjx5MLgfTZl6Icl7aPE16k"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=<?php echo $google_maps_api;?>"></script>
 
 
-    <script language="JavaScript" src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
+    <script src="http://www.geoplugin.net/javascript.gp" type="text/javascript"></script>
     <script src="js/main.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
@@ -131,7 +135,7 @@ The project claims that the smart predictive technologies can speed up the text 
 
 
                             <div>
-                                <div class="labelbox">Detected Spelling Errors
+                                <div class="labelbox">Spelling Errors
 
                                 </div>
 

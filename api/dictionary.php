@@ -1,11 +1,13 @@
 <?php
 $q = htmlspecialchars(mb_strtolower(($_GET["q"])));
 
-//$q = end(explode(PHP_EOL,$q));$q = end(explode('.',$q));
 
-//$q = end(preg_split('/[^a-z0-9]/i', $q));
+$servername = "localhost";
+$dbname = "dictionaries";
 
-include('connectdb.php');
+// this file has reference to '$username' and '$password' variables that needs to hold the user and password to your MySQL database
+include('credentials.php');
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection

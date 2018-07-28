@@ -100,6 +100,7 @@ $(function () {
                                         if (result["flaggedTokens"][0]["suggestions"][0]["suggestion"]) {
 
                                             document.getElementById("spelling").innerHTML = "";
+                                            lastWord = lastWord.toLowerCase();
 
                                             if (result["flaggedTokens"][0]["suggestions"][0]["suggestion"]) {
                                                 element2 = result["flaggedTokens"][0]["suggestions"][0]["suggestion"];
