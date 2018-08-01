@@ -115,7 +115,7 @@ The project claims that the smart predictive technologies can speed up the text 
                     <tr>
                         <td>
 
-                            <br><b>Enter text into box below:</b>
+                            <br><b>Enter text into box below!</b> (use TAB key to utilize provided real-time suggestions)
 
 
                             <br>
@@ -131,15 +131,16 @@ The project claims that the smart predictive technologies can speed up the text 
 
 
 
-                               <br><b>Real-Time Text Analysis:</b><br>
+                            <br><br>
+                               <b>Real-Time Text Analysis:</b>
 
 
                             <div>
-                                <div class="labelbox">Spelling Errors
+                                <div class="labelbox">Spelling Corrections
 
                                 </div>
 
-                                <div class="labelbox">People
+                                <div class="labelbox">Suggestions
 
                                 </div>
 

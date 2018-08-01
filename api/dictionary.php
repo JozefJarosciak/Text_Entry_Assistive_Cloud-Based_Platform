@@ -38,7 +38,9 @@ print json_encode($rows);
  else {
 
 
-$sql = 'select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)>=CHAR_LENGTH("'.$q.'") and word not like "%-%" order by CHAR_LENGTH(word) ASC, -rank DESC limit 1';
+//$sql = 'select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)=CHAR_LENGTH("'.$q.'") UNION select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)=CHAR_LENGTH("'.$q.'")+1 UNION select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)=CHAR_LENGTH("'.$q.'")-1 order by -rank DESC limit 6';
+
+     $sql = 'SELECT * FROM en_english479k WHERE word <> "'.$q.'" and SOUNDEX(word) like SOUNDEX("'.$q.'") and levenshtein(word, "'.$q.'")<=2 order by -rank desc, -levenshtein(word, "'.$q.'") desc limit 1';
 
 $result = $conn->query($sql);
 $rows = array();
@@ -48,13 +50,15 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $rows[] = strtolower ($row["word"]);
     }
+
+    /*
    usort($rows, function ($a, $b) use ($userInput) {
             $levA = levenshtein($userInput, $a);
             $levB = levenshtein($userInput, $b);
 
             return $levA === $levB ? 0 : ($levA > $levB ? 1 : -1);
         });
-
+*/
 
          print json_encode($rows);
 

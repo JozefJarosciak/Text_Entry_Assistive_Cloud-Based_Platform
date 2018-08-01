@@ -27,6 +27,12 @@ $(function () {
     google.maps.event.addDomListener(window, 'load', initialize);
     document.getElementById('textentry').focus();
 
+    var foundSpellCheck = "";
+    var lastWord = "";
+    var lastWordFinal = "";
+    var elementFinal = "";
+    var element = "";
+    var availableTags = [];
 
     $("#textentry").keyup(function (e) {
         var code = e.keyCode || e.which;
@@ -38,7 +44,6 @@ $(function () {
         lastWord = "";
         element = "";
         availableTags = [];
-
 
         textEntryContent = document.getElementById("textentry").innerText;
         lastWord = getLastWord(textEntryContent);
@@ -61,18 +66,35 @@ $(function () {
 
                         var lastWordFinal = lastWord.toLowerCase();
                         var elementFinal = element.toLowerCase();
+
+                        // If correct word found in the DB
                         if (elementFinal.startsWith(lastWordFinal) === true) {
                             console.log("Found: " + elementFinal);
 
                             if ((e.which != '9') && (e.which != '20')) {
                                 pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
+                                //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
                             }
-                            //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
+
                         } else {
 
+                            // If misspelling found in the DB
+                            if (elementFinal.length >0) {
+                            if ((e.which != '9') && (e.which != '20')) {
+                                console.log("MYSQL Typo Replacement Found: " + elementFinal);
+
+                                foundSpellCheck = elementFinal;
+                                if (initialIsCapital(lastWord)===true) {
+                                    foundSpellCheck = capitalizeFirstLetter(foundSpellCheck);
+                                }
+                                pasteHtmlAtCaret("<span id='hint'>?" + foundSpellCheck + "</span>");
 
 
 
+                                //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,elementFinal).replace(/(?:\r\n|\r|\n)/g, '<br>');
+                                //placeCaretAtEnd(document.getElementById("textentry"));
+                            }
+                            } else {
 
 
                             // Try Spelling if the word is not found in DB
@@ -100,26 +122,31 @@ $(function () {
                                         if (result["flaggedTokens"][0]["suggestions"][0]["suggestion"]) {
 
                                             document.getElementById("spelling").innerHTML = "";
-                                            lastWord = lastWord.toLowerCase();
+                                          //  lastWord = lastWord.toLowerCase();
 
-                                            if (result["flaggedTokens"][0]["suggestions"][0]["suggestion"]) {
-                                                element2 = result["flaggedTokens"][0]["suggestions"][0]["suggestion"];
-                                                if (lastWord.toLowerCase().indexOf(element2) < 0) {
-                                                    document.getElementById("spelling").innerHTML = lastWord + " &#x2192; <b>" + element2 + "</b>"
-                                                }
-                                            }
+                                            var numofSpellSuggestions = result["flaggedTokens"][0]["suggestions"].length;
 
-                                            if (result["flaggedTokens"][0]["suggestions"][1]["suggestion"]) {
-                                                element2 = result["flaggedTokens"][0]["suggestions"][1]["suggestion"];
-                                                if (lastWord.toLowerCase().indexOf(element2) < 0) {
-                                                    document.getElementById("spelling").innerHTML = document.getElementById("spelling").innerHTML + "<br>" + lastWord + " &#x2192; <b>" + element2 + "</b>"
-                                                }
-                                            }
+                                            for (i = 0; i < numofSpellSuggestions; i++) {
 
-                                            if (result["flaggedTokens"][0]["suggestions"][2]["suggestion"]) {
-                                                element2 = result["flaggedTokens"][0]["suggestions"][2]["suggestion"];
+                                                element2 = result["flaggedTokens"][0]["suggestions"][i]["suggestion"];
                                                 if (lastWord.toLowerCase().indexOf(element2) < 0) {
-                                                    document.getElementById("spelling").innerHTML = document.getElementById("spelling").innerHTML + "<br>" + lastWord + " &#x2192; <b>" + element2 + "</b>"
+                                                    if (i==0) {
+                                                        document.getElementById("spelling").innerHTML = document.getElementById("spelling").innerHTML + lastWord + " &#x2192; <b>" + element2 + "</b>"
+
+                                                        if (initialIsCapital(lastWord)===true) {
+                                                            element2 = capitalizeFirstLetter(element2);
+                                                        }
+
+                                                        document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,element2).replace(/(?:\r\n|\r|\n)/g, '<br>');
+                                                        //document.getElementById("textentry").innerHTML = element2;
+                                                        placeCaretAtEnd(document.getElementById("textentry"));
+                                                        console.log(lastWord + " -> " + element2);
+                                                        //replacer(lastWord,element2);
+
+                                                    } else {
+                                                       // document.getElementById("spelling").innerHTML = document.getElementById("spelling").innerHTML + "<br>" + lastWord + " &#x2192; <b>" + element2 + "</b>"
+                                                    }
+
                                                 }
                                             }
 
@@ -139,7 +166,7 @@ $(function () {
 
                                 });
                         }
-
+                            }
 
                         }
 
@@ -179,7 +206,17 @@ $(function () {
 
     $("#textentry").keydown(function (e) {
         var code = e.keyCode || e.which;
+        // If TAB is pressed
         if (code == '9') {
+            // if typo correction found in MySQL
+            console.log(lastWord + " -> " + foundSpellCheck);
+            if (foundSpellCheck) {
+                replaceSelectionWithHtml("");
+                document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,foundSpellCheck).replace(/(?:\r\n|\r|\n)/g, '<br>');
+                placeCaretAtEnd(document.getElementById("textentry"));
+                foundSpellCheck = "";
+            } else {
+            // just offer prediction for word
             e.preventDefault();
             //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerHTML.replace("<br>","");
             //replaceSelectionWithHtml("");
@@ -190,6 +227,7 @@ $(function () {
 
             //  $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
 //            $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
+            }
 
             return false;
         }
@@ -197,6 +235,7 @@ $(function () {
 
 
     });
+
 
 
     function pasteHtmlAtCaret(html) {
