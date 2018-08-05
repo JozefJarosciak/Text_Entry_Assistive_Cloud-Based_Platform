@@ -80,20 +80,25 @@ $(function () {
 
                             // If misspelling found in the DB
                             if (elementFinal.length >0) {
-                            if ((e.which != '9') && (e.which != '20')) {
-                                console.log("MYSQL Typo Replacement Found: " + elementFinal);
+                                if (e.which == '32') {
+                                   // if ((e.which != '9') && (e.which != '20')) {
 
-                                foundSpellCheck = elementFinal;
-                                if (initialIsCapital(lastWord)===true) {
-                                    foundSpellCheck = capitalizeFirstLetter(foundSpellCheck);
+                                        foundSpellCheck = elementFinal;
+
+                                    console.log("MYSQL Typo Replacement Found: " + foundSpellCheck);
+
+                                    if (initialIsCapital(lastWord) === true) {
+                                        foundSpellCheck = capitalizeFirstLetter(foundSpellCheck);
+                                    }
+                                    replaceSelectionWithHtml(" "); replaceSelectionWithHtml(" ");
+                                    pasteHtmlAtCaret("<span id=\"hint\">?" + foundSpellCheck + "</span>");
+
+                                        //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,elementFinal).replace(/(?:\r\n|\r|\n)/g, '<br>');
+                                        //placeCaretAtEnd(document.getElementById("textentry"));
+                                   // }
+                                    resetVars();
                                 }
-                                pasteHtmlAtCaret("<span id='hint'>?" + foundSpellCheck + "</span>");
 
-
-
-                                //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,elementFinal).replace(/(?:\r\n|\r|\n)/g, '<br>');
-                                //placeCaretAtEnd(document.getElementById("textentry"));
-                            }
                             } else {
 
 
@@ -170,13 +175,9 @@ $(function () {
 
                         }
 
-                        if ((e.which == '32') || (e.which == '8') || (e.which == '13') || (e.which == '188') || (e.which == '186') || (e.which == '190')) {
+                        if ((code == '8') || (code == '13') || (code == '188') || (code == '186') || (code == '190')) {
                             replaceSelectionWithHtml(" ");
-                            lastWordFinal = "";
-                            elementFinal = "";
-                            //lastWord = "";
-                            element = "";
-                            availableTags = [];
+                            resetVars();
                             replaceSelectionWithHtml(" ");
                         }
                     });
@@ -236,6 +237,15 @@ $(function () {
 
     });
 
+
+
+    function resetVars() {
+        lastWordFinal = "";
+        elementFinal = "";
+        //lastWord = "";
+        element = "";
+        availableTags = [];
+    }
 
 
     function pasteHtmlAtCaret(html) {

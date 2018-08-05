@@ -171,6 +171,15 @@ The project claims that the smart predictive technologies can speed up the text 
 
                 </table>
 
+                <br> <br>
+                <b>Current Functionality:</b>
+                <ul>
+
+                    <li>Word Predictions (DB of 474k words)</li>
+                    <li>Spell Checking powered by MySQL SOUNDEX and Levenshtein distance algorithms</li>
+                    <li>Spell Checking powered by BING Spell Check API</li>
+                    <li><b>IN PROGRESS:</b> Automatic suggestions powered by Microsoft Bing Autosuggest API</li>
+                </ul>
 
             </td>
         </tr>
