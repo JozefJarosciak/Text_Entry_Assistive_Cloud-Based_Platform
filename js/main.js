@@ -8,6 +8,7 @@ function onload() {
     // latitude longitude
     document.getElementById("latit").value = geoplugin_latitude();
     document.getElementById("longi").value = geoplugin_longitude();
+
 }
 
 function initialIsCapital(word) {
@@ -24,33 +25,41 @@ function lowerFirstLetter(string) {
 
 
 $(function () {
-    google.maps.event.addDomListener(window, 'load', initialize);
+
     document.getElementById('textentry').focus();
-
-    var foundSpellCheck = "";
+    google.maps.event.addDomListener(window, 'load', initialize);
     var lastWord = "";
-    var lastWordFinal = "";
     var elementFinal = "";
-    var element = "";
-    var availableTags = [];
-
+    var lastWordFinal = "";
     $("#textentry").keyup(function (e) {
         var code = e.keyCode || e.which;
 
+
+
        // document.getElementById("justText").innerText = document.getElementById('textentry').innerText;
 
-        lastWordFinal = "";
-        elementFinal = "";
-        lastWord = "";
-        element = "";
-        availableTags = [];
-
         textEntryContent = document.getElementById("textentry").innerText;
+        console.log("Last 1: " + textEntryContent);
+        textEntryContent = textEntryContent.replace(/.*\./,"").replace(/.*\,/,"").replace(/.*\;/,"");
+        console.log("Last 2: " + textEntryContent);
+
+        /*
+        if (e.which == '32') {
+            textEntryContent = textEntryContent.match(/\S*$/)[0];
+            console.log("Last 3: " + textEntryContent);
+        }
+        */
+
         lastWord = getLastWord(textEntryContent);
-
-
+        console.log("Last 4: " + lastWord);
+        //lastWord = getLastWord(textEntryContent).match(/\S*$/)[0];
+      //  lastWord = lastWord.replace(/.*\./,"").trim();
+        console.log("Last Word: " + lastWord);
+        foundSpellCheck = "";
         if (lastWord.length >= 5) {
-            console.log("Last Word: " + lastWord);
+
+
+
             $.ajax({
                 url: 'api/dictionary.php?q=' + lastWord,
                 type: 'GET',
@@ -64,26 +73,32 @@ $(function () {
                     // WIRE INTO DB for Suggestions
                     availableTags.forEach(function (element) {
 
-                        var lastWordFinal = lastWord.toLowerCase();
-                        var elementFinal = element.toLowerCase();
+                        lastWordFinal = lastWord.toLowerCase();
+                        elementFinal = element.toLowerCase();
 
                         // If correct word found in the DB
                         if (elementFinal.startsWith(lastWordFinal) === true) {
-                            console.log("Found: " + elementFinal);
+                            if (e.which != '32') {
+                                console.log("Found: " + elementFinal);
 
-                            if ((e.which != '9') && (e.which != '20')) {
-                                pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
-                                //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
+                                if ((e.which != '9') && (e.which != '20')) {
+                                    pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
+                                    //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
+                                }
                             }
-
                         } else {
 
                             // If misspelling found in the DB
                             if (elementFinal.length >0) {
-                                if (e.which == '32') {
-                                   // if ((e.which != '9') && (e.which != '20')) {
 
-                                        foundSpellCheck = elementFinal;
+                                if (e.which == '32') {
+                                   // console.log("elementFinal: " + lastWordFinal);
+                                    //lastWordFinal = lastWordFinal.match(/\S*$/)[0];
+                                    //console.log("Last 5: " + lastWordFinal);
+
+                                   // if ((e.which != '9') && (e.which != '20')) {
+                                    foundSpellCheck = elementFinal;
+
 
                                     console.log("MYSQL Typo Replacement Found: " + foundSpellCheck);
 
@@ -96,7 +111,7 @@ $(function () {
                                         //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,elementFinal).replace(/(?:\r\n|\r|\n)/g, '<br>');
                                         //placeCaretAtEnd(document.getElementById("textentry"));
                                    // }
-                                    resetVars();
+
                                 }
 
                             } else {
@@ -105,7 +120,7 @@ $(function () {
                             // Try Spelling if the word is not found in DB
                             //if ((e.which == '32') && (availableTags.length === 0)) {
                              if (e.which == '32') {
-
+                              //   elementFinal=""; resetVars(); lastWordFinal = ""; lastWord = "";
                                 //
                                 // use Microsoft Spellcheck
                                 // console.log(lastWord)
@@ -170,6 +185,7 @@ $(function () {
 
 
                                 });
+                                 lastWord = "";
                         }
                             }
 
@@ -177,8 +193,14 @@ $(function () {
 
                         if ((code == '8') || (code == '13') || (code == '188') || (code == '186') || (code == '190')) {
                             replaceSelectionWithHtml(" ");
-                            resetVars();
                             replaceSelectionWithHtml(" ");
+                            resetVars(); lastWord="";
+                            elementFinal = "";
+
+                            if (code == '190') {
+                            console.log("Pressed:.");
+                                elementFinal=""; resetVars(); lastWordFinal = ""; lastWord = "";
+                            }
                         }
                     });
 
@@ -217,18 +239,13 @@ $(function () {
                 placeCaretAtEnd(document.getElementById("textentry"));
                 foundSpellCheck = "";
             } else {
-            // just offer prediction for word
+            // if there is just suggestion, no type, accept the suggestion
             e.preventDefault();
-            //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerHTML.replace("<br>","");
-            //replaceSelectionWithHtml("");
             placeCaretAtEnd(document.getElementById("textentry"));
-            //$('#textentry').trigger(jQuery.Event('keypress', { keycode: 39 }));
-            //  pasteHtmlAtCaret ("");
-            //placeCaretAtEnd(document.getElementById("textentry"));
-
-            //  $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
-//            $("#textentry").trigger(jQuery.Event('keydown', { keycode: 39 }));
-            }
+            resetVars();
+            lastWord = "";
+            foundSpellCheck = "";
+             }
 
             return false;
         }
@@ -242,7 +259,6 @@ $(function () {
     function resetVars() {
         lastWordFinal = "";
         elementFinal = "";
-        //lastWord = "";
         element = "";
         availableTags = [];
     }
@@ -329,6 +345,10 @@ $(function () {
     }
 });
 
+function selectedText() {
+    var selection = window.getSelection().anchorNode.data.substring( window.getSelection().anchorOffset,window.getSelection().extentOffset );
+    return selection;
+}
 
 function initialize() {
     var goo = google.maps,
