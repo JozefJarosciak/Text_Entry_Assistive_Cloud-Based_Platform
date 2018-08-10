@@ -39,9 +39,9 @@ $(function () {
        // document.getElementById("justText").innerText = document.getElementById('textentry').innerText;
 
         textEntryContent = document.getElementById("textentry").innerText;
-        console.log("Last 1: " + textEntryContent);
+        //console.log("Last 1: " + textEntryContent);
         textEntryContent = textEntryContent.replace(/.*\./,"").replace(/.*\,/,"").replace(/.*\;/,"");
-        console.log("Last 2: " + textEntryContent);
+       // console.log("Last 2: " + textEntryContent);
 
         /*
         if (e.which == '32') {
@@ -51,7 +51,7 @@ $(function () {
         */
 
         lastWord = getLastWord(textEntryContent);
-        console.log("Last 4: " + lastWord);
+      //  console.log("Last 4: " + lastWord);
         //lastWord = getLastWord(textEntryContent).match(/\S*$/)[0];
       //  lastWord = lastWord.replace(/.*\./,"").trim();
         console.log("Last Word: " + lastWord);

@@ -54,60 +54,12 @@ The project claims that the smart predictive technologies can speed up the text 
     </small>
     <br><br>
 
+
+
     <table style="table-layout: fixed">
-        <tr>
-            <td rowspan="2"
-                style="width: 192px;background: #fffef2;padding: 10px;max-width: 192px;word-wrap:break-word; vertical-align: top;text-align: left;">
-
-                <div id="configuration">
-
-                    <h4>Approx. Location</h4>
-
-
-                    <table>
-                        <tbody>
-                        <tr>
-                            <input id="location" type="text" style="width:100%" disabled>
-                            <br>
-                            Lat:<input id="latit" type="text" style="width:30%" disabled>
-                            Long:<input id="longi" type="text" style="width:30%" disabled></td>
-                        </tr>
-
-                        <input type="button" disabled id="fancybutton" value="Show Map"/>
-                        <div style="width:0px;height:0px">
-                            <div id="map_canvas" style="width:100%;height:100%"></div>
-                        </div>
-
-                    </table>
-
-
-                    <br>
-
-                    <h4>Configuration</h4>
-
-                    <select id="calculation_Type">
-                        <option value="all">Combinations [slow]</option>
-                        <option selected value="random">Random [faster]</option>
-                    </select>
-                    <br>
-
-                    <h4>Rate</h4>
-                    <select id="errorRate" onkeyup="calculateTotals()">
-                        <option selected value=0>0</option>
-                        <option value=4>4</option>
-                        <option value=8>8</option>
-                        <option value=12>12</option>
-                        <option value=16>16</option>
-                        <option value=20>20</option>
-                    </select>
-
-
-                    <br>
-                </div>
-
 
             </td>
-            <td style="width: 650px;vertical-align:top;padding: 25px;background: #eafff8;">
+            <td style="width: 850px;vertical-align:top;padding: 25px;background: #eafff8;">
 
 
                 <table>
@@ -115,7 +67,7 @@ The project claims that the smart predictive technologies can speed up the text 
                     <tr>
                         <td>
 
-                            <br><b>Enter text into box below!</b> (use TAB key to utilize provided real-time suggestions)
+                <b>Enter text into box below!</b> (use TAB key to utilize provided real-time suggestions)
 
 
                             <br>
@@ -131,37 +83,20 @@ The project claims that the smart predictive technologies can speed up the text 
 
 
 
-                            <br><br>
+
                                <b>Real-Time Text Analysis:</b>
 
 
                             <div>
-                                <div class="labelbox">Spelling Corrections
+                                <div class="labelbox">Wiki Suggestions</div>
+                                <div class="labelbox">Next Word Suggestions</div>
+                                <div class="labelbox">People</div>
+                                <div class="labelbox">Places</div>
 
-                                </div>
-
-                                <div class="labelbox">Suggestions
-
-                                </div>
-
-                                <div class="labelbox">Places
-
-                                </div>
-
-
-
-
-                                <div id="spelling">
-
-                                </div>
-
-                                <div id="people">
-
-                                </div>
-
-                                <div id="places">
-
-                                </div>
+                                <div id="wiki"></div>
+                                <div id="nextWord"></div>
+                                <div id="people"></div>
+                                <div id="places"></div>
                             </div>
 
 
@@ -170,6 +105,56 @@ The project claims that the smart predictive technologies can speed up the text 
 
 
                 </table>
+
+
+                <table>
+                    <tr>
+                        <td style="width: 950px;background: #fffef2;padding: 2px;max-width: 950px;word-wrap:break-word; vertical-align: top;text-align: left;">
+
+                            <div id="configuration">
+
+                                <b>Approximate Location:</b><br>
+
+                                <input id="location" type="text" disabled>
+                                Lat:<input id="latit" type="text" style="width:120px" disabled> Long:<input id="longi" type="text" style="width:120px" disabled>
+                                <input type="button" disabled id="fancybutton" value="Show Map"/>
+                                <div style="width:0px;height:0px">
+                                    <div id="map_canvas" style="width:100%;height:100%"></div>
+                                </div>
+                    </tr>
+
+
+
+
+
+
+                    <!--                <br>
+
+                <h4>Configuration</h4>
+
+                <select id="calculation_Type">
+                    <option value="all">Combinations [slow]</option>
+                    <option selected value="random">Random [faster]</option>
+                </select>
+                <br>
+
+                <h4>Rate</h4>
+                <select id="errorRate" onkeyup="calculateTotals()">
+                    <option selected value=0>0</option>
+                    <option value=4>4</option>
+                    <option value=8>8</option>
+                    <option value=12>12</option>
+                    <option value=16>16</option>
+                    <option value=20>20</option>
+                </select>
+
+
+                <br>
+                -->
+</div>
+</table>
+
+    </table>
 
                 <br> <br>
                 <b>Current Functionality:</b>
@@ -192,7 +177,7 @@ The project claims that the smart predictive technologies can speed up the text 
             </td>
         </tr>
 
-    </table>
+
 
 
     <br><br><br>

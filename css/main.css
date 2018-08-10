@@ -128,16 +128,27 @@ body {
 .labelbox {
     float: left;
     border: 1px solid #ccc;
-    width: 218px;
+    width: 235px;
     height: 20px;
     background: #f0f2b6;
     text-align: center;
     font-weight: bold;
 }
 
-#spelling {
+#wiki {
     float: left;
-    width: 213px;
+    width: 230px;
+    height: 122px;
+    padding-left: 5px;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    pointer-events:none
+}
+
+#nextWord {
+    float: left;
+    width: 230px;
     height: 122px;
     padding-left: 5px;
     text-align: left;
@@ -148,7 +159,7 @@ body {
 
 #people {
     float: left;
-    width: 213px;
+    width: 230px;
     height: 122px;
     padding-left: 5px;
     text-align: left;
@@ -159,7 +170,7 @@ body {
 
 #places {
     float: left;
-    width: 213px;
+    width: 230px;
     height: 122px;
     padding-left: 5px;
     text-align: left;
@@ -191,7 +202,7 @@ option[type="text"] { font-size:14px; }
 
 
 div#textentry {
-    width: 650px;
+    width: 950px;
     height: 150px;
     max-height: 150px;
     overflow-y: hidden;
