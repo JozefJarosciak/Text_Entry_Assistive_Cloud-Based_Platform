@@ -46,7 +46,7 @@ The project claims that the smart predictive technologies can speed up the text 
     <!-- Add your site or application content here -->
 
     <br>
-    <div id="header"><b>Text Entry Assistive Cloud-Based Platform (1.1)</b></div>
+    <div id="header"><b>Text Entry Assistive Cloud-Based Platform (1.2)</b></div>
     <small style="text-align: center;">The primary goal of this alpha prototype is to create a real-time text analysis engine that based on inspection of
         entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry
         process, as well as improve user experience and overall user productivity.
@@ -58,7 +58,7 @@ The project claims that the smart predictive technologies can speed up the text 
 
     <table style="table-layout: fixed">
 
-            </td>
+            </table>
             <td style="width: 850px;vertical-align:top;padding: 25px;background: #eafff8;">
 
 

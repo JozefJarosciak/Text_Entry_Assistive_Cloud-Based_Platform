@@ -106,7 +106,7 @@ $(function () {
                                         foundSpellCheck = capitalizeFirstLetter(foundSpellCheck);
                                     }
                                     replaceSelectionWithHtml(" "); replaceSelectionWithHtml(" ");
-                                    pasteHtmlAtCaret("<span id=\"hint\">?" + foundSpellCheck + "</span>");
+                                    pasteHtmlAtCaret("<span id=\"hint\">!" + foundSpellCheck + "</span>");
 
                                         //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,elementFinal).replace(/(?:\r\n|\r|\n)/g, '<br>');
                                         //placeCaretAtEnd(document.getElementById("textentry"));
@@ -157,7 +157,7 @@ $(function () {
                                                             element2 = capitalizeFirstLetter(element2);
                                                         }
 
-                                                        document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,element2).replace(/(?:\r\n|\r|\n)/g, '<br>');
+                                                        document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,element2).replace(/(!:\r\n|\r|\n)/g, '<br>');
                                                         //document.getElementById("textentry").innerHTML = element2;
                                                         placeCaretAtEnd(document.getElementById("textentry"));
                                                         console.log(lastWord + " -> " + element2);
