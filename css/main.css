@@ -214,6 +214,22 @@ div#textentry {
 }
 
 
+table#headertable {
+    width: 950px;
+    padding: 2px;
+    background-color: #ffffff;
+    color:black;
+}
+
+td#headertable1 {
+    width: 650px;
+    text-align: left;
+}
+
+td#headertable2 {
+    width: 350px;
+    text-align: right;
+}
 
 /* ==========================================================================
    Browser Upgrade Prompt

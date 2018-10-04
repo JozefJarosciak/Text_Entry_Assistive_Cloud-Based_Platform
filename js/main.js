@@ -34,8 +34,6 @@ $(function () {
     $("#textentry").keyup(function (e) {
         var code = e.keyCode || e.which;
 
-
-
        // document.getElementById("justText").innerText = document.getElementById('textentry').innerText;
 
         textEntryContent = document.getElementById("textentry").innerText;
@@ -56,7 +54,7 @@ $(function () {
       //  lastWord = lastWord.replace(/.*\./,"").trim();
         console.log("Last Word: " + lastWord);
         foundSpellCheck = "";
-        if (lastWord.length >= 5) {
+        if (lastWord.length >= 4) {
 
 
 
@@ -106,7 +104,7 @@ $(function () {
                                         foundSpellCheck = capitalizeFirstLetter(foundSpellCheck);
                                     }
                                     replaceSelectionWithHtml(" "); replaceSelectionWithHtml(" ");
-                                    pasteHtmlAtCaret("<span id=\"hint\">!" + foundSpellCheck + "</span>");
+                                    pasteHtmlAtCaret(" <span style='border:1px dimgrey solid;' id=\"hint\"><font size=\"-2\" color=\"red\"><b>TYPO: </b></font> " + foundSpellCheck + "</span> ");
 
                                         //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,elementFinal).replace(/(?:\r\n|\r|\n)/g, '<br>');
                                         //placeCaretAtEnd(document.getElementById("textentry"));
@@ -229,6 +227,8 @@ $(function () {
 
     $("#textentry").keydown(function (e) {
         var code = e.keyCode || e.which;
+
+
         // If TAB is pressed
         if (code == '9') {
             // if typo correction found in MySQL
@@ -240,7 +240,13 @@ $(function () {
                 foundSpellCheck = "";
             } else {
             // if there is just suggestion, no type, accept the suggestion
-            e.preventDefault();
+                // Clean Saved Keystrokes counter on first stroke
+               e.preventDefault();
+                var counterExisting = Number(document.getElementById("keystrokesSaved").innerText);
+                var counterKeys = (counterExisting + (elementFinal.length - lastWord.length));
+                document.getElementById("keystrokesSaved").innerText = counterKeys;
+                console.log("COUNTER: " + lastWord + "+" + elementFinal);
+                console.log("NUMS: " + counterExisting + "+" + (elementFinal.length - lastWord.length));
             placeCaretAtEnd(document.getElementById("textentry"));
             resetVars();
             lastWord = "";
@@ -248,6 +254,10 @@ $(function () {
              }
 
             return false;
+        } else {
+            var totalLength = document.getElementById("textentry").innerText.length;
+            console.log("Total Length: " + totalLength);
+            if (totalLength < 4) {document.getElementById("keystrokesSaved").innerText = "0";}
         }
 
 

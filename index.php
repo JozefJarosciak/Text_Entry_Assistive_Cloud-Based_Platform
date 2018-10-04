@@ -50,7 +50,7 @@ The project claims that the smart predictive technologies can speed up the text 
     <small style="text-align: center;">The primary goal of this alpha prototype is to create a real-time text analysis engine that based on inspection of
         entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry
         process, as well as improve user experience and overall user productivity.
-        <br> <b>Supported Browsers: </b>Google Chrome Version 67 and higher.
+        <br> <b>Supported Browsers: </b>Google Chrome Version 69.0 and higher.
     </small>
     <br><br>
 
@@ -67,10 +67,17 @@ The project claims that the smart predictive technologies can speed up the text 
                     <tr>
                         <td>
 
-                <b>Enter text into box below!</b> (use TAB key to utilize provided real-time suggestions)
+                            <table id="headertable">
+                                <tr>
+                                <td id="headertable1">
+                                    <b>Enter text into box below!</b> (use TAB key to utilize real-time suggestions)
+                                </td>
+                                <td id="headertable2">
+                                    Saved Keystrokes: <label id="keystrokesSaved">0</label>
+                                </td>
+                                </tr>
+                            </table>
 
-
-                            <br>
 
 
                             <div class="ui-widget">
@@ -88,10 +95,10 @@ The project claims that the smart predictive technologies can speed up the text 
 
 
                             <div>
-                                <div class="labelbox">Wiki Suggestions</div>
-                                <div class="labelbox">Next Word Suggestions</div>
-                                <div class="labelbox">People</div>
-                                <div class="labelbox">Places</div>
+                                <div class="labelbox">#1 wki</div>
+                                <div class="labelbox">#2 nxt wrd</div>
+                                <div class="labelbox">#3 ppl</div>
+                                <div class="labelbox">#4 plcs</div>
 
                                 <div id="wiki"></div>
                                 <div id="nextWord"></div>
@@ -164,6 +171,7 @@ The project claims that the smart predictive technologies can speed up the text 
                     <li>Spell Checking powered by MySQL SOUNDEX and Levenshtein distance algorithms</li>
                     <li>Spell Checking powered by BING Spell Check API</li>
                     <li><b>IN PROGRESS:</b> Automatic suggestions powered by Microsoft Bing Autosuggest API</li>
+                    <li><b>IN PROGRESS:</b> Counter of saved keystrokes</li>
                 </ul>
 
             </td>
@@ -171,7 +179,7 @@ The project claims that the smart predictive technologies can speed up the text 
         <tr>
             <td style="vertical-align:middle;padding: 20px;background: #fff2f9;">
 
-                <small> Dissertation Project by JJ(H00058995). Licensing: GNU Affero General Public License v3.0.</small>
+                <small>Dissertation Project by JJ(H00058995). Licensing: GNU Affero General Public License v3.0.</small>
 
 
             </td>
