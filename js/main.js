@@ -228,7 +228,7 @@ $(function () {
     $("#textentry").keydown(function (e) {
         var code = e.keyCode || e.which;
 
-
+        var totalLength = document.getElementById("textentry").innerText.length + 1;
         // If TAB is pressed
         if (code == '9') {
             // if typo correction found in MySQL
@@ -247,6 +247,11 @@ $(function () {
                 document.getElementById("keystrokesSaved").innerText = counterKeys;
                 console.log("COUNTER: " + lastWord + "+" + elementFinal);
                 console.log("NUMS: " + counterExisting + "+" + (elementFinal.length - lastWord.length));
+
+                // percent saved
+                var percentSaved = Math.round((Number(document.getElementById("keystrokesSaved").innerText) * 100 / totalLength) * 100) / 100 ;
+                document.getElementById("percentSaved").innerText = percentSaved;
+
             placeCaretAtEnd(document.getElementById("textentry"));
             resetVars();
             lastWord = "";
@@ -255,8 +260,9 @@ $(function () {
 
             return false;
         } else {
-            var totalLength = document.getElementById("textentry").innerText.length;
+
             console.log("Total Length: " + totalLength);
+            document.getElementById("totalLength").innerText = totalLength.toString();
             if (totalLength < 4) {document.getElementById("keystrokesSaved").innerText = "0";}
         }
 

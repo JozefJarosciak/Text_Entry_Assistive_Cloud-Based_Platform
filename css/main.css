@@ -222,12 +222,12 @@ table#headertable {
 }
 
 td#headertable1 {
-    width: 650px;
+    width: 500px;
     text-align: left;
 }
 
 td#headertable2 {
-    width: 350px;
+    width: 450px;
     text-align: right;
 }
 

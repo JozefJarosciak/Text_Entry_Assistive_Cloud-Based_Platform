@@ -73,7 +73,7 @@ The project claims that the smart predictive technologies can speed up the text 
                                     <b>Enter text into box below!</b> (use TAB key to utilize real-time suggestions)
                                 </td>
                                 <td id="headertable2">
-                                    Saved Keystrokes: <label id="keystrokesSaved">0</label>
+                                    Total Length: <b><label id="totalLength">0</label></b> | Saved Keystrokes: <b><label id="keystrokesSaved">0</label></b> (<label id="percentSaved">0</label>%)
                                 </td>
                                 </tr>
                             </table>
