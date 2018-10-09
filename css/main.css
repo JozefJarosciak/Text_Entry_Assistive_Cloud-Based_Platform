@@ -128,28 +128,34 @@ body {
 .labelbox {
     float: left;
     border: 1px solid #ccc;
-    width: 235px;
+    width: 240px;
     height: 20px;
     background: #f0f2b6;
     text-align: center;
     font-weight: bold;
 }
 
-#wiki {
+#googleSuggest {
     float: left;
     width: 230px;
-    height: 122px;
-    padding-left: 5px;
+    font-size: 12px;
+    padding: 5px;
     text-align: left;
     background: #ffffff;
     border: 1px solid #ccc;
-    pointer-events:none
+    /*pointer-events:none */
+}
+
+#googleSuggestSelect {
+    width: 230px;
+    height: 170px;
+    overflow-y: auto;
 }
 
 #nextWord {
     float: left;
     width: 230px;
-    height: 122px;
+    height: 160px;
     padding-left: 5px;
     text-align: left;
     background: #ffffff;
@@ -157,10 +163,12 @@ body {
     pointer-events:none
 }
 
+
+
 #people {
     float: left;
     width: 230px;
-    height: 122px;
+    height: 160px;
     padding-left: 5px;
     text-align: left;
     background: #ffffff;
@@ -171,7 +179,7 @@ body {
 #places {
     float: left;
     width: 230px;
-    height: 122px;
+    height: 160px;
     padding-left: 5px;
     text-align: left;
     background: #ffffff;
@@ -208,7 +216,7 @@ div#textentry {
     overflow-y: hidden;
     overflow-x: hidden;
     border: 2px solid #cccccc;
-    padding: 5px;
+    padding: 0px;
     background-color: #ffffff;
     color:black;
 }
@@ -216,7 +224,7 @@ div#textentry {
 
 table#headertable {
     width: 950px;
-    padding: 2px;
+    padding: 0px;
     background-color: #ffffff;
     color:black;
 }
@@ -227,7 +235,7 @@ td#headertable1 {
 }
 
 td#headertable2 {
-    width: 450px;
+    width: 950px;
     text-align: right;
 }
 

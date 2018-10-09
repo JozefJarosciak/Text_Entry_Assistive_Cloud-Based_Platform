@@ -81,14 +81,53 @@ $(function () {
 
                                 if ((e.which != '9') && (e.which != '20')) {
                                     pasteHtmlAtCaret("<span id='hint'>" + element.substr(lastWord.length, element.length) + "</span>");
+
+
+                                    // GOOGLE SUGGEST
+                                    var googleSuggestData = $.ajax({
+                                        url: "api/google-suggestqueries.php?q=" + lastWord,
+                                        async: false
+                                    }).responseText;
+
+                                    var googleSuggestArray = googleSuggestData.split("|");
+                                    // alert("Data Loaded: " + googleSuggestArray);
+
+                                    removeOptions(document.getElementById("googleSuggestSelect"));
+
+                                    for (var i = 0; i < googleSuggestArray.length-1; i++) {
+
+
+
+                                        var x = document.getElementById("googleSuggestSelect");
+                                        var option = document.createElement("option");
+                                        option.text = googleSuggestArray[i];
+                                        option.value = googleSuggestArray[i];
+                                        x.add(option);
+
+                                        // $("#googleSuggestSelect").append(new Option(googleSuggestArray[i], googleSuggestArray[i]));
+                                     //   console.log(googleSuggestArray[i])
+                                    }
+
+
                                     //pasteHtmlAtCaret(element.substr(lastWord.length, element.length));
                                 }
+                            } else {
+                                console.log("Founder 1:");
                             }
                         } else {
 
-                            // If misspelling found in the DB
-                            if (elementFinal.length >0) {
+                            var firstGoogleString = "";
+                            try {
+                            var firstGoogleString = document.getElementById("googleSuggestSelect").options[0].text;
+                            }
+                            catch(err) {
+                                firstGoogleString = "";
+                            }
 
+                            if (firstGoogleString) {
+                                pasteHtmlAtCaret("<span id='hint'>" + firstGoogleString.substr(lastWord.length, firstGoogleString.length) + "</span>");
+                            } else if (elementFinal.length >0) {
+                                // If misspelling found in the DB
                                 if (e.which == '32') {
                                    // console.log("elementFinal: " + lastWordFinal);
                                     //lastWordFinal = lastWordFinal.match(/\S*$/)[0];
@@ -109,16 +148,16 @@ $(function () {
                                         //document.getElementById("textentry").innerHTML = document.getElementById("textentry").innerText.replace(lastWord,elementFinal).replace(/(?:\r\n|\r|\n)/g, '<br>');
                                         //placeCaretAtEnd(document.getElementById("textentry"));
                                    // }
-
                                 }
 
                             } else {
 
 
+
                             // Try Spelling if the word is not found in DB
                             //if ((e.which == '32') && (availableTags.length === 0)) {
                              if (e.which == '32') {
-                              //   elementFinal=""; resetVars(); lastWordFinal = ""; lastWord = "";
+                                 //   elementFinal=""; resetVars(); lastWordFinal = ""; lastWord = "";
                                 //
                                 // use Microsoft Spellcheck
                                 // console.log(lastWord)
@@ -199,6 +238,8 @@ $(function () {
                             console.log("Pressed:.");
                                 elementFinal=""; resetVars(); lastWordFinal = ""; lastWord = "";
                             }
+
+
                         }
                     });
 
@@ -229,6 +270,13 @@ $(function () {
         var code = e.keyCode || e.which;
 
         var totalLength = document.getElementById("textentry").innerText.length + 1;
+
+        if (code == '32') {
+           // console.log("PRESSED SPACE")
+            removeOptions(document.getElementById("googleSuggestSelect"));
+        }
+
+
         // If TAB is pressed
         if (code == '9') {
             // if typo correction found in MySQL
@@ -248,9 +296,7 @@ $(function () {
                 console.log("COUNTER: " + lastWord + "+" + elementFinal);
                 console.log("NUMS: " + counterExisting + "+" + (elementFinal.length - lastWord.length));
 
-                // percent saved
-                var percentSaved = Math.round((Number(document.getElementById("keystrokesSaved").innerText) * 100 / totalLength) * 100) / 100 ;
-                document.getElementById("percentSaved").innerText = percentSaved;
+
 
             placeCaretAtEnd(document.getElementById("textentry"));
             resetVars();
@@ -260,10 +306,15 @@ $(function () {
 
             return false;
         } else {
-
+            // with every keystroke calculate the totals
             console.log("Total Length: " + totalLength);
             document.getElementById("totalLength").innerText = totalLength.toString();
             if (totalLength < 4) {document.getElementById("keystrokesSaved").innerText = "0";}
+
+            // percent saved
+            var percentSaved = Math.round((Number(document.getElementById("keystrokesSaved").innerText) * 100 / totalLength) * 100) / 100 ;
+            document.getElementById("percentSaved").innerText = percentSaved;
+
         }
 
 
@@ -364,6 +415,15 @@ $(function () {
 function selectedText() {
     var selection = window.getSelection().anchorNode.data.substring( window.getSelection().anchorOffset,window.getSelection().extentOffset );
     return selection;
+}
+
+function removeOptions(selectbox)
+{
+    var i;
+    for(i = selectbox.options.length - 1 ; i >= 0 ; i--)
+    {
+        selectbox.remove(i);
+    }
 }
 
 function initialize() {

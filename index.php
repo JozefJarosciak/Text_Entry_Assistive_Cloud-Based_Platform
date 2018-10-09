@@ -31,7 +31,7 @@ The project claims that the smart predictive technologies can speed up the text 
 
 </head>
 
-<body onload="onload()" spellcheck="false">
+<body onload="onload()" spellcheck="true">
 
 
 <div class="content">
@@ -69,38 +69,37 @@ The project claims that the smart predictive technologies can speed up the text 
 
                             <table id="headertable">
                                 <tr>
-                                <td id="headertable1">
-                                    <b>Enter text into box below!</b> (use TAB key to utilize real-time suggestions)
-                                </td>
-                                <td id="headertable2">
-                                    Total Length: <b><label id="totalLength">0</label></b> | Saved Keystrokes: <b><label id="keystrokesSaved">0</label></b> (<label id="percentSaved">0</label>%)
-                                </td>
+                                    <td>
+                                        <b>Enter text into box below!</b> (use TAB key to utilize real-time suggestions)
+                                        <div id="textentry" contentEditable="true"></div>
+                                    </td>
                                 </tr>
+
+                                <tr>
+                                    <td id="headertable2">
+                                        Total Length: <b><label id="totalLength">0</label></b> | Saved Keystrokes: <b><label id="keystrokesSaved">0</label></b> (<label id="percentSaved">0</label>%)
+                                    </td>
+                                </tr>
+
                             </table>
 
 
-
-                            <div class="ui-widget">
-
-                                <div id="textentry" contentEditable="true"></div>
-                                <br>
-                                <!--<lable id="justText" style="visibility:hidden"></lable>-->
-
-                            </div>
-
-
-
-
-                               <b>Real-Time Text Analysis:</b>
-
+                          <br> <b>Real-Time Text Analysis:</b>
 
                             <div>
-                                <div class="labelbox">#1 wki</div>
+                                <div class="labelbox">Google Suggest</div>
                                 <div class="labelbox">#2 nxt wrd</div>
                                 <div class="labelbox">#3 ppl</div>
                                 <div class="labelbox">#4 plcs</div>
 
-                                <div id="wiki"></div>
+                                <div id="googleSuggest">
+
+                                    <select id="googleSuggestSelect" size="10">
+
+                                    </select>
+                                </div>
+
+
                                 <div id="nextWord"></div>
                                 <div id="people"></div>
                                 <div id="places"></div>
@@ -119,7 +118,7 @@ The project claims that the smart predictive technologies can speed up the text 
                         <td style="width: 950px;background: #fffef2;padding: 2px;max-width: 950px;word-wrap:break-word; vertical-align: top;text-align: left;">
 
                             <div id="configuration">
-
+<br>
                                 <b>Approximate Location:</b><br>
 
                                 <input id="location" type="text" disabled>
@@ -169,7 +168,6 @@ The project claims that the smart predictive technologies can speed up the text 
 
                     <li>Word Predictions (DB of 474k words)</li>
                     <li>Spell Checking powered by MySQL SOUNDEX and Levenshtein distance algorithms</li>
-                    <li>Spell Checking powered by BING Spell Check API</li>
                     <li><b>IN PROGRESS:</b> Automatic suggestions powered by Microsoft Bing Autosuggest API</li>
                     <li><b>IN PROGRESS:</b> Counter of saved keystrokes</li>
                 </ul>
