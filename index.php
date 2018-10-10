@@ -87,10 +87,10 @@ The project claims that the smart predictive technologies can speed up the text 
                           <br> <b>Real-Time Text Analysis:</b>
 
                             <div>
-                                <div class="labelbox">Google Suggest</div>
-                                <div class="labelbox">#2 nxt wrd</div>
-                                <div class="labelbox">#3 ppl</div>
-                                <div class="labelbox">#4 plcs</div>
+                                <div id="labelbox">Google Suggest</div>
+                                <div id="labelbox">#2 nxt wrd</div>
+                                <div id="labelbox">#3 ppl</div>
+                                <div id="labelbox">#4 plcs</div>
 
                                 <div id="googleSuggest">
 

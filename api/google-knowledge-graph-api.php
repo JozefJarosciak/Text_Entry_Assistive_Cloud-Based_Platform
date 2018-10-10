@@ -24,6 +24,7 @@ print_r( $response );
 echo "<hr>";
 
 foreach($response['itemListElement'] as $element) {
+
 echo $element['result']['name'] . '<br/>';
 echo $element['result']['description'] . '<br/>';
 echo $element['result']['image']['contentUrl']. '<br/>';

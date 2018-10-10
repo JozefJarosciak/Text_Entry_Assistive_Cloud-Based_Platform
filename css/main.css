@@ -125,7 +125,7 @@ body {
     height: 148px;
 }
 
-.labelbox {
+#labelbox {
     float: left;
     border: 1px solid #ccc;
     width: 240px;
