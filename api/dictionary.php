@@ -27,10 +27,11 @@ if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
         $rows[] = strtolower ($row["word"]);
+        echo strtolower ($row["word"])."|";
     }
 
 //
-print json_encode($rows);
+//print $rows[0];
 
 
 
@@ -49,6 +50,7 @@ if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
         $rows[] = strtolower ($row["word"]);
+        echo strtolower ($row["word"])."|";
     }
 
     /*
@@ -60,7 +62,7 @@ if ($result->num_rows > 0) {
         });
 */
 
-         print json_encode($rows);
+      //   print $rows[0];
 
 }
 

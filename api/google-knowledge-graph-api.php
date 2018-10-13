@@ -5,8 +5,9 @@ include('credentials.php');
 
 $service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
 $params = array(
-    'query' => urlencode($q),
+    'query' => $q,
     'limit' => 1,
+    'prefix'=>TRUE,
     'indent' => TRUE,
     'key' => $google_api);
 
@@ -31,6 +32,13 @@ echo $element['result']['image']['contentUrl']. '<br/>';
 echo $element['result']['detailedDescription']['url'] . '<br/>';
 echo $element['result']['detailedDescription']['articleBody'] . '<br/>';
 echo $element['result']['@type']['0'] . '<br/>';
+
+$kgmid = str_replace('kg:/', 'kgmid=/', $element['result']['@id']);
+echo 'https://www.google.com/search?q=%20&kponly&'.$kgmid . '<br/>';
+
+
+    //kgmid=/m/0tc7
+
 
 }
 

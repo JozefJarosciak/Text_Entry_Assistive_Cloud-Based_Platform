@@ -21,7 +21,7 @@ $host = "https://api.cognitive.microsoft.com";
 $path = "/bing/v7.0/Suggestions";
 
 $mkt = "en-US";
-$query = $q;
+$query = urlencode($q);
 
 function get_suggestions ($host, $path, $key, $mkt, $query) {
 

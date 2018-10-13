@@ -2,12 +2,15 @@
 
 $q = urldecode(htmlspecialchars(mb_strtolower(($_GET["q"]))));
 
-$url_google = 'https://suggestqueries.google.com/complete/search?output=toolbar&client=chrome&hl=en&q='.urlencode($q).'';
+$url_google = 'https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&format=json&search='.urlencode($q).'';
 $curl = get_data($url_google);
+//echo $curl;
 $array = json_decode($curl, true);
 //echo $curl;
 //sort($array[1]);
 
+echo $array[1][0];
+//echo $array[1][0]."|".$array[2][0]."|".$array[3][0];
 
 /*
 $arraynew = [];
@@ -35,7 +38,7 @@ echo "<hr>";
 //( $array[1]);
 //print "</pre>\n";
 
-echo $array[1][0];
+
 
 //echo "<hr>".$arraynew;
 /*

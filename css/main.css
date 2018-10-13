@@ -211,7 +211,7 @@ option[type="text"] { font-size:14px; }
 
 div#textentry {
     width: 950px;
-    height: 150px;
+    height: 200px;
     max-height: 150px;
     overflow-y: hidden;
     overflow-x: hidden;

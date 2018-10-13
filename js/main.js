@@ -37,7 +37,18 @@ $(function () {
        // document.getElementById("justText").innerText = document.getElementById('textentry').innerText;
 
         textEntryContent = document.getElementById("textentry").innerText;
-        //console.log("Last 1: " + textEntryContent);
+
+        var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
+        var lastLine = arrayOfLines.slice(-1)[0];
+        if (lastLine.indexOf('.') > 0) {
+            lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
+            console.log("LAST SENTENCE: " + lastLine);
+        } else {
+            console.log("LAST SENTENCE: " + lastLine);
+        }
+
+
+          //console.log("Last 1: " + textEntryContent);
         textEntryContent = textEntryContent.replace(/.*\./,"").replace(/.*\,/,"").replace(/.*\;/,"");
        // console.log("Last 2: " + textEntryContent);
 
@@ -85,7 +96,7 @@ $(function () {
 
                                     // GOOGLE SUGGEST
                                     var googleSuggestData = $.ajax({
-                                        url: "api/google-suggestqueries.php?q=" + lastWord,
+                                        url: "api/google-suggestqueries.php?q=" + lastLine,
                                         async: false
                                     }).responseText;
 
@@ -95,8 +106,6 @@ $(function () {
                                     removeOptions(document.getElementById("googleSuggestSelect"));
 
                                     for (var i = 0; i < googleSuggestArray.length-1; i++) {
-
-
 
                                         var x = document.getElementById("googleSuggestSelect");
                                         var option = document.createElement("option");
@@ -307,7 +316,7 @@ $(function () {
             return false;
         } else {
             // with every keystroke calculate the totals
-            console.log("Total Length: " + totalLength);
+            //console.log("Total Length: " + totalLength);
             document.getElementById("totalLength").innerText = totalLength.toString();
             if (totalLength < 4) {document.getElementById("keystrokesSaved").innerText = "0";}
 

@@ -15,7 +15,7 @@ $data = '{
 
 //$payload = json_encode($data);
 $payload = $data;
-$url = 'https://language.googleapis.com/v1/documents:analyzeEntities?key='.$google_nlp_api;
+$url = 'https://language.googleapis.com/v1beta2/documents:analyzeEntitySentiment?key='.$google_nlp_api;
 // Prepare new cURL resource
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

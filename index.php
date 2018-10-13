@@ -31,7 +31,7 @@ The project claims that the smart predictive technologies can speed up the text 
 
 </head>
 
-<body onload="onload()" spellcheck="true">
+<body onload="onload()" spellcheck="false">
 
 
 <div class="content">
@@ -47,11 +47,7 @@ The project claims that the smart predictive technologies can speed up the text 
 
     <br>
     <div id="header"><b>Text Entry Assistive Cloud-Based Platform (1.2)</b></div>
-    <small style="text-align: center;">The primary goal of this alpha prototype is to create a real-time text analysis engine that based on inspection of
-        entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry
-        process, as well as improve user experience and overall user productivity.
-        <br> <b>Supported Browsers: </b>Google Chrome Version 69.0 and higher.
-    </small>
+<small><b>Supported Browsers: </b>Google Chrome Version 69.0+. Minimal Resolution: 1200x800</small>
     <br><br>
 
 
@@ -177,14 +173,18 @@ The project claims that the smart predictive technologies can speed up the text 
         <tr>
             <td style="vertical-align:middle;padding: 20px;background: #fff2f9;">
 
-                <small>Dissertation Project by JJ(H00058995). Licensing: GNU Affero General Public License v3.0.</small>
+
 
 
             </td>
         </tr>
 
-
-
+<hr>
+<small>Dissertation Project by JJ(H00058995). Licensing: GNU Affero General Public License v3.0.</small><br>
+<small style="text-align: center;">The primary goal of this alpha prototype is to create a real-time text analysis engine that based on inspection of
+    entered text offers predictive suggestions to the end user.<br>The project claims that the smart predictive technologies can speed up the text entry
+    process, as well as improve user experience and overall user productivity.</small>
+    <br>
 
     <br><br><br>
     <hr style="text-align:right;width:364px;position: fixed;padding:10px;bottom: 0;right: 0;">

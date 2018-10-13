@@ -1,0 +1,33 @@
+/* JUST FOR THIS DEMO */
+html,body{ height:100%; }
+body{ background: #ffffff; display:flex; align-items:baseline; }
+
+div#entirePage{
+    width: 100%;
+    max-width: 800px;
+    margin: 5px auto;
+    font-family: "Helvetica", Times, serif;
+}
+
+
+h1 {
+    color: #4a9aff;
+    margin-bottom: 0;
+}
+
+textarea{
+    font-family: "Helvetica", Times, serif;
+    display: block;
+    box-sizing: padding-box;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    padding: 10px;
+    width: 95%;
+    max-width: 800px;
+    font-size: 16px;
+    border-radius: 6px;
+    box-shadow: 2px 2px #ebebeb;
+    border: 2px solid #cccccc;
+    background-color: #ffffff;
+    resize: none;
+}
