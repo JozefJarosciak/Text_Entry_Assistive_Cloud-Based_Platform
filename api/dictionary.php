@@ -1,5 +1,5 @@
 <?php
-$q = htmlspecialchars(mb_strtolower(($_GET["q"])));
+$q = htmlspecialchars((($_GET["q"])));
 
 
 $servername = "localhost";
@@ -26,8 +26,8 @@ $rows = array();
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        $rows[] = strtolower ($row["word"]);
-        echo strtolower ($row["word"])."|";
+        $rows[] =  ($row["word"]);
+        echo  ($row["word"]);//."|";
     }
 
 //
@@ -49,8 +49,8 @@ $rows = array();
 if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-        $rows[] = strtolower ($row["word"]);
-        echo strtolower ($row["word"])."|";
+        $rows[] =  ($row["word"]);
+        echo  ($row["word"]);//."|";
     }
 
     /*

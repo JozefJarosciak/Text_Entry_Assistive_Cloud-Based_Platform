@@ -52,5 +52,9 @@ if ($result === FALSE) {
 }
 
 $json = json_encode(json_decode($result), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-echo $json;
+
+print "<pre style=\"margin:16px 8px; padding:4px; text-align:left; background:#DEDEDE; color:#000099;\">\n";
+print $json;
+print "</pre>\n";
+
 ?>
