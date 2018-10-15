@@ -1,7 +1,9 @@
 <?php
 error_reporting(0);
 // this file has reference to '$subscriptionKey' variable that needs to hold the Microsoft API key
+$subscriptionKeyAnswer = 'f5a7781232a24303b09e3a4d1739073';
 include("credentials.php");
+
 
 
 $q = htmlspecialchars(mb_strtolower(($_GET["q"])));
@@ -50,10 +52,28 @@ function get_suggestions ($host, $path, $subscriptionKeyAnswer, $mkt, $count, $o
 
 $result = get_suggestions ($host, $path, $subscriptionKeyAnswer, $mkt, $count, $offset, $safesearch, $query);
 $result = json_encode(json_decode ($result), JSON_PRETTY_PRINT);
+
+$data = json_decode($result, true);
 //echo json_encode (json_decode ($result), JSON_PRETTY_PRINT);
 
+if ($data[webPages][value][0][about][0][name]) {
+    echo $data[webPages][value][0][about][0][name]. "|<br>";
+} else{
+    echo $data[entities][value][0][name]. "|<br>";
+}
+echo $data[webPages][value][0][about][0][name]. "|<br>";
+echo $data[webPages][value][0][url] . "|<br>";
+echo $data[webPages][value][0][snippet]. "|<br>";
+
+echo $data[entities][value][0][description]. "|<br>";
+
+
+
+echo $data[webPages][value][0][deepLinks][0][snippet]. " ...";
+
+
 print "<pre>";
-print_r($result);
+print_r ( $data);
 print "</pre>";
 
 ?>
