@@ -29,7 +29,7 @@ $(function() {
         var word;
         var capitalizedResponse;
         var lastWord;
-
+        var hostname = window.location.href;
         // FOCUS ON TEXT ENTRY FIELD
         document.getElementById('textarea').focus();
 
@@ -147,7 +147,8 @@ $(function() {
                                 });
 
                                 if (matches.length<=0) {
-                            $.getJSON("/textentry/api/search.php?q=" + lastWord + "&s=" + lastLine , function (json) {
+                                    //console.log(hostname);
+                            $.getJSON(hostname + "/api/search.php?q=" + lastWord + "&s=" + lastLine , function (json) {
                                     availableTags = json;
                                     console.log(availableTags);
                                     //response($.ui.autocomplete.filter(availableTags, lastWord));

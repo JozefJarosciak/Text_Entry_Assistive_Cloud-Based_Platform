@@ -1,5 +1,10 @@
 <?php
 error_reporting(0);
+
+//echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."<br>";
+$path = explode('api', "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+//echo $path[0];
+
 $fullSentence = urldecode(htmlspecialchars(($_GET["s"])));
 //$fullSentence = removeCommonWords($fullSentence);
 $lastWord = urldecode(htmlspecialchars(($_GET["q"])));
@@ -20,17 +25,17 @@ if (strlen($twoWords) === strlen($threeWords)) {
     $threeWords = "";
 }
 
-//echo "$lastWord -- $twoWords -- $threeWords<br>";
+//echo "$lastWord -- $twoWords -- $threeWords<br><br>";
 
 //'http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($threeWords),
 //'http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . urlencode($threeWords),
 
 $urlsToProcess = array(
     'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord,
-    'http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . urlencode($lastWord),
-    'http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($lastWord),
-    'http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($twoWords),
-    'http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . urlencode($twoWords),
+    $path[0].'api/google-suggestqueries.php?q=' . urlencode($lastWord),
+    $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($lastWord),
+    $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($twoWords),
+    $path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
 );
 $resultArray = multiRequest($urlsToProcess);
 
@@ -53,14 +58,24 @@ foreach ($resultArray as $key=>&$value) {
 
        */
         $arr = explode(' ', trim($fullSentence));
+        $arr2 = explode(' ', trim($value));
+
 
        // if (startsWith($result,$arr[0])==true){
 
         for($i = 0, $l = count($arr); $i < $l; ++$i) {
             if ($arr[$i+1]) {
-                $result = trim(str_replace_once($arr[$i], '', $value, 1));
-                $result = trim(str_replace_once(strtolower($arr[$i]), '', $value, 1));
+
+                if (strtolower($arr[$i]) === strtolower($arr2[$i])) {
+                    $result = trim(substr($value, -1 * abs((strlen($value)-strlen($arr[$i])))));
+                }
+
+
+                //$result = trim(str_replace(strtolower($arr[$i]), '', $strtolower($arr2[$i])));
+                //echo strtolower($arr[$i]) . " - " . strtolower($arr2[$i]) . " - $value<br>";
                 $value = $result;
+
+
             }
         }
 
