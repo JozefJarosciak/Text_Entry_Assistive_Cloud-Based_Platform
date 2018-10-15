@@ -35,16 +35,18 @@ $urlsToProcess = array(
     $path[0].'api/google-suggestqueries.php?q=' . urlencode($lastWord),
     $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($lastWord),
     $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($twoWords),
+    $path[0].'api/wikipedia-suggest.php?q=' . urlencode($lastWord),
+    $path[0].'api/wikipedia-suggest.php?q=' . urlencode($twoWords),
     $path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
 );
 $resultArray = multiRequest($urlsToProcess);
-
+//print_r( $resultArray);
 foreach ($resultArray as $key=>&$value) {
     if (strlen($value) <= 2) {
         unset($resultArray[$key]);
     }
 
-   // echo "$value - ". ucwords($value). "<br>";
+    //echo "$value - ". ucwords($value). "<br>";
     if (preg_match('#^\p{Lu}#u', $lastWord) == true) {
 
         $value = ucwords($value);
@@ -57,28 +59,43 @@ foreach ($resultArray as $key=>&$value) {
        /*
 
        */
+        $arr = array();
         $arr = explode(' ', trim($fullSentence));
-        $arr2 = explode(' ', trim($value));
+
 
 
        // if (startsWith($result,$arr[0])==true){
 
         for($i = 0, $l = count($arr); $i < $l; ++$i) {
             if ($arr[$i+1]) {
+                $arr2=array();
+                $arr2 = explode(' ', trim($value));
+                for($ii = 0, $ll = count($arr2); $ii < $ll; ++$ii) {
+                    //echo strtolower($arr[$i]) . " - " . strtolower($arr2[$ii]) . " - $value<br>";
+                    if (strtolower($arr[$i]) === strtolower($arr2[$ii])) {
 
-                if (strtolower($arr[$i]) === strtolower($arr2[$i])) {
-                    $result = trim(substr($value, -1 * abs((strlen($value)-strlen($arr[$i])))));
+
+                        if (strpos(strtolower($value), strtolower($arr[$i])) === 0) {
+                            $result = trim(substr($value, -1 * abs((strlen($value) - trim(strlen($arr[$i]))))));
+                            $value = $result;
+                        }
+                      //  echo strtolower(substr($value, 0, strlen($arr[$i]))) . " === " . $strtolower($arr2[$ii]) . " - $value<br>";
+                       // if (strtolower(substr($arr2[$ii], 0, strlen($arr[$i]))) === $strtolower($arr2[$ii])) {
+
+                        //}
+                    }
                 }
 
 
                 //$result = trim(str_replace(strtolower($arr[$i]), '', $strtolower($arr2[$i])));
-                //echo strtolower($arr[$i]) . " - " . strtolower($arr2[$i]) . " - $value<br>";
-                $value = $result;
+
+
 
 
             }
-        }
 
+        }
+       // echo "<br><br>";
 
         //}
 
