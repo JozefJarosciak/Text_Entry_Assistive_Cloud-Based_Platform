@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 $q = urldecode(htmlspecialchars(mb_strtolower(($_GET["q"]))));
 
 $url_google = 'https://suggestqueries.google.com/complete/search?output=toolbar&client=chrome&hl=en&q='.urlencode($q).'';

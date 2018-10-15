@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 $q = urldecode(htmlspecialchars(mb_strtolower(($_GET["q"]))));
 
 $url_google = 'https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&format=json&search='.urlencode($q).'';

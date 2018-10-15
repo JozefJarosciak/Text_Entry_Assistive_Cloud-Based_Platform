@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 $fullSentence = urldecode(htmlspecialchars(($_GET["s"])));
 //$fullSentence = removeCommonWords($fullSentence);
 $lastWord = urldecode(htmlspecialchars(($_GET["q"])));
@@ -58,6 +59,7 @@ foreach ($resultArray as $key=>&$value) {
         for($i = 0, $l = count($arr); $i < $l; ++$i) {
             if ($arr[$i+1]) {
                 $result = trim(str_replace_once($arr[$i], '', $value, 1));
+                $result = trim(str_replace_once(strtolower($arr[$i]), '', $value, 1));
                 $value = $result;
             }
         }

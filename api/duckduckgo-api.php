@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 $q = urldecode(htmlspecialchars(mb_strtolower(($_GET["q"]))));
 
 $url = 'https://api.duckduckgo.com/?format=json&pretty=1&skip_disambig=0&q='.$q;

@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 include('credentials.php');
 $q = urldecode(htmlspecialchars(mb_strtolower(($_GET["q"]))));
 

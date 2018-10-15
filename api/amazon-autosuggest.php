@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 /**
  * Created by IntelliJ IDEA.
  * User: jaros

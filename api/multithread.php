@@ -1,6 +1,6 @@
 <?php
 // At start of script
-
+error_reporting(0);
 $time_start = microtime(true);
 
 $data = array(

@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 // this file has reference to '$key' variable that needs to hold the Microsoft API key
 include("credentials.php");
 
