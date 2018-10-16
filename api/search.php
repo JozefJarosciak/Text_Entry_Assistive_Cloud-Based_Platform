@@ -35,9 +35,7 @@ $urlsToProcess = array(
     $path[0].'api/google-suggestqueries.php?q=' . urlencode($lastWord),
     $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($lastWord),
     $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($twoWords),
-    $path[0].'api/wikipedia-suggest.php?q=' . urlencode($lastWord),
-    $path[0].'api/wikipedia-suggest.php?q=' . urlencode($twoWords),
-    $path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
+    //$path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
 );
 $resultArray = multiRequest($urlsToProcess);
 //print_r( $resultArray);

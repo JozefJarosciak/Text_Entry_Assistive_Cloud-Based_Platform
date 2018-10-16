@@ -30,6 +30,8 @@ $(function() {
         var capitalizedResponse;
         var lastWord;
         var hostname = window.location.href;
+        var totalLength = 0;
+
         // FOCUS ON TEXT ENTRY FIELD
         document.getElementById('textarea').focus();
 
@@ -80,6 +82,8 @@ $(function() {
         // don't navigate away from the field on tab when selecting an item
             .on("keydown", function(event) {
 
+
+
                 if (event.keyCode === 190) {
                     console.log("pressed dot");
                     $('#textarea').autocomplete('close');
@@ -87,15 +91,13 @@ $(function() {
                     //break;
                 } else {
 
+                    countCharacters();
+
                     if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
                         event.preventDefault();
-                    }
+                     }
 
                 }
-
-
-
-
 
 
             })
@@ -195,8 +197,33 @@ $(function() {
                     //document.getElementById("textarea").value = str + capitalizedResponse + " " ;
                     document.getElementById("textarea").value = str + capitalizedResponse  ;
                     $('#textarea').autocomplete('close');
+
+
+                    countCharacters();
+
+                        // with every keystroke calculate the totals
+                        //console.log("Total Length: " + totalLength);
+
+                    totalLength = Number(document.getElementById("totalLength").innerText);
+                    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                    var countSaved =  currentCountofKeystrokesSaved + Number(ui.item.value.length - lastWord.length);
+                    console.log("Words: " + lastWord + " - " + ui.item.value + " | Saved: " + countSaved);
+                    document.getElementById("keystrokesSaved").innerText = countSaved;
+
+
+                    // percent saved
+                    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                    var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100)  ;
+                    document.getElementById("percentSaved").innerText = percentSaved.toString();
+
+
+
+
                     /*
                     var terms = split(this.value);
+
+
+
 
 
 
@@ -252,5 +279,23 @@ function onOffSwitch(){
         console.log("myonoffswitch3 - off");
         document.getElementById('analyticsWrapper').style.display = 'none';
     }
+
+}
+
+function countCharacters() {
+    totalLength = document.getElementById("textarea").value.length + 1;
+    //console.log("Length: " + totalLength);
+    document.getElementById("totalLength").innerText = totalLength;
+
+    // percent saved
+    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+    var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100)  ;
+    document.getElementById("percentSaved").innerText = percentSaved.toString();
+
+    if (totalLength < 4) {
+        document.getElementById("keystrokesSaved").innerText = "0";
+        document.getElementById("percentSaved").innerText = "0";
+    }
+
 
 }

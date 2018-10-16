@@ -25,7 +25,7 @@
 
 
 
-    <table style="width:600px;align-text: left">
+    <table style="width:650px;align-text: left">
         <tr>
             <th align="left">
                 <small>Suggestions</small>
@@ -41,6 +41,9 @@
             </th>
             <th align="left">
                 <small>Word Count</small>
+            </th>
+            <th align="left">
+                <small>Saved Keystrokes</small>
             </th>
         </tr>
         <tr>
@@ -72,10 +75,15 @@
                 </div>
             </td>
             <td style="background: ivory">
-                <label id="charCounter">0</label>
+                <b><label id="totalLength">0</label></b>
             </td>
+
             <td style="background: ivory">
-                <label id="wordCounter">0</label>
+                <b><label id="wordCounter">0</label></b>
+            </td>
+
+            <td style="background: ivory">
+                <b><label id="keystrokesSaved">0</label></b> (<label id="percentSaved">0</label>%)
             </td>
         </tr>
     </table>
