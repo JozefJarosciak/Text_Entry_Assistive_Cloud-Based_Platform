@@ -1,12 +1,12 @@
 <?php
 error_reporting(0);
 // this file has reference to '$subscriptionKey' variable that needs to hold the Microsoft API key
-//$subscriptionKeyAnswer = 'f5a7781232a24303b09e3a4d1739073';
 include("credentials.php");
 
 
-
 $q = htmlspecialchars(mb_strtolower(($_GET["q"])));
+
+//$q = getLastWordsStr($q,2);
 
 // NOTE: Be sure to uncomment the following line in your php.ini file.
 // ;extension=php_openssl.dll
@@ -56,14 +56,30 @@ $result = json_encode(json_decode ($result), JSON_PRETTY_PRINT);
 $data = json_decode($result, true);
 //echo json_encode (json_decode ($result), JSON_PRETTY_PRINT);
 
-// NAME
 
+// RICH CAPTIONS
+$numRichCaptions = count($data[webPages][value][0][richCaption][rows]);
+if ($numRichCaptions>0) {echo "<b>Suggestions: </b>";}
+for ($i = 0; $i < $numRichCaptions; $i++) {
+    echo '<a href="'.$data[webPages][value][0][richCaption][rows][$i][cells][0][url].'" target="_blank">'.$data[webPages][value][0][richCaption][rows][$i][cells][0][text].'</a>';
+    echo ' - '.$data[webPages][value][0][richCaption][rows][$i][cells][1][text];
+    if ($i>=2) {echo '.';break;} else {echo ' ; ';}
+}
+
+if ($numRichCaptions>0) {echo "<br><br>";}
+
+
+
+// NAME
 if ($data[webPages][value][0][name]){
     echo '<b><a href="'.$data[webPages][value][0][url].'" target="_blank">';
-    $nameofurl = explode("– Wikipedia", trim($data[webPages][value][0][name]));
-    $nameofurl2 = explode("|", $nameofurl[0]);
-    $nameofurl3 = explode("- Wikipedia", $nameofurl2[0]);
-    echo trim($nameofurl3[0]). "</a></b>";
+    $nameofurl = str_ireplace(" - Wikipedia","",trim($data[webPages][value][0][name]));
+    $nameofurl = str_ireplace(" - IMDb","",$nameofurl);
+    $nameofurl = str_ireplace(" - Official Site","",$nameofurl);
+    $nameofurl1 = explode("::", $nameofurl);
+    $nameofurlfin = explode("|", $nameofurl1[0]);
+
+    echo trim($nameofurlfin[0]). "</a></b>";
     echo " - ";
 } else if ($data[webPages][value][0][about][0][name]) {
     echo "<b>";
@@ -91,36 +107,44 @@ echo $data[webPages][value][0][snippet]. "... ";
 }
 
 
-
-// RICH CAPTIONS
-$numRichCaptions = count($data[webPages][value][0][richCaption][rows]);
-if ($numRichCaptions>0) {echo "<br><b>Suggestions: </b>";}
-for ($i = 0; $i < $numRichCaptions; $i++) {
-    echo '<a href="'.$data[webPages][value][0][richCaption][rows][$i][cells][0][url].'" target="_blank">'.$data[webPages][value][0][richCaption][rows][$i][cells][0][text].'</a>';
-    echo ' - '.$data[webPages][value][0][richCaption][rows][$i][cells][1][text];
-    if ($i>=2) {echo '.';break;} else {echo ' ; ';}
-}
-
-
 // DEEP LINKS
 $numDeepLinks = count($data[webPages][value][0][deepLinks]);
 if ($numDeepLinks>0) {echo "<br><b>Deep Links: </b>";}
 for ($i = 0; $i < $numDeepLinks; $i++) {
     if ($i==3) {break;}
-    echo '<a href="'.$data[webPages][value][0][deepLinks][$i][url].'" target="_blank">'.$data[webPages][value][0][deepLinks][$i][name].'</a>';
+    echo '<br><a href="'.$data[webPages][value][0][deepLinks][$i][url].'" target="_blank">'.$data[webPages][value][0][deepLinks][$i][name].'</a>';
     if ($data[webPages][value][0][deepLinks][$i][snippet]) {
-    echo  " - " .$data[webPages][value][0][deepLinks][$i][snippet]."... ";
+    echo  " - " .$data[webPages][value][0][deepLinks][$i][snippet];
     }
-    if ($i>=2) {echo '.';break;} else {echo ' ; ';}
+    //if ($i>=2) {echo '.';break;} else {echo ' ; ';}
 }
 
 
 
-
+/*
 
 print "<pre>";
 print_r ( $data);
 print "</pre>";
+*/
 
+
+function getLastWordsStr($text, $numWords = 1)
+{
+    $nonWordChars = ':;,.?![](){}*';
+    $result = '';
+    $words = explode(' ', $text);
+    $wordCount = count($words);
+    if ($numWords > $wordCount) {
+        $numWords = $wordCount;
+    }
+    for ($w = $numWords; $w > 0; $w--) {
+        if (!empty($result)) {
+            $result .= ' ';
+        }
+        $result .= trim($words[$wordCount - $w], $nonWordChars);
+    }
+    return $result;
+}
 
 ?>

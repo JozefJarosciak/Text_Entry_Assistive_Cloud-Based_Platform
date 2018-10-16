@@ -20,8 +20,12 @@
 
 
     <h1>Text Entry Assistive Cloud-Based Platform</h1>
-    <small><b>Dissertation:</b> JJ(H00058995); <b>Licensing:</b> GNU AGPL-3.0; <b>Requirements:</b> Chrome 69+, Resolution: 800x600</small>
-    <br><br>
+    <small><b>Dissertation:</b> H00058995; <b>Requirements:</b> Chrome 69+, Resolution: 800x600; <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">Open Source</a>
+        under <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform/blob/master/LICENSE.md" target="_blank">AGPL-3.0</a>
+        ; © <script>document.write(new Date().getFullYear())</script> J.Jarosciak.
+        <br>
+    </small>
+    <br>
 
 
 
@@ -102,8 +106,8 @@
     <div id="quickHelpWrapper">
         <small><b>Quick Help</b></small>
         <div id="quickHelp">
-            <div id="topHelp1">
-            </div>
+            <small><div id="topHelp">
+            </div></small>
         </div>
     </div>
 
@@ -127,17 +131,6 @@
 
 </div>
 
-<br><br><br>
-<hr style="text-align:right;width:410px;position: fixed;padding:10px;bottom: 0;right: 0;">
-<small style="position: fixed;bottom: 0;right: 0;padding:10px;color:black">
-    ©
-    <script>document.write(new Date().getFullYear())</script>
-
-
-    - Jozef Jarosciak - Open Source on <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">GitHub</a>
-    under <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform/blob/master/LICENSE.md" target="_blank">AGPL-3.0</a> license.
-    <br>
-</small>
 </body>
 
 </html>

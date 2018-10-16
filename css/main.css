@@ -29,8 +29,16 @@ textarea{
     border-radius: 6px;
     box-shadow: 2px 2px #ebebeb;
     border: 2px solid #cccccc;
-    background-color: #ffffff;
+    background-color: #fffcd0;
     resize: none;
+}
+
+.ui-menu .ui-menu-item { /* the selector */
+    font-family: "Helvetica", Times, serif;
+    font-size: 14px;
+    color: #575757;
+    font-weight: bold;
+    box-shadow: 0 0 10px 100px #b5ffee inset;
 }
 
 #footer {
