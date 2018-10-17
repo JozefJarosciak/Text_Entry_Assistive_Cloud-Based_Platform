@@ -15,11 +15,19 @@ $(function() {
 
 
     function initialIsCapital( word ){
+        try {
         return word[0] !== word[0].toLowerCase();
+        } catch (e) {
+            $('#textarea').autocomplete("close");
+        }
     }
 
     function capitalizeFirstLetter(string) {
+        try {
         return string.charAt(0).toUpperCase() + string.slice(1);
+        } catch (e) {
+            $('#textarea').autocomplete("close");
+        }
     }
 
 
@@ -59,7 +67,7 @@ $(function() {
                 n = term.split(".");
                 word = n[n.length - 1];
                 word = "-----";
-                $('#textarea').autocomplete("close");
+               // $('#textarea').autocomplete("close");
             } else if (word.length >= 3) {
 
                 if (word.includes(".") === true) {
@@ -83,7 +91,7 @@ $(function() {
 
 
 
-                if ((event.keyCode === 190) ) {
+                if ((event.keyCode === 190) || (event.keyCode === 32) ) {
                   //  console.log("space or dot pressed");
                     $('#textarea').autocomplete("close");
 
@@ -121,21 +129,106 @@ $(function() {
                 multiline: true,
                 autoFocus: true,
                 appendTo: '#appendEnabled',
-                position: { my : "right top", at: "right bottom" },
                 source: function(request, response) {
                     // delegate back to autocomplete, but extract the last term
 
                     lastWord = extractLast(request.term);
+                    lastWordSpace = extractLast(request.term.trim());
+                    var lastChar = request.term.substr(request.term.length - 1);
+                    //console.log("!!!SPACE PRESSED!!! - '"+lastChar+"'");
+
+
+
+                    if (lastChar==" ") {
+                       // $('#textarea').autocomplete("close");
+                        console.log("!!!SPACE PRESSED!!!");
+                        var textEntryContent = document.getElementById("textarea").value;
+
+                        var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
+                        var lastLine = arrayOfLines.slice(-1)[0];
+                        if (lastLine.indexOf('.') > 0) {
+                            lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
+                              console.log("LAST SENTENCE: " + lastLine);
+                        } else {
+                             console.log("LAST SENTENCE: " + lastLine);
+                        }
+
+
+                        var spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
+
+
+                        console.log("spaceCount: " + spaceCount);
+                        if (spaceCount >= 1) {
+
+                            var urlAnswerSearch = hostname + "api/bing-answer-search.php?q=" + lastLine;
+                            //var urlAnswerSearch = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine ;
+
+                            var extract = "";
+
+                            $.get( urlAnswerSearch, function(data) {
+                                //myStr.match(/\$(.*?)\./);
+
+                                document.getElementById("topHelp").innerHTML = data;
+
+                                if (stripHtml(data).includes(lastWordSpace) == true) {
+                                    console.log("FOUND: " + lastWordSpace);
+                                var regex = new RegExp(lastWordSpace + "(.*?)\\.");
+                                var matches = stripHtml(data).match(regex);
+                                extract = matches && matches.length ? matches[1] : '';
+
+                                    /*
+                                                                        if (stripHtml(extract).includes(",") == true) {
+                                                                            var deliminator1 = ",";
+                                                                            regex1 = new RegExp(deliminator1 + "(.*?)\\.");
+                                                                            matches1 = stripHtml(extract).match(regex1);
+                                                                            extract = matches1 && matches1.length ? matches1[1] : '';
+                                                                        }
+
+                                                                        if (stripHtml(extract).includes(";") == true) {
+                                                                            var deliminator1 = ",";
+                                                                            regex = new RegExp(deliminator1 + "(.*?)\\.");
+                                                                            matches = stripHtml(extract).match(regex);
+                                                                            extract = matches && matches.length ? matches[1] : '';
+                                                                        }
+                                    */
 
 
 
 
-                    if (lastWord) {
+
+                                console.log("EXTRACT:" + extract);
+                                if (extract) {
+                                //console.log(returned);
+                                availableTags = [];
+                               // var finalSuggestion = extract;
+                                var finalSuggestion = lastWordSpace + extract + ".";
+                                    availableTags.push(finalSuggestion);
+                                //console.log(availableTags);
+                                //availableTags.push("returned");
+
+
+                                response(availableTags);
+                                }
+
+                                }
+                            });
+
+                            /*
+                            $.getJSON(urlAnswerSearch, function (json2) {
+                                testavailableTags = [];
+                                testavailableTags.push(json2);
+                                console.log(testavailableTags);
+                                availableTags = [];
+                                availableTags = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ];
+
+                                console.log(availableTags);
+                                response(availableTags);
+                            })
+                            */
+                        }
+
+                    } else if (lastWord) {
                         if (lastWord.length >= 3) {
-
-
-
-
 
 
                             console.log("LAST WORD: "+lastWord);
@@ -179,17 +272,18 @@ $(function() {
                                             response(availableTags);
                                         } });
                                         */
-                                   $.getJSON(hostname + "/api/search.php?q=" + lastWord + "&s=" + lastLine , function (json) {
+                                   $.getJSON(hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine , function (json) {
                                        availableTags = [];
                                     availableTags = json;
-                                    //console.log(availableTags);
-                                       console.log(availableTags.length + " -> " + availableTags[0]);
+                                    console.log(availableTags);
+                                     //  console.log(availableTags.length + " -> " + availableTags[0]);
 
-
+/*
                                        try {
                                        availableTags.push("Test");
                                        } catch (e) {}
-
+                                       //availableTags = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ];
+                                       */
 
                                            response(availableTags);
 
@@ -227,10 +321,18 @@ $(function() {
                     //  var pos = str.lastIndexOf(word);
 //       str = str.substring(0,pos) + ui.item.value + str.substring(pos+1)
 
+                    console.log("STRING: "+str);
+
+                    if (str.slice(-1) == " ") {
+                        str = str.substring(0, (str.length - word.length)-1);
+                    } else {
+                        str = str.substring(0, (str.length - word.length));
+                    }
 
 
-                    str = str.substring(0, (str.length - word.length));
                     //  $("label[for='helper2']").text(str);
+
+                    console.log("SUBSTRING: "+str);
 
                     if (initialIsCapital(lastWord) === true) {
                         capitalizedResponse = capitalizeFirstLetter(ui.item.value);
@@ -250,6 +352,7 @@ $(function() {
 
                     totalLength = Number(document.getElementById("totalLength").innerText);
                     var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                    if (!lastWord) {lastWord = "";}
                     var countSaved =  currentCountofKeystrokesSaved + Number(ui.item.value.length - lastWord.length);
                     console.log("Words: " + lastWord + " - " + ui.item.value + " | Saved: " + countSaved);
                     document.getElementById("keystrokesSaved").innerText = countSaved;
@@ -261,32 +364,33 @@ $(function() {
                     document.getElementById("percentSaved").innerText = percentSaved.toString();
 
 
-                    getTopHelp();
-                    $( ".textarea" ).autocomplete({
-                        open: function( event, ui ) {},
-                        source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
-                    });
-                   // $('#textarea').autocomplete("open");
+                  // getTopHelp();
                     /*
-                    var terms = split(this.value);
+                 $( ".textarea" ).autocomplete({
+                     open: function( event, ui ) {},
+                     source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
+                 });
+                // $('#textarea').autocomplete("open");
+
+                 var terms = split(this.value);
 
 
 
 
 
 
-                     // remove the current input
-                     terms.pop();
+                  // remove the current input
+                  terms.pop();
 
-                     // add the selected item
-                     terms.push(ui.item.value);
+                  // add the selected item
+                  terms.push(ui.item.value);
 
-                          $("label[for='helper2']").text(ui.item.value);
+                       $("label[for='helper2']").text(ui.item.value);
 
-                     // add placeholder to get the comma-and-space at the end
-                     terms.push("");
-                     this.value = terms.join(" ");
-                     */
+                  // add placeholder to get the comma-and-space at the end
+                  terms.push("");
+                  this.value = terms.join(" ");
+                  */
                     return false;
                 }
             });
@@ -367,7 +471,7 @@ function getTopHelp() {
         $.ajax({ url: hostname + "/api/bing-answer-search.php?q=" + lastLine, success: function(data) {
                 document.getElementById("topHelp").innerHTML = data;
             } });
-
+    return data;
 
                //$("#textarea").autocomplete("search");
       //  $("#textarea").autocomplete("search");
@@ -884,4 +988,13 @@ String.prototype.removeStopWords = function() {
 
     }
     return cleansed_string.replace(/^\s+|\s+$/g, "");
+}
+
+function stripHtml(html){
+    // Create a new div element
+    var temporalDivElement = document.createElement("div");
+    // Set the HTML content with the providen
+    temporalDivElement.innerHTML = html;
+    // Retrieve the text property of the element (cross-browser support)
+    return temporalDivElement.textContent || temporalDivElement.innerText || "";
 }
