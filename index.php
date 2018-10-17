@@ -102,7 +102,7 @@
     <textarea class='autoExpand' rows='5' data-min-rows='5' id='textarea'></textarea>
 
 
-    <br>
+    <br><br><br>
     <div id="quickHelpWrapper">
         <small><b>Quick Help</b></small>
         <div id="quickHelp">

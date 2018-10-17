@@ -57,6 +57,9 @@ foreach ($resultArray as $key=>&$value) {
     if (strpos($value, ' meaning') !== false) {$value = trim(str_ireplace(" meaning","",$value));}
     if (strpos($value, ' definition') !== false) {$value = trim(str_ireplace(" definition","",$value));}
     if (strpos($value, ' weather') !== false) {$value = trim(str_ireplace(" weather","",$value));}
+    if (strpos($value, ' synonym') !== false) {$value = trim(str_ireplace(" synonym","",$value));}
+
+
     //echo "VALUE 2: $value<br>";
     //echo "$value - ". ucwords($value). "<br>";
     if (preg_match('#^\p{Lu}#u', $lastWord) == true) {

@@ -1,5 +1,5 @@
 $(function() {
-
+    var availableTags = [];
 // Overrides the default autocomplete filter function to
 // search only from the beginning of the string
     $.ui.autocomplete.filter = function (array, term) {
@@ -25,7 +25,6 @@ $(function() {
 
 
     $(function() {
-        var availableTags = [];
         var word;
         var capitalizedResponse;
         var lastWord;
@@ -99,7 +98,7 @@ $(function() {
                         event.preventDefault();
                      }
 
-                }
+                                    }
 
 
             })
@@ -114,11 +113,16 @@ $(function() {
                     lastWord = extractLast(request.term);
 
 
+
+
                     if (lastWord) {
                         if (lastWord.length >= 3) {
 
 
-                            availableTags = [];
+
+
+
+
                             console.log("LAST WORD: "+lastWord);
 
                             // last sentence
@@ -137,10 +141,7 @@ $(function() {
 
                             if ((lastWord) && (lastWord.toString().length >= 2)) {
                                 console.log("START SEARCH");
-                                availableTags = [];
-
-                                //$.getJSON("https://en.wikipedia.org/w/api.php?action=opensearch&search=" + lastTypedWord + "&limit=10&namespace=0&format=json&callback=?", function (json) {
-
+                              //  availableTags = [];
 
                                 var stopWords = ['known','know','and','also','like','i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'need','needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"];
 
@@ -152,22 +153,48 @@ $(function() {
 
                                 if (matches.length<=0) {
                                     //console.log(hostname);
-                            $.getJSON(hostname + "/api/search.php?q=" + lastWord + "&s=" + lastLine , function (json) {
+
+                                    /*
+                                    $.ajax({ url: hostname + "/api/search.php?q=" + lastLine + "&s=" + lastLine, success: function(data) {
+                                            var searchResult = document.createElement("searchResult");searchResult.innerHTML = data;
+                                            availableTags = JSON.parse(searchResult.innerText);
+
+                                            console.log(availableTags);
+                                            //availableTags.push("Test");
+                                            response(availableTags);
+                                        } });
+                                        */
+                                   $.getJSON(hostname + "/api/search.php?q=" + lastWord + "&s=" + lastLine , function (json) {
+                                       availableTags = [];
                                     availableTags = json;
-                                    console.log(availableTags);
+                                    //console.log(availableTags);
+                                       console.log(availableTags.length + " -> " + availableTags[0]);
+
+
+                                       try {
+                                       availableTags.push("Test");
+                                       } catch (e) {}
+
+
+                                           response(availableTags);
+
                                     //response($.ui.autocomplete.filter(availableTags, lastWord));
-                                    response(availableTags);
                                 })
+
+
                                 }
 
 
+
+
                             }
                             }
+
 
 
                         }
-                    }
 
+                    }
 
 
 
@@ -309,17 +336,55 @@ function getTopHelp() {
     var lastLine = arrayOfLines.slice(-1)[0];
     if (lastLine.indexOf('.') > 0) {
         lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
-        console.log("LAST SENTENCE: " + lastLine);
+      //  console.log("LAST SENTENCE: " + lastLine);
     } else {
-        console.log("LAST SENTENCE: " + lastLine);
+        // console.log("LAST SENTENCE: " + lastLine);
     }
 
     var spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
     console.log("spaceCount: " + spaceCount);
     if (spaceCount >= 1) {
+        console.log("TOP HELP SEARCH: " + lastLine);
         $.ajax({ url: hostname + "/api/bing-answer-search.php?q=" + lastLine, success: function(data) {
                 document.getElementById("topHelp").innerHTML = data;
             } });
+                //$('#textarea').autocomplete('open');
+                //console.log($("#textarea").autocomplete().data());
+
+                /*
+                $("#textarea").autocomplete().data("uiAutocomplete")._renderItem =  function( ul, item )
+                {
+                    return $( "<li>" )
+                        .append( "JOZEF" )
+                        .appendTo( ul );
+                };
+
+
+                $( "#textarea" ).autocomplete({
+                    source: ["test"],
+                    minLength:0
+                }).bind('focus', function(){ $(this).autocomplete("search"); } );
+
+
+                var source = ["Apples", "Oranges", "Bananas"];
+                $("#textarea").autocomplete({
+                    source: function (request, response) {
+                        response($.ui.autocomplete.filter(source, request.term));
+                    },
+                    change: function (event, ui) {
+                        $("#add").toggle(!ui.item);
+                    }
+                });
+
+                $("#add").on("click", function () {
+                    source.push($("#auto").val());
+                    $(this).hide();
+                });
+
+                $("#textarea").autocomplete("search");
+*/
+
+
     }
 }
 
@@ -766,11 +831,11 @@ String.prototype.removeStopWords = function() {
 
     // Split out all the individual words in the phrase
     var words = cleansed_string.match(/[^\s]+|\s+[^\s+]$/g);
-
+    try {
     // Review all the words
-    for(x=0; x < words.length; x++) {
+    for (x = 0; x < words.length; x++) {
         // For each word, check all the stop words
-        for(y=0; y < stop_words.length; y++) {
+        for (y = 0; y < stop_words.length; y++) {
             // Get the current word
             word = words[x].replace(/\s+|[^a-z]+/ig, "");   // Trim the word and remove non-alpha
 
@@ -778,18 +843,21 @@ String.prototype.removeStopWords = function() {
             stop_word = stop_words[y];
 
             // If the word matches the stop word, remove it from the keywords
-            if(word.toLowerCase() == stop_word) {
+            if (word.toLowerCase() == stop_word) {
                 // Build the regex
-                regex_str = "^\\s*"+stop_word+"\\s*$";      // Only word
-                regex_str += "|^\\s*"+stop_word+"\\s+";     // First word
-                regex_str += "|\\s+"+stop_word+"\\s*$";     // Last word
-                regex_str += "|\\s+"+stop_word+"\\s+";      // Word somewhere in the middle
+                regex_str = "^\\s*" + stop_word + "\\s*$";      // Only word
+                regex_str += "|^\\s*" + stop_word + "\\s+";     // First word
+                regex_str += "|\\s+" + stop_word + "\\s*$";     // Last word
+                regex_str += "|\\s+" + stop_word + "\\s+";      // Word somewhere in the middle
                 regex = new RegExp(regex_str, "ig");
 
                 // Remove the word from the keywords
                 cleansed_string = cleansed_string.replace(regex, " ");
             }
         }
+    }
+} catch (e) {
+
     }
     return cleansed_string.replace(/^\s+|\s+$/g, "");
 }
