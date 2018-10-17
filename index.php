@@ -29,7 +29,7 @@
 
 
 
-    <table style="width:650px;align-text: left">
+    <table style="width:650px;align-text: left;">
         <tr>
             <th align="left">
                 <small>Suggestions</small>
@@ -98,13 +98,14 @@
     <b>Enter Text!</b>
     <small>(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small>
 
+    <div id="appendEnabled">
+    <textarea class='autoExpand' rows='3' data-min-rows='3' id='textarea'></textarea>
+        </div>
 
-    <textarea class='autoExpand' rows='5' data-min-rows='5' id='textarea'></textarea>
+    <div id="spacer"></div>
 
-
-    <br><br><br>
     <div id="quickHelpWrapper">
-        <small><b>Quick Help</b></small>
+        <br><small><b>Quick Help</b></small>
         <div id="quickHelp">
             <small><div id="topHelp">
             </div></small>

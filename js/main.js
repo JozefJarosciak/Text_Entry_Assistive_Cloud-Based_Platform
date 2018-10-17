@@ -59,7 +59,7 @@ $(function() {
                 n = term.split(".");
                 word = n[n.length - 1];
                 word = "-----";
-                $('#textarea').autocomplete('close');
+                $('#textarea').autocomplete("close");
             } else if (word.length >= 3) {
 
                 if (word.includes(".") === true) {
@@ -82,15 +82,28 @@ $(function() {
             .on("keydown", function(event) {
 
 
-                if ((event.keyCode === 190) || (event.keyCode === 32)) {
+
+                if ((event.keyCode === 190) ) {
                   //  console.log("space or dot pressed");
-                    $('#textarea').autocomplete('close');
+                    $('#textarea').autocomplete("close");
 
                     // get top help ideas
-                    getTopHelp();
+
 
 
                 } else {
+
+                    if (event.keyCode === 32) {
+                       // getTopHelp();
+                        console.log("space pressed");
+                        //$('#textarea').autocomplete("search");
+                    }
+
+                    if (event.keyCode === 13) {
+                        // getTopHelp();
+                        console.log("enter pressed");
+                       // $('#textarea').autocomplete("search");
+                    }
 
                     countCharacters();
 
@@ -103,10 +116,12 @@ $(function() {
 
             })
             .autocomplete({
-                delay: 100,
+                delay: 200,
                 minLength: 3,
                 multiline: true,
                 autoFocus: true,
+                appendTo: '#appendEnabled',
+                position: { my : "right top", at: "right bottom" },
                 source: function(request, response) {
                     // delegate back to autocomplete, but extract the last term
 
@@ -225,7 +240,7 @@ $(function() {
 
                     //document.getElementById("textarea").value = str + capitalizedResponse + " " ;
                     document.getElementById("textarea").value = str + capitalizedResponse  ;
-                    $('#textarea').autocomplete('close');
+                    //$('#textarea').autocomplete('close');
 
 
                     countCharacters();
@@ -247,7 +262,11 @@ $(function() {
 
 
                     getTopHelp();
-
+                    $( ".textarea" ).autocomplete({
+                        open: function( event, ui ) {},
+                        source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
+                    });
+                   // $('#textarea').autocomplete("open");
                     /*
                     var terms = split(this.value);
 
@@ -348,6 +367,11 @@ function getTopHelp() {
         $.ajax({ url: hostname + "/api/bing-answer-search.php?q=" + lastLine, success: function(data) {
                 document.getElementById("topHelp").innerHTML = data;
             } });
+
+
+               //$("#textarea").autocomplete("search");
+      //  $("#textarea").autocomplete("search");
+
                 //$('#textarea').autocomplete('open');
                 //console.log($("#textarea").autocomplete().data());
 
@@ -381,7 +405,7 @@ function getTopHelp() {
                     $(this).hide();
                 });
 
-                $("#textarea").autocomplete("search");
+
 */
 
 
