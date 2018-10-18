@@ -398,6 +398,43 @@ $(function() {
 });
 
 
+// TOP HELP HIGHLIGHTING
+function enableHighlighting(){
+/*
+    var words = $("div#topHelp:first").html().split(" ");
+    var text = words.join("</span> <span>");
+    $("div#topHelp:first").html("<span>" + text + "</span>");
+    $("span").click(function () {
+        $(this).css("background-color","LightYellow");
+        var wordHighligted = $(this).text();
+        console.log("SELECTED: " + wordHighligted);
+        $("#textarea").append(" " + wordHighligted);
+    });
+*/
+   // $('#topHelp').click(function(){
+        var s = window.getSelection();
+        s.modify('extend','backward','word');
+        var b = s.toString();
+
+        s.modify('extend','forward','word');
+        var a = s.toString();
+        s.modify('move','forward','character');
+        // alert(b+a);
+
+        // $(this).css("background-color","Yellow");
+        var wordHighligted = " "+b+a;
+        wordHighligted = wordHighligted.replace(/\s\s+/g,' ');
+        wordHighligted = wordHighligted.replace(/ \s*$/, "");
+        console.log("SELECTED: " + wordHighligted);
+
+      //  $('#textarea').append(wordHighligted);
+    $("#textarea").val($("#textarea").val() + wordHighligted);
+
+   // });
+
+};
+
+
 // Applied globally on all textareas with the "autoExpand" class
 $(document)
     .one('focus.autoExpand', 'textarea.autoExpand', function(){
@@ -410,7 +447,7 @@ $(document)
         var minRows = this.getAttribute('data-min-rows')|0, rows;
         this.rows = minRows;
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
-        this.rows = minRows + rows;
+        this.rows = minRows + rows + 1;
     });
 
 
