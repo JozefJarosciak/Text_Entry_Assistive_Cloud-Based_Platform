@@ -107,7 +107,7 @@
     <div id="quickHelpWrapper">
         <br><small><b>Quick Help</b></small>
         <div id="quickHelp">
-            <small><div id="topHelp" ondblclick="enableHighlighting()">
+            <small><div id="topHelp" onclick="enableHighlighting()">
             </div></small>
         </div>
     </div>

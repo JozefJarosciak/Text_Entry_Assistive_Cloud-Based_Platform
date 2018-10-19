@@ -29,7 +29,6 @@ textarea{
     box-shadow: 2px 2px #ebebeb;
     border: 2px solid #cccccc;
     background-color: #fffcd0;
-    resize: none;
 }
 
 .ui-menu .ui-menu-item { /* the selector */

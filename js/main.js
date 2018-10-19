@@ -363,7 +363,6 @@ $(function() {
                     var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100)  ;
                     document.getElementById("percentSaved").innerText = percentSaved.toString();
 
-
                   // getTopHelp();
                     /*
                  $( ".textarea" ).autocomplete({
@@ -398,6 +397,25 @@ $(function() {
 });
 
 
+function placeCaretAtEnd(el) {
+    el.focus();
+    if (typeof window.getSelection != "undefined" &&
+        typeof document.createRange != "undefined") {
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+    } else if (typeof document.body.createTextRange != "undefined") {
+        var textRange = document.body.createTextRange();
+        textRange.moveToElementText(el);
+        textRange.collapse(false);
+        textRange.select();
+    }
+}
+
+
 // TOP HELP HIGHLIGHTING
 function enableHighlighting(){
 /*
@@ -429,6 +447,24 @@ function enableHighlighting(){
 
       //  $('#textarea').append(wordHighligted);
     $("#textarea").val($("#textarea").val() + wordHighligted);
+
+
+    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+    var countSaved =  currentCountofKeystrokesSaved + wordHighligted.length;
+    document.getElementById("keystrokesSaved").innerText = countSaved;
+
+    // percent saved
+    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+    var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100)  ;
+    document.getElementById("percentSaved").innerText = percentSaved.toString();
+
+
+    countCharacters();
+
+    //placeCaretAtEnd(document.getElementById('textarea'));
+    document.getElementById('textarea').focus();
+
+    $("#textarea").trigger({type: 'keypress', which: 13, keyCode: 13});
 
    // });
 
