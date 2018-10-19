@@ -23,7 +23,7 @@ $host = "https://api.labs.cognitive.microsoft.com";
 $path = "/answersearch/v7.0/search";
 
 $mkt = "en-US";
-$query = urlencode($q);
+$query = urlencode("site:wikipedia.org ".$q);
 
 $count=1;
 $offset=0;
@@ -55,19 +55,6 @@ $result = json_encode(json_decode ($result), JSON_PRETTY_PRINT);
 
 $data = json_decode($result, true);
 //echo json_encode (json_decode ($result), JSON_PRETTY_PRINT);
-
-
-// RICH CAPTIONS
-$numRichCaptions = count($data[webPages][value][0][richCaption][rows]);
-if ($numRichCaptions>0) {echo "<b>Suggestions: </b>";}
-for ($i = 0; $i < $numRichCaptions; $i++) {
-    echo '<a href="'.$data[webPages][value][0][richCaption][rows][$i][cells][0][url].'" target="_blank">'.$data[webPages][value][0][richCaption][rows][$i][cells][0][text].'</a>';
-    echo ' - '.$data[webPages][value][0][richCaption][rows][$i][cells][1][text];
-    if ($i>=2) {echo '.';break;} else {echo ' ; ';}
-}
-
-if ($numRichCaptions>0) {echo "<br><br>";}
-
 
 
 // NAME
@@ -106,6 +93,18 @@ echo $data[webPages][value][0][snippet]. "... ";
 //echo  "|" . $data[webPages][value][0][displayUrl] . "<br>";
 }
 
+// RICH CAPTIONS
+$numRichCaptions = count($data[webPages][value][0][richCaption][rows]);
+if ($numRichCaptions>0) {echo "<b>Suggestions: </b>";}
+for ($i = 0; $i < $numRichCaptions; $i++) {
+    echo '<a href="'.$data[webPages][value][0][richCaption][rows][$i][cells][0][url].'" target="_blank">'.$data[webPages][value][0][richCaption][rows][$i][cells][0][text].'</a>';
+    echo ' - '.$data[webPages][value][0][richCaption][rows][$i][cells][1][text];
+    if ($i>=2) {echo '.';break;} else {echo ' ; ';}
+}
+
+if ($numRichCaptions>0) {echo "<br>";}
+
+echo "<br>";
 
 // DEEP LINKS
 $numDeepLinks = count($data[webPages][value][0][deepLinks]);

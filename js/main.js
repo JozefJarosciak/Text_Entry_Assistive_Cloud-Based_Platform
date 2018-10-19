@@ -1,5 +1,12 @@
 $(function() {
     var availableTags = [];
+
+
+    var container = document.getElementById('mynetwork');
+    var dot = 'dinetwork {node[shape=circle]; 1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }';
+    var data = vis.network.convertDot(dot);
+    var network = new vis.Network(container, data);
+
 // Overrides the default autocomplete filter function to
 // search only from the beginning of the string
     $.ui.autocomplete.filter = function (array, term) {
@@ -67,7 +74,7 @@ $(function() {
                 n = term.split(".");
                 word = n[n.length - 1];
                 word = "-----";
-               // $('#textarea').autocomplete("close");
+                $('#textarea').autocomplete("close");
             } else if (word.length >= 3) {
 
                 if (word.includes(".") === true) {
@@ -91,10 +98,9 @@ $(function() {
 
 
 
-                if ((event.keyCode === 190) || (event.keyCode === 32) ) {
+                if ((event.keyCode === 190)) {
                   //  console.log("space or dot pressed");
                     $('#textarea').autocomplete("close");
-
                     // get top help ideas
 
 
@@ -102,13 +108,13 @@ $(function() {
                 } else {
 
                     if (event.keyCode === 32) {
-                       // getTopHelp();
                         console.log("space pressed");
                         //$('#textarea').autocomplete("search");
+                        getTopHelp();
                     }
 
                     if (event.keyCode === 13) {
-                        // getTopHelp();
+                        getTopHelp();
                         console.log("enter pressed");
                        // $('#textarea').autocomplete("search");
                     }
@@ -137,7 +143,7 @@ $(function() {
                     var lastChar = request.term.substr(request.term.length - 1);
                     //console.log("!!!SPACE PRESSED!!! - '"+lastChar+"'");
 
-
+/*
 
                     if (lastChar==" ") {
                        // $('#textarea').autocomplete("close");
@@ -176,22 +182,6 @@ $(function() {
                                 var matches = stripHtml(data).match(regex);
                                 extract = matches && matches.length ? matches[1] : '';
 
-                                    /*
-                                                                        if (stripHtml(extract).includes(",") == true) {
-                                                                            var deliminator1 = ",";
-                                                                            regex1 = new RegExp(deliminator1 + "(.*?)\\.");
-                                                                            matches1 = stripHtml(extract).match(regex1);
-                                                                            extract = matches1 && matches1.length ? matches1[1] : '';
-                                                                        }
-
-                                                                        if (stripHtml(extract).includes(";") == true) {
-                                                                            var deliminator1 = ",";
-                                                                            regex = new RegExp(deliminator1 + "(.*?)\\.");
-                                                                            matches = stripHtml(extract).match(regex);
-                                                                            extract = matches && matches.length ? matches[1] : '';
-                                                                        }
-                                    */
-
 
 
 
@@ -213,21 +203,11 @@ $(function() {
                                 }
                             });
 
-                            /*
-                            $.getJSON(urlAnswerSearch, function (json2) {
-                                testavailableTags = [];
-                                testavailableTags.push(json2);
-                                console.log(testavailableTags);
-                                availableTags = [];
-                                availableTags = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ];
-
-                                console.log(availableTags);
-                                response(availableTags);
-                            })
-                            */
                         }
 
-                    } else if (lastWord) {
+                    }
+                    */
+                    if (lastWord) {
                         if (lastWord.length >= 3) {
 
 
@@ -346,10 +326,6 @@ $(function() {
 
 
                     countCharacters();
-
-                        // with every keystroke calculate the totals
-                        //console.log("Total Length: " + totalLength);
-
                     totalLength = Number(document.getElementById("totalLength").innerText);
                     var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
                     if (!lastWord) {lastWord = "";}
@@ -363,33 +339,6 @@ $(function() {
                     var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100)  ;
                     document.getElementById("percentSaved").innerText = percentSaved.toString();
 
-                  // getTopHelp();
-                    /*
-                 $( ".textarea" ).autocomplete({
-                     open: function( event, ui ) {},
-                     source: [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ]
-                 });
-                // $('#textarea').autocomplete("open");
-
-                 var terms = split(this.value);
-
-
-
-
-
-
-                  // remove the current input
-                  terms.pop();
-
-                  // add the selected item
-                  terms.push(ui.item.value);
-
-                       $("label[for='helper2']").text(ui.item.value);
-
-                  // add placeholder to get the comma-and-space at the end
-                  terms.push("");
-                  this.value = terms.join(" ");
-                  */
                     return false;
                 }
             });
@@ -418,18 +367,6 @@ function placeCaretAtEnd(el) {
 
 // TOP HELP HIGHLIGHTING
 function enableHighlighting(){
-/*
-    var words = $("div#topHelp:first").html().split(" ");
-    var text = words.join("</span> <span>");
-    $("div#topHelp:first").html("<span>" + text + "</span>");
-    $("span").click(function () {
-        $(this).css("background-color","LightYellow");
-        var wordHighligted = $(this).text();
-        console.log("SELECTED: " + wordHighligted);
-        $("#textarea").append(" " + wordHighligted);
-    });
-*/
-   // $('#topHelp').click(function(){
         var s = window.getSelection();
         s.modify('extend','backward','word');
         var b = s.toString();
@@ -446,7 +383,7 @@ function enableHighlighting(){
         console.log("SELECTED: " + wordHighligted);
 
       //  $('#textarea').append(wordHighligted);
-    $("#textarea").val($("#textarea").val() + wordHighligted);
+    $("#textarea").val($("#textarea").val().trim() + wordHighligted);
 
 
     var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
@@ -464,7 +401,8 @@ function enableHighlighting(){
     //placeCaretAtEnd(document.getElementById('textarea'));
     document.getElementById('textarea').focus();
 
-    $("#textarea").trigger({type: 'keypress', which: 13, keyCode: 13});
+    //$("#textarea").trigger({type: 'keypress', which: 13, keyCode: 13});
+   // jQuery('#textarea').trigger('click');
 
    // });
 
@@ -544,7 +482,7 @@ function getTopHelp() {
         $.ajax({ url: hostname + "/api/bing-answer-search.php?q=" + lastLine, success: function(data) {
                 document.getElementById("topHelp").innerHTML = data;
             } });
-    return data;
+    //return data;
 
                //$("#textarea").autocomplete("search");
       //  $("#textarea").autocomplete("search");

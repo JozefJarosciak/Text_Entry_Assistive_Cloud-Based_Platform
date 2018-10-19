@@ -1,10 +1,8 @@
 /* JUST FOR THIS DEMO */
 
 div#entirePage{
-    width: 800px;
+    width: 1024px;
     position: relative;
-    min-width: 800px;
-    max-width: 800px;
     margin: 0px auto;
     font-family: "Helvetica", Times, serif;
 }
@@ -19,33 +17,42 @@ textarea{
     font-family: "Helvetica", Times, serif;
     display: block;
     box-sizing: padding-box;
-    overflow-y: hidden;
     overflow-x: hidden;
-    padding: 10px;
-    width: 800px;
-    max-width: 800px;
-    font-size: 16px;
+    padding: 5px;
+    width: 500px;
+    max-width: 500px;
+    min-height: 250px;
+    max-height: 250px;
+    font-size: 14px;
     border-radius: 6px;
     box-shadow: 2px 2px #ebebeb;
     border: 2px solid #cccccc;
     background-color: #fffcd0;
+    overflow-y: scroll;
+    resize: none;
 }
 
-.ui-menu .ui-menu-item { /* the selector */
+#knowledgeGraph {
+    background: #ebebeb;
+    width: 500px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.ui-menu .ui-menu-item {
+    max-width: 500px;
+/*
     font-family: "Helvetica", Times, serif;
     font-size: 14px;
     color: #575757;
     font-weight: bold;
     box-shadow: 0 0 10px 100px #b5ffee inset;
-
+*/
 }
+
 
 .ui-autocomplete {
     position: static !important;
-}
-
-#spacer #quickHelpWrapper #analyticsWrapper {
-    position: relative;
 }
 
 #footer {
@@ -55,13 +62,18 @@ textarea{
 }
 
 #quickHelp {
-    border: 1px solid lightgrey;
-    min-height: 20px;
-    width: 800px;
-    max-width: 800px;
-    padding: 10px;
+   /* border: 1px solid lightgrey; */
+    width: 98%;
 }
 
+#researchBox {
+    border: 1px solid #ffffff;
+    min-height: 10px;
+    padding: 0px;
+    background: white;
+    vertical-align: top;
+    text-align: left;
+}
 
 #wrapper {
     width: 800px;
@@ -73,23 +85,7 @@ textarea{
     float: left;
     min-height: 300px;
     color: #525252;
-
 }
-
-#leftcolumn {
-    width: 150px;
-    background-color: #d8d8d8;
-    padding-left: 5px;
-    padding-top: 5px;
-}
-
-#rightcolumn {
-    width: 635px;
-    background-color: #f3f3f3;
-    padding-left: 5px;
-    padding-top: 5px;
-}
-
 
 .onoffswitch {
     position: relative; width: 60px;

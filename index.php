@@ -6,11 +6,15 @@
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
     <title>Text Entry Assistive Cloud-Based Platform</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/vis.min.js"></script>
     <script src="js/main.js"></script>
-    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <link rel="stylesheet" href="css/vis-network.min.css" type="text/css"/>
+
 </head>
 
 <body>
@@ -20,13 +24,15 @@
 
 
     <h1>Text Entry Assistive Cloud-Based Platform</h1>
-    <small><b>Dissertation:</b> H00058995; <b>Requirements:</b> Chrome 69+, Resolution: 800x600; <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">Open Source</a>
+    <small><b>Dissertation:</b> H00058995; <b>Requirements:</b> Chrome 69+, Resolution: 1024x768; <a
+                href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">Open Source</a>
         under <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform/blob/master/LICENSE.md" target="_blank">AGPL-3.0</a>
-        ; © <script>document.write(new Date().getFullYear())</script> J.Jarosciak.
+        ; ©
+        <script>document.write(new Date().getFullYear())</script>
+        J.Jarosciak.
         <br>
     </small>
     <br>
-
 
 
     <table style="width:650px;align-text: left;">
@@ -78,15 +84,15 @@
                     </label>
                 </div>
             </td>
-            <td style="background: ivory">
+            <td>
                 <b><label id="totalLength">0</label></b>
             </td>
 
-            <td style="background: ivory">
+            <td>
                 <b><label id="wordCounter">0</label></b>
             </td>
 
-            <td style="background: ivory">
+            <td>
                 <b><label id="keystrokesSaved">0</label></b> (<label id="percentSaved">0</label>%)
             </td>
         </tr>
@@ -95,38 +101,40 @@
 
     <br>
 
-    <b>Enter Text!</b>
-    <small>(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small>
 
-    <div id="appendEnabled">
-    <textarea class='autoExpand' rows='3' data-min-rows='3' id='textarea'></textarea>
-        </div>
 
-    <div id="spacer"></div>
+
+    <table>
+        <tr>
+            <td>
+                <b>Enter Text!</b>
+                <small>(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small>
+                <div id="appendEnabled">
+                    <textarea id='textarea'></textarea>
+                </div>
+            </td>
+            <td id="knowledgeGraph">
+                <b>Knowledge Graph</b>
+                <div id="mynetwork"></div>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+               <br>
+                    <br>
 
     <div id="quickHelpWrapper">
-        <br><small><b>Quick Help</b></small>
-        <div id="quickHelp">
-            <small><div id="topHelp" onclick="enableHighlighting()">
-            </div></small>
-        </div>
+                    <b>Quick Help</b><br>
+                    <div id="quickHelp">
+                        <small>
+                            <div id="topHelp" onclick="enableHighlighting()">
+                            </div>
+                        </small>
+                    </div>
     </div>
-
-
-    <br>
-    <div id="analyticsWrapper">
-        <small><b>Analytics</b></small>
-        <div id="wrapper">
-            <div id="leftcolumn">
-                <b style="font-size:14px">Discovered Terms</b>
-            </div>
-            <div id="rightcolumn">
-
-            </div>
-        </div>
-    </div>
-
-
 
 
 
