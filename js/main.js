@@ -1,11 +1,15 @@
+var hostname = window.location.href;
+
 $(function() {
     var availableTags = [];
+    var word;
+    var capitalizedResponse;
+    var lastWord;
+    var totalLength = 0;
 
-
-    var container = document.getElementById('mynetwork');
-    var dot = 'dinetwork {node[shape=circle]; 1 -> 1 -> 2; 2 -> 3; 2 -- 4; 2 -> 1 }';
-    var data = vis.network.convertDot(dot);
-    var network = new vis.Network(container, data);
+    var network;
+    nodes = new vis.DataSet([]);
+    edges = new vis.DataSet([]);
 
 // Overrides the default autocomplete filter function to
 // search only from the beginning of the string
@@ -20,31 +24,6 @@ $(function() {
 
     };
 
-
-    function initialIsCapital( word ){
-        try {
-        return word[0] !== word[0].toLowerCase();
-        } catch (e) {
-            $('#textarea').autocomplete("close");
-        }
-    }
-
-    function capitalizeFirstLetter(string) {
-        try {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-        } catch (e) {
-            $('#textarea').autocomplete("close");
-        }
-    }
-
-
-
-    $(function() {
-        var word;
-        var capitalizedResponse;
-        var lastWord;
-        var hostname = window.location.href;
-        var totalLength = 0;
 
         // FOCUS ON TEXT ENTRY FIELD
         document.getElementById('textarea').focus();
@@ -98,23 +77,18 @@ $(function() {
 
 
 
-                if ((event.keyCode === 190)) {
+                if ((event.keyCode === 190) || (event.keyCode === 32)) {
                   //  console.log("space or dot pressed");
                     $('#textarea').autocomplete("close");
+                    getTopHelp();
                     // get top help ideas
 
 
 
                 } else {
 
-                    if (event.keyCode === 32) {
-                        console.log("space pressed");
-                        //$('#textarea').autocomplete("search");
-                        getTopHelp();
-                    }
-
                     if (event.keyCode === 13) {
-                        getTopHelp();
+
                         console.log("enter pressed");
                        // $('#textarea').autocomplete("search");
                     }
@@ -342,8 +316,102 @@ $(function() {
                     return false;
                 }
             });
-    });
+
 });
+
+
+function initialIsCapital( word ){
+    try {
+        return word[0] !== word[0].toLowerCase();
+    } catch (e) {
+        $('#textarea').autocomplete("close");
+    }
+}
+
+function capitalizeFirstLetter(string) {
+    try {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    } catch (e) {
+        $('#textarea').autocomplete("close");
+    }
+}
+
+function createNodesEdges(name) {
+    // create an array with nodes
+    /*
+    nodes = new vis.DataSet([
+        {id: 1, label: 'Isaac Newton', shape:'box'},
+    ]);
+
+    // create an array with edges
+    edges = new vis.DataSet([
+        {from: 1, to: 2},
+    ]);
+*/
+   // edges.add( {from: 3, to: nodes.length+1});
+
+if (nodes.length>0) {
+    nodes.add({id: nodes.length+1, label: name, shape:'box'});
+    edges.add( {from: 1, to: nodes.length});
+} else {
+    nodes.add({id: nodes.length+1, label: name, shape:'box'});
+}
+    /*
+    $.ajax({ url: hostname + "/api/duckduckgo-api.php?q=" + textEntryContent, success: function(data) {
+            //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+            var dataFinal = data.split("|");
+
+            for (var forLoop1 = 0; forLoop1 < dataFinal.length; forLoop1++) {
+
+                var nameForGraph = dataFinal[forLoop1];
+                if (nameForGraph) {
+
+                    var foundExist = 0;
+                    for (var xx = 0; xx < nodes.length; xx++) {
+                        var nameFinal = network.body.data.nodes._data[xx+1].label.toLowerCase().trim();
+                        if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                            foundExist++;
+                        }
+                    }
+                    if (foundExist <= 0) {
+                        createNodesEdges(nameForGraph);
+                        showKnowledgeGraph();                  }
+                }
+
+            }
+
+            //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
+        } });
+*/
+
+}
+
+function showKnowledgeGraph() {
+
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {};
+    network = new vis.Network(container, data, options);
+    var selectedArray = network.getSelectedNodes();
+    console.log(selectedArray);
+
+
+
+}
+
+function showNodeInfo() {
+    var selectedArray = network.getSelectedNodes();
+    var nodeObj= network.body.data.nodes._data[selectedArray[0]];
+    console.log(selectedArray[0] + " - " + nodeObj.label); //nodeObj.label to get label
+
+   // createNodesEdges();
+}
 
 
 function placeCaretAtEnd(el) {
@@ -425,7 +493,7 @@ $(document)
     });
 
 
-
+/*
 function onOffSwitch(){
     if (document.getElementById("myonoffswitch2").checked === true) {
         console.log("myonoffswitch2 - on");
@@ -444,6 +512,7 @@ function onOffSwitch(){
     }
 
 }
+*/
 
 function countCharacters() {
     totalLength = document.getElementById("textarea").value.length + 1;
@@ -464,7 +533,6 @@ function countCharacters() {
 }
 
 function getTopHelp() {
-    var hostname = window.location.href;
     var textEntryContent = document.getElementById("textarea").value;
     var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
     var lastLine = arrayOfLines.slice(-1)[0];
@@ -475,55 +543,168 @@ function getTopHelp() {
         // console.log("LAST SENTENCE: " + lastLine);
     }
 
-    var spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
+    //var spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
+    var spaceCount = (lastLine.split(" ").length - 1);
+    console.log("spaceCount: " + spaceCount);
+
+    var wordNotFound = 0;
+    if (spaceCount >= 1) {
+        console.log("TOP HELP SEARCH: " + lastLine);
+        $.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + textEntryContent, success: function(data) {
+                //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                var dataFinal = data.split("|");
+
+                for (var forLoop1 = 0; forLoop1 < dataFinal.length; forLoop1++) {
+
+                var nameForGraph = dataFinal[forLoop1];
+                if (nameForGraph) {
+
+                    var foundExist = 0;
+                    for (var xx = 0; xx < nodes.length; xx++) {
+                        var nameFinal = network.body.data.nodes._data[xx+1].label.toLowerCase().trim();
+                         if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                            foundExist++;
+                        }
+                    }
+                    if (foundExist <= 0) {
+                        createNodesEdges(nameForGraph);
+                    showKnowledgeGraph();
+                        wordNotFound = 1;
+                    }
+                }
+
+                }
+
+              //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
+            } });
+    }
+
+    if (wordNotFound <= 0) {
+        $.ajax({ url: hostname + "/api/duckduckgo-api.php?q=" + getLastWord(textEntryContent), success: function(data) {
+                //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                var dataFinal = data.split("|");
+
+                if (dataFinal[1]) {
+
+
+                    var nameForGraph = dataFinal[0];
+                    if (nameForGraph) {
+
+                        var foundExist = 0;
+                        for (var xx = 0; xx < nodes.length; xx++) {
+                            var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                            if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                foundExist++;
+                            }
+                        }
+                        if (foundExist <= 0) {
+                            createNodesEdges(nameForGraph);
+                            showKnowledgeGraph();
+                        }
+                    }
+                    document.getElementById("topHelp").innerHTML = "<b>"+dataFinal[0]+"</b><br>";
+                    document.getElementById("topHelp").innerHTML += '<img src="'+dataFinal[1]+'" width="100px"><br>';
+                    document.getElementById("topHelp").innerHTML += dataFinal[3]+"<br>";
+                    wordNotFound = 1;
+                }
+
+            } });
+    }
+
+
+    if (wordNotFound <= 0) {
+        $.ajax({ url: hostname + "/api/duckduckgo-api.php?q=" + getLastTwoWords(textEntryContent), success: function(data) {
+                //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                var dataFinal = data.split("|");
+
+                if (dataFinal[1]) {
+
+
+                    var nameForGraph = dataFinal[0];
+                    if (nameForGraph) {
+
+                        var foundExist = 0;
+                        for (var xx = 0; xx < nodes.length; xx++) {
+                            var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                            if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                foundExist++;
+                            }
+                        }
+                        if (foundExist <= 0) {
+                            createNodesEdges(nameForGraph);
+                            showKnowledgeGraph();
+                        }
+                    }
+                    document.getElementById("topHelp").innerHTML = "<b>"+dataFinal[0]+"</b><br>";
+                    document.getElementById("topHelp").innerHTML += '<img src="'+dataFinal[1]+'" width="100px"><br>';
+                    document.getElementById("topHelp").innerHTML += dataFinal[3]+"<br>";
+
+                }
+
+            } });
+    }
+
+}
+
+
+function getLastWord(str) {
+    // strip punctuations
+    str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
+    str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
+    // get the last word
+    return str.trim().split(" ").reverse()[0];
+}
+
+function getLastTwoWords(str) {
+    // strip punctuations
+    str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
+    str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
+    // get the last word
+    return str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
+}
+
+function getTopHelp2() {
+  //  var hostname = window.location.href;
+    var textEntryContent = document.getElementById("textarea").value;
+    var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
+    var lastLine = arrayOfLines.slice(-1)[0];
+    if (lastLine.indexOf('.') > 0) {
+        lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
+        //  console.log("LAST SENTENCE: " + lastLine);
+    } else {
+        // console.log("LAST SENTENCE: " + lastLine);
+    }
+
+    //var spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
+    var spaceCount = (lastLine.split(" ").length - 1);
     console.log("spaceCount: " + spaceCount);
     if (spaceCount >= 1) {
         console.log("TOP HELP SEARCH: " + lastLine);
         $.ajax({ url: hostname + "/api/bing-answer-search.php?q=" + lastLine, success: function(data) {
-                document.getElementById("topHelp").innerHTML = data;
-            } });
-    //return data;
 
-               //$("#textarea").autocomplete("search");
-      //  $("#textarea").autocomplete("search");
+                var dataFinal = data.split(" ->");
+                var nameForGraph = dataFinal[0];
+                if (nameForGraph) {
 
-                //$('#textarea').autocomplete('open');
-                //console.log($("#textarea").autocomplete().data());
-
-                /*
-                $("#textarea").autocomplete().data("uiAutocomplete")._renderItem =  function( ul, item )
-                {
-                    return $( "<li>" )
-                        .append( "JOZEF" )
-                        .appendTo( ul );
-                };
-
-
-                $( "#textarea" ).autocomplete({
-                    source: ["test"],
-                    minLength:0
-                }).bind('focus', function(){ $(this).autocomplete("search"); } );
-
-
-                var source = ["Apples", "Oranges", "Bananas"];
-                $("#textarea").autocomplete({
-                    source: function (request, response) {
-                        response($.ui.autocomplete.filter(source, request.term));
-                    },
-                    change: function (event, ui) {
-                        $("#add").toggle(!ui.item);
+                    var foundExist = 0;
+                    for (var xx = 0; xx < nodes.length; xx++) {
+                        var nameFinal = network.body.data.nodes._data[xx+1].label.toLowerCase().trim();
+                        if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                            foundExist++;
+                        }
                     }
-                });
-
-                $("#add").on("click", function () {
-                    source.push($("#auto").val());
-                    $(this).hide();
-                });
+                    if (foundExist <= 0) {
+                        createNodesEdges(nameForGraph);
+                        showKnowledgeGraph();
+                    }
 
 
-*/
-
-
+                }
+                document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
+            } });
     }
 }
 

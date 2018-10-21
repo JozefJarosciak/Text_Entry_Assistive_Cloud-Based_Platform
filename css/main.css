@@ -1,10 +1,40 @@
-/* JUST FOR THIS DEMO */
+html,
+body {
+    height: 100%;
+    margin: 0
+}
 
-div#entirePage{
-    width: 1024px;
-    position: relative;
-    margin: 0px auto;
-    font-family: "Helvetica", Times, serif;
+.box {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    align-content: center;
+}
+
+.box .row {
+    border: 1px dotted grey;
+}
+
+.box .row.header {
+    flex: 0 1 auto;
+}
+
+.box .row.content {
+    display: flex;
+    flex-flow: column;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 20px;
+    font-size: 16px;
+}
+
+.box .row.footer {
+    flex: 0 1 10px;
+    justify-content: center;
+}
+
+#mynetwork{
+    height: 300px;
 }
 
 
@@ -13,42 +43,46 @@ h1 {
     margin-bottom: 0;
 }
 
+
 textarea{
     font-family: "Helvetica", Times, serif;
-    display: block;
-    box-sizing: padding-box;
     overflow-x: hidden;
-    padding: 5px;
-    width: 500px;
-    max-width: 500px;
-    min-height: 250px;
-    max-height: 250px;
-    font-size: 14px;
+    width: 100%;
+    max-width: 99%;
+    min-height: 300px;
+    max-height: 300px;
+    font-size: 16px;
     border-radius: 6px;
     box-shadow: 2px 2px #ebebeb;
     border: 2px solid #cccccc;
     background-color: #fffcd0;
     overflow-y: scroll;
-    resize: none;
+}
+.ui-menu .ui-menu-item {
+    width: 99%;
+    /*
+        font-family: "Helvetica", Times, serif;
+        font-size: 14px;
+        color: #575757;
+        font-weight: bold;
+        box-shadow: 0 0 10px 100px #b5ffee inset;
+    */
 }
 
-#knowledgeGraph {
-    background: #ebebeb;
-    width: 500px;
+#quickHelp {
+    width: 99%;
+    font-family: "Helvetica", Times, serif;
+    font-size: 18px;
+    background: #ffffff;
+    /*border: 1px solid #efefef;*/
     vertical-align: top;
     text-align: left;
+    min-height: 20px;
+    margin-left: 10px;
 }
 
-.ui-menu .ui-menu-item {
-    max-width: 500px;
-/*
-    font-family: "Helvetica", Times, serif;
-    font-size: 14px;
-    color: #575757;
-    font-weight: bold;
-    box-shadow: 0 0 10px 100px #b5ffee inset;
-*/
-}
+
+
 
 
 .ui-autocomplete {
@@ -56,14 +90,9 @@ textarea{
 }
 
 #footer {
-    width: 800px;
+    width: 100px;
     padding-top: 50px;
     margin: 0px auto;
-}
-
-#quickHelp {
-   /* border: 1px solid lightgrey; */
-    width: 98%;
 }
 
 #researchBox {
@@ -76,7 +105,7 @@ textarea{
 }
 
 #wrapper {
-    width: 800px;
+    width: 100%;
 }
 
 

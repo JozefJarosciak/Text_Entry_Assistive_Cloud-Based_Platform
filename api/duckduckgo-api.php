@@ -23,16 +23,15 @@ print "</pre>";
 echo "<hr>";
 */
 
-echo $response['Heading'] . '<br/>';
-echo $response['Image']. '<br/>';
-echo $response['AbstractURL'] . '<br/>';
-echo $response['AbstractText'] . '<br/>';
+echo $response['Heading'] . '|';
+echo $response['Image']. '|';
+echo $response['AbstractURL'] . '|';
+echo $response['AbstractText'] . '|';
 
-echo "<hr>";
 
 foreach ($response['Infobox']['content'] as $entity) {
     if (is_array ($entity['value']) !== true) {
-    echo $entity['label'] . ': ' . $entity['value']. '<br/>';
+    echo $entity['label'] . ': ' . $entity['value']. '|';
     }
 }
 

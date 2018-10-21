@@ -24,6 +24,7 @@ $path = "/answersearch/v7.0/search";
 
 $mkt = "en-US";
 $query = urlencode("site:wikipedia.org ".$q);
+//$query = urlencode($q);
 
 $count=1;
 $offset=0;
@@ -59,25 +60,26 @@ $data = json_decode($result, true);
 
 // NAME
 if ($data[webPages][value][0][name]){
-    echo '<b><a href="'.$data[webPages][value][0][url].'" target="_blank">';
+    //echo '<b><a href="'.$data[webPages][value][0][url].'" target="_blank">';
     $nameofurl = str_ireplace(" - Wikipedia","",trim($data[webPages][value][0][name]));
     $nameofurl = str_ireplace(" - IMDb","",$nameofurl);
     $nameofurl = str_ireplace(" - Official Site","",$nameofurl);
     $nameofurl1 = explode("::", $nameofurl);
     $nameofurlfin = explode("|", $nameofurl1[0]);
 
-    echo trim($nameofurlfin[0]). "</a></b>";
-    echo " - ";
+    echo trim($nameofurlfin[0]);
+   // echo trim($nameofurlfin[0]). "</a></b>";
+    echo " -> ";
 } else if ($data[webPages][value][0][about][0][name]) {
     echo "<b>";
   //  echo '<a href="'.$data[webPages][value][0][url].'" target="_blank">';
     echo strtoupper($data[webPages][value][0][about][0][name]). "</b>";
-    echo " - ";
+    echo " -> ";
 } else if ($data[entities][value][0][name]){
     echo "<b>";
    // echo '<a href="'.$data[webPages][value][0][url].'" target="_blank">';
     echo strtoupper($data[entities][value][0][name]).  "</b>";
-    echo " - ";
+    echo " -> ";
 }
 
 if ($data[facts][value][0][description]) {
@@ -87,11 +89,21 @@ if ($data[facts][value][0][description]) {
 
 // SNIPPET
 if ($data[entities][value][0][description]) {
-echo $data[entities][value][0][description]. "... ";
+echo $data[entities][value][0][description]. ".";
 } else {
-echo $data[webPages][value][0][snippet]. "... ";
+echo $data[webPages][value][0][snippet]. ". ";
 //echo  "|" . $data[webPages][value][0][displayUrl] . "<br>";
 }
+
+/*
+// SNIPPET
+if ($data[webPages][value][0][snippet]) {
+    echo $data[webPages][value][0][snippet]. ".";
+} else {
+    $data[entities][value][0][description]. ". ";
+//echo  "|" . $data[webPages][value][0][displayUrl] . "<br>";
+}
+*/
 
 // RICH CAPTIONS
 $numRichCaptions = count($data[webPages][value][0][richCaption][rows]);

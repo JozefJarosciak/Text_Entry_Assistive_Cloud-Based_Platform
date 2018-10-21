@@ -7,7 +7,7 @@ $service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
 $params = array(
     'query' => $q,
     'limit' => 10,
-    'prefix'=>false,
+    'prefix'=>TRUE,
     'indent' => TRUE,
     'key' => $google_api);
 
@@ -16,16 +16,14 @@ $url = $service_url . '?' . http_build_query($params);
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-$response = json_decode(curl_exec($ch), true);
+$json = curl_exec($ch);
+$response = json_decode($json, true);
 curl_close($ch);
 
-print_r( $response );
-
-
-echo "<hr>";
+//echo  $json ;echo "<hr>";
 
 foreach($response['itemListElement'] as $element) {
-
+    echo $element['resultScore'] . '<br/>';
 echo $element['result']['name'] . '<br/>';
 echo $element['result']['description'] . '<br/>';
 echo $element['result']['image']['contentUrl']. '<br/>';

@@ -127,198 +127,7 @@ foreach ($resultArray as $key=>&$value) {
     }
 
 }
-/*
-echo "dictionarySuggestLastWord1 -> '$resultArray[0]' <br>";
-//echo "wikiSuggestThreeWords -> '$resultArray[1]' <br>";
-echo "wikiSuggestTwoWords -> '$resultArray[2]' <br>";
-echo "wikiSuggestLastWord -> '$resultArray[3]' <br>";
-//echo "googleSuggestThreeWords -> $threeWords -> '$resultArray[4]' <br>";
-echo "googleSuggestTwoWords -> '$resultArray[5]' <br>";
-echo "googleSuggestLastWord -> '$resultArray[6]' <br>";
-*/
 
-/*
-
-
-
-// DICTIONARY SUGGEST LAST WORD
-$dictionaryWord = file_get_contents('http://www.jarosciak.com/textentry/api/dictionary.php?q=' . $lastWord);
-$dictionarySuggestLastWord = explode("|", $dictionaryWord);
-if ($dictionarySuggestLastWord[0]) {
-    array_push($resultArray, $dictionarySuggestLastWord[0]);
-}
-if ($dictionarySuggestLastWord[1]) {
-    array_push($resultArray, $dictionarySuggestLastWord[1]);
-}
-
-
-// WIKIPEDIA SUGGEST LAST 3 WORDS
-if (strlen($threeWords) > 0) {
-    $threeWords = removeCommonWords($threeWords);
-    $wikiSuggestThreeWords = file_get_contents('http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($threeWords));
-    //$positionOfExistingFullSentenceInTheResult = stripos($wikiSuggestThreeWords, $threeWords);
-   // $wikiSuggestThreeWords = substr($wikiSuggestThreeWords, ($positionOfExistingFullSentenceInTheResult + strlen($threeWords)) - (strlen($lastWord) + 1));
-    //echo "$threeWords -> $wikiSuggestThreeWords<br>";
-    array_push($resultArray, $wikiSuggestThreeWords);
-}
-
-
-// WIKIPEDIA SUGGEST LAST TWO WORDS IF LAST 3 WORDS WERE NOT FOUND
-if (strlen($wikiSuggestThreeWords) < 1) {
-    //echo strlen($wikiSuggestThreeWords)."<br>";
-    if (strlen($twoWords) > 0) {
-        $wikiSuggestTwoWords = file_get_contents('http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($twoWords));
-        $arr = explode(' ', trim($twoWords));
-        $wikiSuggestTwoWords = trim(str_replace_once($arr[0], '', $wikiSuggestTwoWords, 1));
-        $wikiSuggestTwoWords = trim(str_replace_once(strtolower($arr[0]), '', $wikiSuggestTwoWords, 1));
-        $wikiSuggestTwoWords = trim(str_replace_once(ucwords($arr[0]), '', $wikiSuggestTwoWords, 1));
-        $wikiSuggestTwoWords = trim(str_replace_once(strtoupper($arr[0]), '', $wikiSuggestTwoWords, 1));
-        if (startsWith($wikiSuggestTwoWords, 'y ') === true) {
-            $wikiSuggestTwoWords = str_replace_once('y ', '', $wikiSuggestTwoWords);
-        }
-        array_push($resultArray, $wikiSuggestTwoWords);
-    }
-}
-
-
-// WIKIPEDIA SUGGEST LAST WORD
-//if (strlen($wikiSuggestThreeWords)<1) {
-//if (!$wikiSuggestTwoWords) {
-$wikiSuggestLastWord = file_get_contents('http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($lastWord));
-array_push($resultArray, $wikiSuggestLastWord);
-//}
-//}
-
-
-// GOOGLE SUGGEST - LAST 3 WORDS
-if (strlen($wikiSuggestThreeWords) < 1) {
-    if (strlen($threeWords) > 0) {
-        // only search if sentence has no more than 5 words
-        if (substr_count($fullsentence, ' ') <= 5) {
-            $threeWords = removeCommonWords($threeWords);
-            $googleSuggestThreeWords = file_get_contents('http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . urlencode($threeWords));
-           // $positionOfExistingFullSentenceInTheResult = stripos($googleSuggestThreeWords, $threeWords);
-           // $googleSuggestThreeWords = substr($googleSuggestThreeWords, ($positionOfExistingFullSentenceInTheResult + strlen($threeWords)) - (strlen($lastWord) + 1));
-
-            if (in_arrayi(strtolower($googleSuggestThreeWords), $resultArray)) {
-            } else {
-                array_push($resultArray, $googleSuggestThreeWords);
-            }
-
-        }
-    }
-}
-
-// GOOGLE SUGGEST LAST TWO WORDS
-if (strlen($wikiSuggestThreeWords) < 1) {
-    if (strlen($wikiSuggestTwoWords) < 1) {
-        if (strlen($googleSuggestThreeWords) < 1) {
-            if (strlen($twoWords) > strlen($lastWord)) {
-                $googleSuggestTwoWords = file_get_contents('http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . urlencode($twoWords));
-                $arr = explode(' ', trim($twoWords));
-                $googleSuggestTwoWords = trim(str_replace_once($arr[0], '', $googleSuggestTwoWords, 1));
-                $googleSuggestTwoWords = trim(str_replace_once(strtolower($arr[0]), '', $googleSuggestTwoWords, 1));
-                $googleSuggestTwoWords = trim(str_replace_once(ucwords($arr[0]), '', $googleSuggestTwoWords, 1));
-                $googleSuggestTwoWords = trim(str_replace_once(strtoupper($arr[0]), '', $googleSuggestTwoWords, 1));
-
-                if (in_arrayi(strtolower($googleSuggestTwoWords), $resultArray)) {
-                } else {
-                    array_push($resultArray, $googleSuggestTwoWords);
-                }
-
-            }
-        }
-    }
-}
-
-
-// GOOGLE SUGGEST LAST WORD
-//if (strlen($wikiSuggestThreeWords) < 1) {
-  //  if (strlen($wikiSuggestTwoWords) < 1) {
-        //if (strlen($wikiSuggestLastWord) < 1) {
-    //        if (strlen($googleSuggestTwoWords) < 1) {
-                $googleSuggestLastWord = file_get_contents('http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . $lastWord);
-                //$positionOfExistingFullSentenceInTheResult = stripos($wikiSuggestThreeWords, $lastWord);
-                //$wikiSuggestThreeWords = substr($wikiSuggestThreeWords, ($positionOfExistingFullSentenceInTheResult + strlen($threeWords) + 1) - (strlen($lastWord) + 1));
-                if (in_arrayi(strtolower($googleSuggestLastWord), $resultArray)) {
-                } else {
-                    array_push($resultArray, $googleSuggestLastWord);
-                }
-        //    }
-       // }
-    //}
-//}
-
-*/
-
-
-
-// debug
-
-
-
-
-/*
-if (strtolower($dictionarySuggestLastWord[0]) === strtolower($googleSuggestTwoWords)) {
-    // GOOGLE/WIKI LAST TWO WORDS RESULTS
-    if (strtolower($googleSuggestTwoWords) === strtolower($wikiSuggestTwoWords)) {
-        array_push($resultArray, $wikiSuggestTwoWords);
-    } else {
-        if (substr($wikiSuggestTwoWords, 0, 2) === "y ") {
-            $wikiSuggestTwoWords = substr($wikiSuggestTwoWords, 2);
-            array_push($resultArray, $wikiSuggestTwoWords);
-        } else {
-            array_push($resultArray, $wikiSuggestTwoWords);
-        }
-        array_push($resultArray, $googleSuggestTwoWords);
-    }
-} else {
-    // DICTIONARY RESULT
-    if ($dictionarySuggestLastWord[0]) {
-        array_push($resultArray, $dictionarySuggestLastWord[0]);
-    }
-}
-
-/*
-echo "googleSuggestTwoWords -> $googleSuggestTwoWords <br>";
-echo "wikiSuggestTwoWords -> $wikiSuggestTwoWords <br>";
-echo "googleSuggestLastWord 1 -> $googleSuggestLastWord <br>";
-
-
-
-// GOOGLE LAST WORD SUGGESTIONS
-if (strtolower($googleSuggestLastWord) === strtolower($wikiSuggestLastWord)) {
-    array_push($resultArray, $wikiSuggestLastWord);
-} else {
-    $wikiSuggestLastWord = file_get_contents('http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=' . urlencode($googleSuggestLastWord));
-    //echo "<hr>2 - > $googleSuggestLastWord -> $wikiSuggestLastWord";
-    if (strtolower($googleSuggestLastWord) === strtolower($wikiSuggestLastWord)) {
-        array_push($resultArray, $wikiSuggestLastWord);
-    } else {
-        array_push($resultArray, $googleSuggestLastWord);
-        array_push($resultArray, $wikiSuggestLastWord);
-    }
-}
-
-
-if (strtolower(substr($googleSuggestThreeWords, 0, strlen($lastWord))) === strtolower($lastWord)) {
-    array_push($resultArray, $googleSuggestThreeWords);
-}
-*/
-/*
-echo "dictionarySuggestLastWord[0] -> $dictionarySuggestLastWord[0] <br>";
-echo "wikiSuggestLastWord 2 -> $wikiSuggestLastWord <br>";
-echo "googleSuggestSentence -> $googleSuggestThreeWords <br>";
-*/
-
-
-//array_push($resultArray, ucwords($wikiSuggestLastWord));
-
-
-//$resultArray2 = array_merge($resultArray[0], $resultArray[1]);
-//$resultArray2 = call_user_func_array('array_merge', $resultArray);
-
-//print "<pre style=\"margin:16px 8px; padding:4px; text-align:left; background:#DEDEDE; color:#000099;\">\n";
 $trimmedArray = array_map('trim', $resultArray);
 $result = array_filter($trimmedArray);
 $result = array_unique($result);
@@ -572,5 +381,201 @@ function remove_accents($string) {
 
     return $string;
 }
+
+
+
+/*
+echo "dictionarySuggestLastWord1 -> '$resultArray[0]' <br>";
+//echo "wikiSuggestThreeWords -> '$resultArray[1]' <br>";
+echo "wikiSuggestTwoWords -> '$resultArray[2]' <br>";
+echo "wikiSuggestLastWord -> '$resultArray[3]' <br>";
+//echo "googleSuggestThreeWords -> $threeWords -> '$resultArray[4]' <br>";
+echo "googleSuggestTwoWords -> '$resultArray[5]' <br>";
+echo "googleSuggestLastWord -> '$resultArray[6]' <br>";
+*/
+
+/*
+
+
+
+// DICTIONARY SUGGEST LAST WORD
+$dictionaryWord = file_get_contents('http://www.jarosciak.com/textentry/api/dictionary.php?q=' . $lastWord);
+$dictionarySuggestLastWord = explode("|", $dictionaryWord);
+if ($dictionarySuggestLastWord[0]) {
+    array_push($resultArray, $dictionarySuggestLastWord[0]);
+}
+if ($dictionarySuggestLastWord[1]) {
+    array_push($resultArray, $dictionarySuggestLastWord[1]);
+}
+
+
+// WIKIPEDIA SUGGEST LAST 3 WORDS
+if (strlen($threeWords) > 0) {
+    $threeWords = removeCommonWords($threeWords);
+    $wikiSuggestThreeWords = file_get_contents('http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($threeWords));
+    //$positionOfExistingFullSentenceInTheResult = stripos($wikiSuggestThreeWords, $threeWords);
+   // $wikiSuggestThreeWords = substr($wikiSuggestThreeWords, ($positionOfExistingFullSentenceInTheResult + strlen($threeWords)) - (strlen($lastWord) + 1));
+    //echo "$threeWords -> $wikiSuggestThreeWords<br>";
+    array_push($resultArray, $wikiSuggestThreeWords);
+}
+
+
+// WIKIPEDIA SUGGEST LAST TWO WORDS IF LAST 3 WORDS WERE NOT FOUND
+if (strlen($wikiSuggestThreeWords) < 1) {
+    //echo strlen($wikiSuggestThreeWords)."<br>";
+    if (strlen($twoWords) > 0) {
+        $wikiSuggestTwoWords = file_get_contents('http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($twoWords));
+        $arr = explode(' ', trim($twoWords));
+        $wikiSuggestTwoWords = trim(str_replace_once($arr[0], '', $wikiSuggestTwoWords, 1));
+        $wikiSuggestTwoWords = trim(str_replace_once(strtolower($arr[0]), '', $wikiSuggestTwoWords, 1));
+        $wikiSuggestTwoWords = trim(str_replace_once(ucwords($arr[0]), '', $wikiSuggestTwoWords, 1));
+        $wikiSuggestTwoWords = trim(str_replace_once(strtoupper($arr[0]), '', $wikiSuggestTwoWords, 1));
+        if (startsWith($wikiSuggestTwoWords, 'y ') === true) {
+            $wikiSuggestTwoWords = str_replace_once('y ', '', $wikiSuggestTwoWords);
+        }
+        array_push($resultArray, $wikiSuggestTwoWords);
+    }
+}
+
+
+// WIKIPEDIA SUGGEST LAST WORD
+//if (strlen($wikiSuggestThreeWords)<1) {
+//if (!$wikiSuggestTwoWords) {
+$wikiSuggestLastWord = file_get_contents('http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($lastWord));
+array_push($resultArray, $wikiSuggestLastWord);
+//}
+//}
+
+
+// GOOGLE SUGGEST - LAST 3 WORDS
+if (strlen($wikiSuggestThreeWords) < 1) {
+    if (strlen($threeWords) > 0) {
+        // only search if sentence has no more than 5 words
+        if (substr_count($fullsentence, ' ') <= 5) {
+            $threeWords = removeCommonWords($threeWords);
+            $googleSuggestThreeWords = file_get_contents('http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . urlencode($threeWords));
+           // $positionOfExistingFullSentenceInTheResult = stripos($googleSuggestThreeWords, $threeWords);
+           // $googleSuggestThreeWords = substr($googleSuggestThreeWords, ($positionOfExistingFullSentenceInTheResult + strlen($threeWords)) - (strlen($lastWord) + 1));
+
+            if (in_arrayi(strtolower($googleSuggestThreeWords), $resultArray)) {
+            } else {
+                array_push($resultArray, $googleSuggestThreeWords);
+            }
+
+        }
+    }
+}
+
+// GOOGLE SUGGEST LAST TWO WORDS
+if (strlen($wikiSuggestThreeWords) < 1) {
+    if (strlen($wikiSuggestTwoWords) < 1) {
+        if (strlen($googleSuggestThreeWords) < 1) {
+            if (strlen($twoWords) > strlen($lastWord)) {
+                $googleSuggestTwoWords = file_get_contents('http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . urlencode($twoWords));
+                $arr = explode(' ', trim($twoWords));
+                $googleSuggestTwoWords = trim(str_replace_once($arr[0], '', $googleSuggestTwoWords, 1));
+                $googleSuggestTwoWords = trim(str_replace_once(strtolower($arr[0]), '', $googleSuggestTwoWords, 1));
+                $googleSuggestTwoWords = trim(str_replace_once(ucwords($arr[0]), '', $googleSuggestTwoWords, 1));
+                $googleSuggestTwoWords = trim(str_replace_once(strtoupper($arr[0]), '', $googleSuggestTwoWords, 1));
+
+                if (in_arrayi(strtolower($googleSuggestTwoWords), $resultArray)) {
+                } else {
+                    array_push($resultArray, $googleSuggestTwoWords);
+                }
+
+            }
+        }
+    }
+}
+
+
+// GOOGLE SUGGEST LAST WORD
+//if (strlen($wikiSuggestThreeWords) < 1) {
+  //  if (strlen($wikiSuggestTwoWords) < 1) {
+        //if (strlen($wikiSuggestLastWord) < 1) {
+    //        if (strlen($googleSuggestTwoWords) < 1) {
+                $googleSuggestLastWord = file_get_contents('http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . $lastWord);
+                //$positionOfExistingFullSentenceInTheResult = stripos($wikiSuggestThreeWords, $lastWord);
+                //$wikiSuggestThreeWords = substr($wikiSuggestThreeWords, ($positionOfExistingFullSentenceInTheResult + strlen($threeWords) + 1) - (strlen($lastWord) + 1));
+                if (in_arrayi(strtolower($googleSuggestLastWord), $resultArray)) {
+                } else {
+                    array_push($resultArray, $googleSuggestLastWord);
+                }
+        //    }
+       // }
+    //}
+//}
+
+*/
+
+
+
+// debug
+
+
+
+
+/*
+if (strtolower($dictionarySuggestLastWord[0]) === strtolower($googleSuggestTwoWords)) {
+    // GOOGLE/WIKI LAST TWO WORDS RESULTS
+    if (strtolower($googleSuggestTwoWords) === strtolower($wikiSuggestTwoWords)) {
+        array_push($resultArray, $wikiSuggestTwoWords);
+    } else {
+        if (substr($wikiSuggestTwoWords, 0, 2) === "y ") {
+            $wikiSuggestTwoWords = substr($wikiSuggestTwoWords, 2);
+            array_push($resultArray, $wikiSuggestTwoWords);
+        } else {
+            array_push($resultArray, $wikiSuggestTwoWords);
+        }
+        array_push($resultArray, $googleSuggestTwoWords);
+    }
+} else {
+    // DICTIONARY RESULT
+    if ($dictionarySuggestLastWord[0]) {
+        array_push($resultArray, $dictionarySuggestLastWord[0]);
+    }
+}
+
+/*
+echo "googleSuggestTwoWords -> $googleSuggestTwoWords <br>";
+echo "wikiSuggestTwoWords -> $wikiSuggestTwoWords <br>";
+echo "googleSuggestLastWord 1 -> $googleSuggestLastWord <br>";
+
+
+
+// GOOGLE LAST WORD SUGGESTIONS
+if (strtolower($googleSuggestLastWord) === strtolower($wikiSuggestLastWord)) {
+    array_push($resultArray, $wikiSuggestLastWord);
+} else {
+    $wikiSuggestLastWord = file_get_contents('http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=' . urlencode($googleSuggestLastWord));
+    //echo "<hr>2 - > $googleSuggestLastWord -> $wikiSuggestLastWord";
+    if (strtolower($googleSuggestLastWord) === strtolower($wikiSuggestLastWord)) {
+        array_push($resultArray, $wikiSuggestLastWord);
+    } else {
+        array_push($resultArray, $googleSuggestLastWord);
+        array_push($resultArray, $wikiSuggestLastWord);
+    }
+}
+
+
+if (strtolower(substr($googleSuggestThreeWords, 0, strlen($lastWord))) === strtolower($lastWord)) {
+    array_push($resultArray, $googleSuggestThreeWords);
+}
+*/
+/*
+echo "dictionarySuggestLastWord[0] -> $dictionarySuggestLastWord[0] <br>";
+echo "wikiSuggestLastWord 2 -> $wikiSuggestLastWord <br>";
+echo "googleSuggestSentence -> $googleSuggestThreeWords <br>";
+*/
+
+
+//array_push($resultArray, ucwords($wikiSuggestLastWord));
+
+
+//$resultArray2 = array_merge($resultArray[0], $resultArray[1]);
+//$resultArray2 = call_user_func_array('array_merge', $resultArray);
+
+//print "<pre style=\"margin:16px 8px; padding:4px; text-align:left; background:#DEDEDE; color:#000099;\">\n";
+
 
 ?>
