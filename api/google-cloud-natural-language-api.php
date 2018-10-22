@@ -36,7 +36,7 @@ curl_close($ch);
 
 print_r($result);
 
-echo "<hr>";
+//echo "<hr>";
 
 $count = 0;
 foreach ($response["entities"] as $entity) {

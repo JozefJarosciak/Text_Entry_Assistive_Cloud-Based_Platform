@@ -29,7 +29,7 @@
                 <br>
 
 
-        <table style="width:45%;align-text: left;border: 1px solid grey;">
+        <table id="statsBox">
             <tr>
                 <th align="left">
                     <small>Suggestions</small>
@@ -68,12 +68,11 @@
             </tr>
         </table>
 
-        <br>
 
-        <table style="width:100%;min-width:100%;height:300px">
+        <table id="topTable">
             <tr>
-                <th style="height:15px;">Enter Text!</b> <small>(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
-                <th style="height:15px;">Knowledge/Relationship Graph</th>
+                <th><h3>Enter Text!</h3><small>(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
+                <th><h3>Knowledge/Relationship Graph</h3><small>(double click the nodes to load details | drag to re-arrange)</small></th>
             </tr>
             <tr>
                 <td style="width:45%;">
@@ -82,8 +81,13 @@
                         <textarea id='textarea'></textarea>
                     </div>
                 </td>
-                <td style="background:lightgrey">
-                    <div id="mynetwork" ondblclick="showNodeInfo()"></div>
+                <td id="quickHelpCell">
+                    <div id="quickHelp">
+                        <small>
+                            <div id="topHelp" onclick="enableHighlighting()">
+                            </div>
+                        </small>
+                    </div>
 
                 </td>
             </tr>
@@ -102,29 +106,10 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div class="row content">
 
-    <div id="quickHelp">
-        <small>
-            <div id="topHelp" onclick="enableHighlighting()">
-            </div>
-        </small>
-    </div>
+        <div id="mynetwork" ondblclick="showNodeInfo()"></div>
+
     </div>
 
 
