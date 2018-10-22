@@ -2,6 +2,7 @@ var hostname = window.location.href;
 var network;
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
+var researchList = [];
 
 $(function () {
     var availableTags = [];
@@ -452,9 +453,13 @@ function showKnowledgeGraph(id) {
         edges: edges
     };
     var options = {
-       autoResize: true,
-        height: '100%',
-        width: '100%'
+        physics: {
+            barnesHut: {
+                avoidOverlap: 1
+            }},
+      // autoResize: true,
+      //  height: '100%',
+      //  width: '100%'
     };
 
     if (id) {
@@ -491,6 +496,8 @@ function showNodeInfo() {
     var nodeObj = network.body.data.nodes._data[selectedArray[0]];
     console.log(selectedArray[0] + " - " + nodeObj.label); //nodeObj.label to get label
     var selectedNodeID = selectedArray[0];
+    researchList.push(nodeObj.label);
+    console.log(researchList);
 
     $.ajax({
         url: hostname + "/api/duckduckgo-api.php?q=" + nodeObj.label, success: function (data) {
