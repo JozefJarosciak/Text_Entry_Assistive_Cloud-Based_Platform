@@ -25,54 +25,61 @@
 
     <div class="row header">
 
-        <h1>Text Entry Assistive Cloud-Based Platform</h1>
-                <br>
-
-
-        <table id="statsBox">
+        <table id="topHeaderTable">
             <tr>
-                <th align="left">
-                    <small>Suggestions</small>
-                </th>
-                <th align="left">
-                    <small>Character Count</small>
-                </th>
-                <th align="left">
-                    <small>Word Count</small>
-                </th>
-                <th align="left">
-                    <small>Saved Keystrokes</small>
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    <div class="onoffswitch">
-                        <input type="checkbox" name="onoffswitch1" class="onoffswitch-checkbox" id="myonoffswitch1" checked>
-                        <label class="onoffswitch-label" for="myonoffswitch1">
-                            <span class="onoffswitch-inner"></span>
-                            <span class="onoffswitch-switch"></span>
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <b><label id="totalLength">0</label></b>
-                </td>
+                <td> <h4>Text Entry Assistive Cloud-Based Platform</h4></td>
+                <td style="vertical-align: middle;"><table id="statsBox">
+                        <tr>
+                            <th align="left">
+                                <small>Suggestions</small>
+                            </th>
+                            <th align="left">
+                                <small>Character Count</small>
+                            </th>
+                            <th align="left">
+                                <small>Word Count</small>
+                            </th>
+                            <th align="left">
+                                <small>Saved Keystrokes</small>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch1" class="onoffswitch-checkbox" id="myonoffswitch1" checked>
+                                    <label class="onoffswitch-label" for="myonoffswitch1">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <b><label id="totalLength">0</label></b>
+                            </td>
 
-                <td>
-                    <b><label id="wordCounter">0</label></b>
-                </td>
+                            <td>
+                                <b><label id="wordCounter">0</label></b>
+                            </td>
 
-                <td>
-                    <b><label id="keystrokesSaved">0</label></b> (<label id="percentSaved">0</label>%)
-                </td>
+                            <td>
+                                <b><label id="keystrokesSaved">0</label></b> (<label id="percentSaved">0</label>%)
+                            </td>
+                        </tr>
+                    </table></td>
             </tr>
         </table>
 
 
+
+
+
+
+<br>
+
         <table id="topTable">
             <tr>
-                <th><h3>Enter Text!</h3><small>(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
-                <th><h3>Knowledge/Relationship Graph</h3><small>(double click the nodes to load details | drag to re-arrange)</small></th>
+                <th><h3>Enter Text!</h3> <small id="detailHeader">(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
+                <th><h3>Discovery Panel</h3> <small id="detailHeader">(double click words to add it to text editor)</small></th>
             </tr>
             <tr>
                 <td style="width:45%;">
@@ -97,19 +104,13 @@
 
 
 
-        <br>
-
 
 
     </div>
 
-
-
-
     <div class="row content">
-
+        <h3>Knowledge/Relationship Graph</h3> <small id="detailHeader">(double click the nodes to load details | drag to re-arrange)</small>
         <div id="mynetwork" ondblclick="showNodeInfo()"></div>
-
     </div>
 
 

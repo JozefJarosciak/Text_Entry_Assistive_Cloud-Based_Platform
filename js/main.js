@@ -1,4 +1,7 @@
 var hostname = window.location.href;
+var network;
+var nodes = new vis.DataSet([]);
+var edges = new vis.DataSet([]);
 
 $(function () {
     var availableTags = [];
@@ -7,9 +10,8 @@ $(function () {
     var lastWord;
     var totalLength = 0;
 
-    var network;
-    nodes = new vis.DataSet([]);
-    edges = new vis.DataSet([]);
+
+
 
 // Overrides the default autocomplete filter function to
 // search only from the beginning of the string
@@ -329,7 +331,7 @@ function capitalizeFirstLetter(string) {
     }
 }
 
-function createNodesEdges(name) {
+function createNodesEdges(name,textForSearch) {
     if (nodes.length > 0) {
         nodes.add({id: nodes.length + 1, label: name, shape: 'box'});
         edges.add({from: 1, to: nodes.length});
@@ -339,14 +341,19 @@ function createNodesEdges(name) {
 
     //showNodeInfo();
 
-    addNodesAround(name,nodes.length);
+    addNodesAround(name,nodes.length,textForSearch);
 
 }
 
 
-function addNodesAround(name,id) {
-    $.ajax({ url: hostname + "/api/google-knowledge-graph-api.php?d=1&q=" + name, success: function(data) {
-            //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+function addNodesAround(name,id,textForSearch) {
+
+ //   console.log(textForSearch);
+
+    var colorNodes = getRandColor(5);
+
+    //$.ajax({ url: hostname + "/api/google-knowledge-graph-api.php?d=1&q=" + name, success: function(data) {
+          $.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + textForSearch, success: function(data) {
 
             var dataFinal = data.split("|");
 
@@ -363,8 +370,12 @@ function addNodesAround(name,id) {
                         }
                     }
                     if (foundExist <= 0) {
-                        nodes.add({id: nodes.length + 1, label: nameForGraph, shape: 'box'});
+                        nodes.add({id: nodes.length + 1, label: nameForGraph, shape: 'box', color: colorNodes});
                         var selectedArray = network.getSelectedNodes();
+
+
+
+
 
                         if (id) {
                             edges.add({from: id, to: nodes.length});
@@ -372,32 +383,91 @@ function addNodesAround(name,id) {
                             edges.add({from: selectedArray[0], to: nodes.length});
                         }
 
-                   } else {
-
-
-                    }
+                   }
 
                 }
 
             }
+                  if (id) {
+                     // network.nodes.update({id:id, x:0, y: 0});
 
+                      /*
+                      var $this = $('#textarea');
+                      var offset = $this.offset();
+                      var width = $this.width();
+                      var height = $this.height();
+
+                      var centerX = offset.left + width / 2;
+                      var centerY = offset.top + height / 2;
+*/
+                      //network.nodes.focus({id:id, x:0, y: 0});
+
+                      for (var xx = 1; xx < nodes.length; xx++) {
+                          nodes.update({
+                              id:xx,
+                              x:undefined, y: undefined,
+                             fixed: {
+                                  x:false,
+                                  y:false
+                              }
+                          });
+                      }
+
+                      nodes.update({
+                              id:id,
+                              x:0, y: 0,
+                          fixed: {
+                              x:true,
+                              y:true
+                          }
+                      });
+
+
+                      //network.moveTo({position: {x:0, y:0},scale: 1.0});
+                      network.focus(id,{scale: 1.0});
+                      network.moveTo({position: {x:0, y:0},scale: 1.0});
+                      //network.moveNode(id, 0, 0);
+
+
+                      nodes.update({
+                          id:id,
+                          x:0, y: 0,
+                          fixed: {
+                              x:false,
+                              y:false
+                          }
+                      });
+                      network.moveNode(id, 0, 0);
+                  }
             //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
         } });
 
 }
 function showKnowledgeGraph() {
-
-
     // create a network
     var container = document.getElementById('mynetwork');
     var data = {
         nodes: nodes,
         edges: edges
     };
-    var options = {};
+    var options = {
+       autoResize: true,
+        height: '100%',
+        width: '100%'
+    };
     network = new vis.Network(container, data, options);
-    var selectedArray = network.getSelectedNodes();
-    console.log(selectedArray);
+  // var selectedArray = network.getSelectedNodes();
+
+
+    /*
+    network.on("selectNode", function (params) {
+        var node = network.body.nodes[id];
+        node.setOptions({
+            selected: true
+        });
+    });
+*/
+ //   console.log("Selected Node: " + id);
 
 
 }
@@ -406,9 +476,7 @@ function showNodeInfo() {
     var selectedArray = network.getSelectedNodes();
     var nodeObj = network.body.data.nodes._data[selectedArray[0]];
     console.log(selectedArray[0] + " - " + nodeObj.label); //nodeObj.label to get label
-
-
-
+    var selectedNodeID = selectedArray[0];
 
     $.ajax({
         url: hostname + "/api/duckduckgo-api.php?q=" + nodeObj.label, success: function (data) {
@@ -416,7 +484,30 @@ function showNodeInfo() {
 
             var dataFinal = data.split("|");
 
-            if (dataFinal[1]) {
+            if (dataFinal[0]) {
+
+
+                document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + dataFinal[3] + '<br><br>';
+
+                if (dataFinal[5]) {
+                    try {
+                        for (var xx = 4; xx < dataFinal.length-1; xx++) {
+                            var dataFinal2 = dataFinal[xx].split(":");
+
+                            if (dataFinal2[1].indexOf('local.js') < 0) {
+                                if (dataFinal2[1].indexOf('""') < 0) {
+                                    if (dataFinal2[1].indexOf('undefined') < 0) {
+                                        document.getElementById("topHelp").innerHTML += "<b>" + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                    }
+                                }
+                            }
+                        }
+
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+                document.getElementById("topHelp").innerHTML += '</td></tr></table>';
 
 
                 var nameForGraph = dataFinal[0];
@@ -429,29 +520,20 @@ function showNodeInfo() {
                             foundExist++;
                         }
                     }
-                    if (foundExist <= 0) {
-                        createNodesEdges(nameForGraph);
+                    //if (foundExist <= 0) {
+                        //createNodesEdges(nameForGraph,dataFinal[3]);
+
+
+                        addNodesAround(nameForGraph,selectedArray[0],dataFinal[3]);
                         showKnowledgeGraph();
-                    }
+
+
+
+//                       network.focus(selectedArray[0],{scale: 1,offset: {x:0, y:0}});
+                    //}
                 }
 
-                document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + dataFinal[3] + '<br><br>';
 
-
-                try {
-                    for (var xx = 4; xx < dataFinal.length; xx++) {
-                        var dataFinal2 = dataFinal[xx].split(":");
-                        if (dataFinal2[1].indexOf('local.js') < 0) {
-                            if (dataFinal2[1].indexOf('""') < 0) {
-                                if (dataFinal2[1].indexOf('undefined') < 0) {
-                                    document.getElementById("topHelp").innerHTML += "<b>" + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
-                                }
-                            }
-                        }
-                    }
-                } catch (e) {
-                }
-                document.getElementById("topHelp").innerHTML += '</td></tr></table>';
 
             }
 
@@ -459,12 +541,20 @@ function showNodeInfo() {
 
     });
 
-    addNodesAround(nodeObj.label);
+    //addNodesAround(nodeObj.label);
 }
 
 
-// TOP HELP HIGHLIGHTING
+function getRandColor(brightness){
+    // Six levels of brightness from 0 to 5, 0 being the darkest
+    var rgb = [Math.random() * 256, Math.random() * 256, Math.random() * 256];
+    var mix = [brightness*51, brightness*51, brightness*51]; //51 => 255/5
+    var mixedrgb = [rgb[0] + mix[0], rgb[1] + mix[1], rgb[2] + mix[2]].map(function(x){ return Math.round(x/2.0)})
+    return "rgb(" + mixedrgb.join(",") + ")";
+}
+
 function enableHighlighting() {
+    /*
     var s = window.getSelection();
     s.modify('extend', 'backward', 'word');
     var b = s.toString();
@@ -473,9 +563,23 @@ function enableHighlighting() {
     var a = s.toString();
     s.modify('move', 'forward', 'character');
     // alert(b+a);
+*/
+
+    s = window.getSelection();
+    var range = s.getRangeAt(0);
+    var node = s.anchorNode;
+    while(range.toString().indexOf(' ') != 0) {
+        range.setStart(node,(range.startOffset -1));
+    }
+    range.setStart(node, range.startOffset +1);
+    do{
+        range.setEnd(node,range.endOffset + 1);
+
+    }while(range.toString().indexOf(' ') == -1 && range.toString().trim() != '');
+    var str = range.toString().trim();
 
     // $(this).css("background-color","Yellow");
-    var wordHighligted = " " + b + a;
+    var wordHighligted = " " + str;
     wordHighligted = wordHighligted.replace(/\s\s+/g, ' ');
     wordHighligted = wordHighligted.replace(/ \s*$/, "");
     console.log("SELECTED: " + wordHighligted);
@@ -505,44 +609,6 @@ function enableHighlighting() {
     // });
 
 };
-
-
-// Applied globally on all textareas with the "autoExpand" class
-$(document)
-    .one('focus.autoExpand', 'textarea.autoExpand', function () {
-        var savedValue = this.value;
-        this.value = '';
-        this.baseScrollHeight = this.scrollHeight;
-        this.value = savedValue;
-    })
-    .on('input.autoExpand', 'textarea.autoExpand', function () {
-        var minRows = this.getAttribute('data-min-rows') | 0, rows;
-        this.rows = minRows;
-        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
-        this.rows = minRows + rows + 1;
-    });
-
-
-/*
-function onOffSwitch(){
-    if (document.getElementById("myonoffswitch2").checked === true) {
-        console.log("myonoffswitch2 - on");
-        document.getElementById('quickHelpWrapper').style.display = 'block';
-    } else {
-        console.log("myonoffswitch2 - off");
-        document.getElementById('quickHelpWrapper').style.display = 'none';
-    }
-
-    if (document.getElementById("myonoffswitch3").checked === true) {
-        console.log("myonoffswitch3 - on");
-        document.getElementById('analyticsWrapper').style.display = 'block';
-    } else {
-        console.log("myonoffswitch3 - off");
-        document.getElementById('analyticsWrapper').style.display = 'none';
-    }
-
-}
-*/
 
 function countCharacters() {
     totalLength = document.getElementById("textarea").value.length + 1;
@@ -578,6 +644,8 @@ function getTopHelp() {
     console.log("spaceCount: " + spaceCount);
 
     var wordNotFound = 0;
+
+
     if (spaceCount >= 1) {
         console.log("TOP HELP SEARCH: " + lastLine);
         $.ajax({
@@ -599,9 +667,58 @@ function getTopHelp() {
                             }
                         }
                         if (foundExist <= 0) {
-                            createNodesEdges(nameForGraph);
-                            showKnowledgeGraph();
-                            wordNotFound = 1;
+
+
+                            $.ajax({
+                                url: hostname + "/api/duckduckgo-api.php?q=" + nameForGraph.removeStopWords(), success: function (data) {
+                                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                                    var dataFinal = data.split("|");
+
+                                    if (dataFinal[1]) {
+
+
+                                        var nameForGraph = dataFinal[0];
+                                        if (nameForGraph) {
+
+                                            var foundExist = 0;
+                                            for (var xx = 0; xx < nodes.length; xx++) {
+                                                var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                                                if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                                    foundExist++;
+                                                }
+                                            }
+                                            if (foundExist <= 0) {
+                                                createNodesEdges(nameForGraph,dataFinal[3]);
+                                                showKnowledgeGraph();
+                                            }
+                                        }
+
+                                        document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + dataFinal[3] + '<br><br>';
+
+
+                                        try {
+                                            for (var xx = 4; xx < dataFinal.length; xx++) {
+                                                var dataFinal2 = dataFinal[xx].split(":");
+                                                if (dataFinal2[1].indexOf('local.js') < 0) {
+                                                    if (dataFinal2[1].indexOf('""') < 0) {
+                                                        if (dataFinal2[1].indexOf('undefined') < 0) {
+                                                            document.getElementById("topHelp").innerHTML += "<b>" + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } catch (e) {
+                                        }
+                                        document.getElementById("topHelp").innerHTML += '</td></tr></table>';
+                                        wordNotFound = 1;
+                                    }
+
+                                }
+                            });
+
+
+
                         }
                     }
 
@@ -636,7 +753,7 @@ function getTopHelp() {
                                 }
                             }
                             if (foundExist <= 0) {
-                                createNodesEdges(nameForGraph);
+                                createNodesEdges(nameForGraph,dataFinal[3]);
                                 showKnowledgeGraph();
                             }
                         }
@@ -690,7 +807,7 @@ function getTopHelp() {
                                 }
                             }
                             if (foundExist <= 0) {
-                                createNodesEdges(nameForGraph);
+                                createNodesEdges(nameForGraph,dataFinal[3]);
                                 showKnowledgeGraph();
                             }
                         }
@@ -722,7 +839,6 @@ function getTopHelp() {
 
 }
 
-
 function getLastWord(str) {
     // strip punctuations
     str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
@@ -738,51 +854,6 @@ function getLastTwoWords(str) {
     // get the last word
     return str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
 }
-
-function getTopHelp2() {
-    //  var hostname = window.location.href;
-    var textEntryContent = document.getElementById("textarea").value;
-    var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
-    var lastLine = arrayOfLines.slice(-1)[0];
-    if (lastLine.indexOf('.') > 0) {
-        lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
-        //  console.log("LAST SENTENCE: " + lastLine);
-    } else {
-        // console.log("LAST SENTENCE: " + lastLine);
-    }
-
-    //var spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
-    var spaceCount = (lastLine.split(" ").length - 1);
-    console.log("spaceCount: " + spaceCount);
-    if (spaceCount >= 1) {
-        console.log("TOP HELP SEARCH: " + lastLine);
-        $.ajax({
-            url: hostname + "/api/bing-answer-search.php?q=" + lastLine, success: function (data) {
-
-                var dataFinal = data.split(" ->");
-                var nameForGraph = dataFinal[0];
-                if (nameForGraph) {
-
-                    var foundExist = 0;
-                    for (var xx = 0; xx < nodes.length; xx++) {
-                        var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
-                        if (nameForGraph.toLowerCase().trim() === nameFinal) {
-                            foundExist++;
-                        }
-                    }
-                    if (foundExist <= 0) {
-                        createNodesEdges(nameForGraph);
-                        showKnowledgeGraph();
-                    }
-
-
-                }
-                document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
-            }
-        });
-    }
-}
-
 
 String.prototype.removeStopWords = function () {
     var x;
@@ -1265,3 +1336,18 @@ function stripHtml(html) {
     // Retrieve the text property of the element (cross-browser support)
     return temporalDivElement.textContent || temporalDivElement.innerText || "";
 }
+
+// Applied globally on all textareas with the "autoExpand" class
+$(document)
+    .one('focus.autoExpand', 'textarea.autoExpand', function () {
+        var savedValue = this.value;
+        this.value = '';
+        this.baseScrollHeight = this.scrollHeight;
+        this.value = savedValue;
+    })
+    .on('input.autoExpand', 'textarea.autoExpand', function () {
+        var minRows = this.getAttribute('data-min-rows') | 0, rows;
+        this.rows = minRows;
+        rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
+        this.rows = minRows + rows + 1;
+    });

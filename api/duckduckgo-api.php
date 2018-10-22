@@ -2,7 +2,7 @@
 error_reporting(0);
 $q = urldecode(htmlspecialchars(mb_strtolower(($_GET["q"]))));
 
-$url = 'https://api.duckduckgo.com/?format=json&pretty=1&skip_disambig=0&q='.$q;
+$url = 'https://api.duckduckgo.com/?format=json&pretty=1&skip_disambig=1&q='.$q;
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
