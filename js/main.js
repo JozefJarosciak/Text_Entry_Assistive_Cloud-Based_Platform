@@ -428,7 +428,7 @@ function addNodesAround(name,id,textForSearch) {
                       network.moveTo({position: {x:0, y:0},scale: 1.0});
                       //network.moveNode(id, 0, 0);
 
-
+/*
                       nodes.update({
                           id:id,
                           x:0, y: 0,
@@ -438,12 +438,13 @@ function addNodesAround(name,id,textForSearch) {
                           }
                       });
                       network.moveNode(id, 0, 0);
+                      */
                   }
             //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
         } });
 
 }
-function showKnowledgeGraph() {
+function showKnowledgeGraph(id) {
     // create a network
     var container = document.getElementById('mynetwork');
     var data = {
@@ -455,6 +456,19 @@ function showKnowledgeGraph() {
         height: '100%',
         width: '100%'
     };
+
+    if (id) {
+        nodes.update({
+            id:id,
+            x:undefined, y: undefined,
+            fixed: {
+                x:false,
+                y:false
+            }
+        });
+    network.moveNode(id, 0, 0);
+    }
+
     network = new vis.Network(container, data, options);
   // var selectedArray = network.getSelectedNodes();
 
@@ -525,7 +539,7 @@ function showNodeInfo() {
 
 
                         addNodesAround(nameForGraph,selectedArray[0],dataFinal[3]);
-                        showKnowledgeGraph();
+                        showKnowledgeGraph(selectedNodeID);
 
 
 
