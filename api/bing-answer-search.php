@@ -23,8 +23,8 @@ $host = "https://api.labs.cognitive.microsoft.com";
 $path = "/answersearch/v7.0/search";
 
 $mkt = "en-US";
-$query = urlencode("site:wikipedia.org ".$q);
-//$query = urlencode($q);
+//$query = urlencode("site:wikipedia.org ".$q);
+$query = urlencode($q);
 
 $count=1;
 $offset=0;

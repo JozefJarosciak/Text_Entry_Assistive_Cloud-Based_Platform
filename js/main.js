@@ -452,6 +452,9 @@ function showKnowledgeGraph(id) {
         nodes: nodes,
         edges: edges
     };
+
+    var options = {};
+    /*
     var options = {
         physics: {
             barnesHut: {
@@ -461,7 +464,7 @@ function showKnowledgeGraph(id) {
       //  height: '100%',
       //  width: '100%'
     };
-
+*/
     if (id) {
         nodes.update({
             id:id,
