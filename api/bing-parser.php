@@ -1,14 +1,30 @@
 <?php
-//error_reporting(0);
-$url = "https://www.bing.com/search?q=arnold+schwarzenegger+age";
+error_reporting(0);
 
-$html = get_data($url,0);
+
+$q = htmlspecialchars(($_GET["q"]));
+$useTor = 0;
+$url = "https://www.bing.com/search?q=".urlencode($q);
+//$html = curl_get_contents_partial($url,$useTor,120000);
+$html = get_data($url,$useTor);
+//echo $html; exit;
 
 //echo $doc;
 
 $dom = new \DOMDocument('1.0');
 @$dom->loadHTML($html);
-$elementsByClass = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
+
+
+
+try {
+    $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
+    $b_focusTextMedium = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
+    $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextLarge', 'div');
+    $rcABP =  getElementsByClassName($dom, 'rcABP', 'div');
+    $b_secondaryFocus = getElementsByClassName($dom, 'b_secondaryFocus', 'div');
+    $df_con = getElementsByClassName($dom, 'rwrl rwrl_sec rwrl_padref', 'div');
+   // $quotesText = getElementsByClassName($dom, 'quotesText', 'div');
+} catch (Exception $e) {};
 
 /*
 print "<pre>";
@@ -17,7 +33,26 @@ print "</pre>";
 */
 
 //echo $elementsByClass->getAttribute('textContent');
-echo $elementsByClass[0]->textContent;
+
+if ($b_focusTextMedium) {
+    echo $b_focusTextMedium[0]->textContent;
+} else if ($b_focusTextLarge) {
+    echo $b_focusTextLarge[0]->textContent;
+} else if ($rcABP) {
+    echo $rcABP[0]->textContent;
+} else if ($df_con) {
+    echo $df_con[0]->textContent;
+} else if ($b_secondaryFocus) {
+    for($i=0; $i<7; $i++){
+        if (strlen($b_secondaryFocus[$i]->textContent)>1) {
+        echo $b_secondaryFocus[$i]->textContent."; ";
+        }
+    }
+} else if ($quotesText) {
+    $quotes = explode(".", ($quotesText[0]->textContent));
+    echo $quotes[0].".";
+}
+
 
 function getElementsByClassName($dom, $ClassName, $tagName=null) {
     if($tagName){
@@ -73,6 +108,52 @@ function xml_to_array($root) {
 
     return $result;
 }
+
+function curl_get_contents_partial($url, $useTor, $limit) {
+    $writefn = function($ch, $chunk) use ($limit, &$datadump) {
+        static $data = '';
+
+        $len = strlen($data) + strlen($chunk);
+        if ($len >= $limit) {
+            $data .= substr($chunk, 0, $limit - strlen($data));
+            $datadump = $data;
+            return -1;
+        }
+        $data .= $chunk;
+        return strlen($chunk);
+    };
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36');
+    curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+
+
+    if ($useTor==1) {
+        curl_setopt($ch, CURLOPT_PROXY, 'http://localhost:9050');
+        curl_setopt($ch, CURLOPT_PROXYTYPE, 7);
+    }
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 120);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+    curl_setopt($ch, CURLOPT_HTTPGET, 1);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($ch, CURLOPT_ENCODING, "");
+    curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+    curl_setopt($ch, CURLOPT_COOKIESESSION, TRUE);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+
+    curl_setopt($ch, CURLOPT_WRITEFUNCTION, $writefn);
+
+    $data = curl_exec($ch);
+    curl_close($ch);
+    return $datadump;
+}
+
 
 function get_data($url,$useTor) {
     $ch = curl_init();
