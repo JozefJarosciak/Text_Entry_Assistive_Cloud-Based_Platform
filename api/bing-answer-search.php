@@ -55,6 +55,7 @@ $result = get_suggestions ($host, $path, $subscriptionKeyAnswer, $mkt, $count, $
 $result = json_encode(json_decode ($result), JSON_PRETTY_PRINT);
 
 $data = json_decode($result, true);
+
 //echo json_encode (json_decode ($result), JSON_PRETTY_PRINT);
 
 
