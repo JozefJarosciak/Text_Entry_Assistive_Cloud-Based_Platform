@@ -6,7 +6,7 @@ include("credentials.php");
 $q = htmlspecialchars(mb_strtolower(($_GET["q"])));
 $term = $q;
 
-$accessKey = $bingSearch;
+$accessKey = $BingSearchAPIKey;
 $endpoint = 'https://api.cognitive.microsoft.com/bing/v7.0/search';
 
 function BingWebSearch ($url, $key, $query) {

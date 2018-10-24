@@ -43,7 +43,7 @@ function get_suggestions ($host, $path, $key, $mkt, $query) {
   return $result;
 }
 
-$result = get_suggestions ($host, $path, $subscriptionKey, $mkt, $query);
+$result = get_suggestions ($host, $path, $BingAutoSuggestAPIKey, $mkt, $query);
 
 echo json_encode (json_decode ($result), JSON_PRETTY_PRINT);
 ?>

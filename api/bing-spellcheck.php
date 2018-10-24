@@ -1,8 +1,7 @@
 <?php
 error_reporting(0);
-// this file has reference to '$key' variable that needs to hold the Microsoft API key
+// this file has reference to '$Bing Spellcheck API_key' variable that needs to hold the Microsoft API key
 include("credentials.php");
-
 
 $q = htmlspecialchars(mb_strtolower(($_GET["q"])));
 
@@ -33,7 +32,7 @@ $data = array (
 //'X-MSEdge-ClientIP' => CLIENT_IP
 
 $headers = "Content-type: application/x-www-form-urlencoded\r\n" .
-    "Ocp-Apim-Subscription-Key: $key\r\n";
+    "Ocp-Apim-Subscription-Key: $BingSpellcheckAPIKey\r\n";
 
 // NOTE: Use the key 'http' even if you are making an HTTPS request. See:
 // http://php.net/manual/en/function.stream-context-create.php

@@ -10,7 +10,7 @@ $params = array(
     'limit' => 5,
     'prefix'=>TRUE,
     'indent' => TRUE,
-    'key' => $google_api);
+    'key' => $google_kg_api);
 
 
 $url = $service_url . '?' . http_build_query($params);

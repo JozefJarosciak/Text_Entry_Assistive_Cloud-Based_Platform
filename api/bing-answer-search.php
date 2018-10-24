@@ -31,12 +31,12 @@ $offset=0;
 $safesearch="Moderate";
 
 
-function get_suggestions ($host, $path, $subscriptionKeyAnswer, $mkt, $count, $offset, $safesearch, $query) {
+function get_suggestions ($host, $path, $BingAnswerSearchAPIKey, $mkt, $count, $offset, $safesearch, $query) {
 
     $params = '?mkt=' . $mkt . '&count=' . $count. '&offset=' . $offset. '&safesearch=' . $safesearch. '&q=' . $query;
 
     $headers = "Content-type: text/json\r\n" .
-        "Ocp-Apim-Subscription-Key: $subscriptionKeyAnswer\r\n";
+        "Ocp-Apim-Subscription-Key: $BingAnswerSearchAPIKey\r\n";
 
     // NOTE: Use the key 'http' even if you are making an HTTPS request. See:
     // http://php.net/manual/en/function.stream-context-create.php
@@ -51,7 +51,7 @@ function get_suggestions ($host, $path, $subscriptionKeyAnswer, $mkt, $count, $o
     return $result;
 }
 
-$result = get_suggestions ($host, $path, $subscriptionKeyAnswer, $mkt, $count, $offset, $safesearch, $query);
+$result = get_suggestions ($host, $path, $bingAnswerSearchAPIKey, $mkt, $count, $offset, $safesearch, $query);
 $result = json_encode(json_decode ($result), JSON_PRETTY_PRINT);
 
 $data = json_decode($result, true);
