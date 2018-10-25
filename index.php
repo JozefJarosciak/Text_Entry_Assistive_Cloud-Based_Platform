@@ -90,9 +90,10 @@
                 </td>
                 <td id="quickHelpCell">
                     <div id="quickHelp">
+                        <div id="shortHelp" onclick="enableHighlighting()"></div>
                         <small>
-                            <div id="topHelp" onclick="enableHighlighting()">
-                            </div>
+                            <span id="topHelp" onclick="enableHighlighting()">
+                            </span>
                         </small>
                     </div>
 

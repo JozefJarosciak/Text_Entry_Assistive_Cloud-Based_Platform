@@ -74,6 +74,11 @@ body {
 
 }
 
+#shortHelp{
+    background-color: #d8e1ff;
+    width: 95%;
+    font-size: 14px;
+}
 
 h1 {
     color: #4a9aff;

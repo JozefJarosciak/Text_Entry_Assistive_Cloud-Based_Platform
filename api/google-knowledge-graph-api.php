@@ -7,7 +7,7 @@ include('credentials.php');
 $service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
 $params = array(
     'query' => $q,
-    'limit' => 5,
+    'limit' => 1,
     'prefix'=>TRUE,
     'indent' => TRUE,
     'key' => $google_kg_api);

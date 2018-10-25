@@ -157,11 +157,98 @@ $(function () {
                                                         console.log(availableTags);
 
                                                         if (availableTags[0] != '') {
+                                                            document.getElementById("shortHelp").innerHTML = " " + availableTags[0] + " <br> ";
 
+
+
+                                                            $.ajax({
+                                                                url: hostname + "/api/google-knowledge-graph-api.php?d=1&q=" + availableTags[0], success: function (data) {
+                                                                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                                                                    var dataFinal = data.split("|");
+
+                                                                    for (var forLoop1 = 0; forLoop1 < dataFinal.length; forLoop1++) {
+
+                                                                        var nameForGraph = dataFinal[forLoop1];
+                                                                        if (nameForGraph) {
+
+                                                                            var foundExist = 0;
+                                                                            for (var xx = 0; xx < nodes.length; xx++) {
+                                                                                var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                                                                                if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                                                                    foundExist++;
+                                                                                }
+                                                                            }
+                                                                            if (foundExist <= 0) {
+
+
+                                                                                $.ajax({
+                                                                                    url: hostname + "/api/duckduckgo-api.php?q=" + nameForGraph.removeStopWords(), success: function (data) {
+                                                                                        //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                                                                                        var dataFinal = data.split("|");
+
+                                                                                        if (dataFinal[1]) {
+
+
+                                                                                            var nameForGraph = dataFinal[0];
+                                                                                            if (nameForGraph) {
+
+                                                                                                var foundExist = 0;
+                                                                                                for (var xx = 0; xx < nodes.length; xx++) {
+                                                                                                    var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                                                                                                    if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                                                                                        foundExist++;
+                                                                                                    }
+                                                                                                }
+                                                                                                if (foundExist <= 0) {
+                                                                                                    createNodesEdges(nameForGraph,dataFinal[3]);
+                                                                                                    showKnowledgeGraph();
+                                                                                                }
+                                                                                            }
+
+                                                                                            document.getElementById("topHelp").innerHTML = '<b> ' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
+
+
+                                                                                            try {
+                                                                                                for (var xx = 4; xx < dataFinal.length; xx++) {
+                                                                                                    var dataFinal2 = dataFinal[xx].split(":");
+                                                                                                    if (dataFinal2[1].indexOf('local.js') < 0) {
+                                                                                                        if (dataFinal2[1].indexOf('""') < 0) {
+                                                                                                            if (dataFinal2[1].indexOf('undefined') < 0) {
+                                                                                                                document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            } catch (e) {
+                                                                                            }
+                                                                                            document.getElementById("topHelp").innerHTML += '</td></tr></table>';
+                                                                                            wordNotFound = 1;
+                                                                                        }
+
+                                                                                    }
+                                                                                });
+
+
+
+                                                                            }
+                                                                        }
+
+                                                                    }
+
+                                                                    //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
+                                                                }
+                                                            });
+
+
+
+
+                                                            /*
                                                             if (availableTags[0].length > 40) {
-                                                                document.getElementById("topHelp").innerHTML = availableTags[0].trim("(");
+                                                                document.getElementById("topHelp").innerHTML = " [" + availableTags[0].substring(availableTags[0].indexOf("[") + 1);
                                                             } else {response(availableTags);}
-
+                                                           */
 
                                                         } else {
                                                             $('#textarea').autocomplete("close");
@@ -504,7 +591,7 @@ function showNodeInfo() {
             if (dataFinal[0]) {
 
 
-                document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + dataFinal[3] + '<br><br>';
+                document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + " " +  dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
 
                 if (dataFinal[5]) {
                     try {
@@ -514,7 +601,7 @@ function showNodeInfo() {
                             if (dataFinal2[1].indexOf('local.js') < 0) {
                                 if (dataFinal2[1].indexOf('""') < 0) {
                                     if (dataFinal2[1].indexOf('undefined') < 0) {
-                                        document.getElementById("topHelp").innerHTML += "<b>" + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                        document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
                                     }
                                 }
                             }
@@ -582,7 +669,7 @@ function enableHighlighting() {
     // alert(b+a);
 */
 
-    s = window.getSelection();
+    var s = window.getSelection();
     var range = s.getRangeAt(0);
     var node = s.anchorNode;
     while(range.toString().indexOf(' ') != 0) {
@@ -711,7 +798,7 @@ function getTopHelp() {
                                             }
                                         }
 
-                                        document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + dataFinal[3] + '<br><br>';
+                                        document.getElementById("topHelp").innerHTML = '<b> ' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
 
 
                                         try {
@@ -720,7 +807,7 @@ function getTopHelp() {
                                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                                     if (dataFinal2[1].indexOf('""') < 0) {
                                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                                            document.getElementById("topHelp").innerHTML += "<b>" + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
                                                         }
                                                     }
                                                 }
@@ -775,7 +862,7 @@ function getTopHelp() {
                             }
                         }
 
-                        document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + dataFinal[3] + '<br><br>';
+                        document.getElementById("topHelp").innerHTML = '<b> ' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
 
 
                         try {
@@ -784,7 +871,7 @@ function getTopHelp() {
                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                     if (dataFinal2[1].indexOf('""') < 0) {
                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                            document.getElementById("topHelp").innerHTML += "<b>" + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
                                         }
                                     }
                                 }
@@ -829,7 +916,7 @@ function getTopHelp() {
                             }
                         }
 
-                        document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + dataFinal[3] + '<br><br>';
+                        document.getElementById("topHelp").innerHTML = '<b> ' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
 
 
                         try {
@@ -838,7 +925,7 @@ function getTopHelp() {
                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                     if (dataFinal2[1].indexOf('""') < 0) {
                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                            document.getElementById("topHelp").innerHTML += "<b>" + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
                                         }
                                     }
                                 }
