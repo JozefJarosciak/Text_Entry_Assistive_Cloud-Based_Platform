@@ -52,12 +52,16 @@ $(function () {
         */
         word = split(term).pop();
 
+        /*
         if (word.length <= 2) {
             n = term.split(".");
             word = n[n.length - 1];
             word = "-----";
-            $('#textarea').autocomplete("close");
-        } else if (word.length >= 3) {
+           // $('#textarea').autocomplete("close");
+        }
+        */
+
+        if (word.length >= 3) {
 
             if (word.includes(".") === true) {
                 word = word.replace(/\r?\n|\r/, "");
@@ -116,71 +120,64 @@ $(function () {
                 var lastChar = request.term.substr(request.term.length - 1);
                 //console.log("!!!SPACE PRESSED!!! - '"+lastChar+"'");
 
-                /*
+
 
                                     if (lastChar==" ") {
-                                       // $('#textarea').autocomplete("close");
-                                        console.log("!!!SPACE PRESSED!!!");
-                                        var textEntryContent = document.getElementById("textarea").value;
+
+                                        // last sentence
+                                        textEntryContent = document.getElementById("textarea").value;
 
                                         var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
                                         var lastLine = arrayOfLines.slice(-1)[0];
+
+                                        console.log("log: " + lastLine);
+                                        var spaceCount = lastLine.split(" ").length - 1;
+
+                                        if (spaceCount>1) {
+
                                         if (lastLine.indexOf('.') > 0) {
                                             lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
-                                              console.log("LAST SENTENCE: " + lastLine);
+                                            //  console.log("LAST SENTENCE: " + lastLine);
                                         } else {
-                                             console.log("LAST SENTENCE: " + lastLine);
+                                            // console.log("LAST SENTENCE: " + lastLine);
+                                        }
+
+                                        if (document.getElementById("myonoffswitch1").checked === true) {
+
+                                           // if ((lastWord) && (lastWord.toString().length >= 2)) {
+                                                console.log("START SEARCH");
+                                                //  availableTags = [];
+
+                                                    var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine+ "&space=1";
+                                                    console.log(url2);
+                                                    $.getJSON(url2, function (json) {
+                                                        availableTags = [];
+                                                        //availableTags = json;
+                                                        availableTags.push(json.toString());
+                                                        console.log(availableTags);
+
+                                                        if (availableTags[0] != '') {
+
+                                                            if (availableTags[0].length > 40) {
+                                                                document.getElementById("topHelp").innerHTML = availableTags[0].trim("(");
+                                                            } else {response(availableTags);}
+
+
+                                                        } else {
+                                                            $('#textarea').autocomplete("close");
+                                                        }
+
+                                                        //response($.ui.autocomplete.filter(availableTags, lastWord));
+                                                    });
                                         }
 
 
-                                        var spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
 
 
-                                        console.log("spaceCount: " + spaceCount);
-                                        if (spaceCount >= 1) {
-
-                                            var urlAnswerSearch = hostname + "api/bing-answer-search.php?q=" + lastLine;
-                                            //var urlAnswerSearch = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine ;
-
-                                            var extract = "";
-
-                                            $.get( urlAnswerSearch, function(data) {
-                                                //myStr.match(/\$(.*?)\./);
-
-                                                document.getElementById("topHelp").innerHTML = data;
-
-                                                if (stripHtml(data).includes(lastWordSpace) == true) {
-                                                    console.log("FOUND: " + lastWordSpace);
-                                                var regex = new RegExp(lastWordSpace + "(.*?)\\.");
-                                                var matches = stripHtml(data).match(regex);
-                                                extract = matches && matches.length ? matches[1] : '';
-
-
-
-
-
-                                                console.log("EXTRACT:" + extract);
-                                                if (extract) {
-                                                //console.log(returned);
-                                                availableTags = [];
-                                               // var finalSuggestion = extract;
-                                                var finalSuggestion = lastWordSpace + extract + ".";
-                                                    availableTags.push(finalSuggestion);
-                                                //console.log(availableTags);
-                                                //availableTags.push("returned");
-
-
-                                                response(availableTags);
-                                                }
-
-                                                }
-                                            });
-
+                                         //   }
                                         }
 
-                                    }
-                                    */
-                if (lastWord) {
+                                    } else if (lastWord) {
                     if (lastWord.length >= 3) {
 
 
@@ -225,18 +222,14 @@ $(function () {
                                             response(availableTags);
                                         } });
                                         */
-                                    $.getJSON(hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine, function (json) {
+
+                                    var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine+ "&space=0";
+                                    console.log(url2);
+                                    $.getJSON(url2, function (json) {
                                         availableTags = [];
                                         availableTags = json;
                                         console.log(availableTags);
-                                        //  console.log(availableTags.length + " -> " + availableTags[0]);
 
-                                        /*
-                                                                               try {
-                                                                               availableTags.push("Test");
-                                                                               } catch (e) {}
-                                                                               //availableTags = [ "c++", "java", "php", "coldfusion", "javascript", "asp", "ruby" ];
-                                                                               */
 
                                         response(availableTags);
 

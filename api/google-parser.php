@@ -1,10 +1,29 @@
 <?php
 error_reporting(0);
 
+/*
+ *
+https://www.google.ca/search?num=10&q=isaac+newton+discovered+gravity+at+the+age+of
+span.ILfuVd
+div.LGOjhe
+
+https://www.google.ca/search?num=10&q=isaac+newton+was%20born%20in%20the%20city%20of
+div.kp-hc
+
+https://www.google.ca/search?num=10&q=isaac+newton+died+at+the+age
+div.Z0LcW
+
+https://www.google.ca/search?sa=X&q=isaac+newton+inventions
+div.title (array)
+
+https://www.google.ca/search?sa=X&q=isaac+newton+siblings
+div.title (array)
+
+ */
 
 $q = htmlspecialchars(($_GET["q"]));
 $useTor = 0;
-$url = "https://www.bing.com/search?q=".urlencode($q);
+$url = "https://www.google.ca/search?num=10&q=".urlencode($q);
 //$html = curl_get_contents_partial($url,$useTor,120000);
 $html = get_data($url,$useTor);
 //echo $html; exit;
@@ -17,12 +36,15 @@ $dom = new \DOMDocument('1.0');
 
 
 try {
-    $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
-    $b_focusTextMedium = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
-    $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextLarge', 'div');
+    $b_focusTextLarge = getElementsByClassName($dom, 'LGOjhe', 'div');
+    $b_focusTextMedium = getElementsByClassName($dom, 'kp-hc', 'div');
+    $df_con = getElementsByClassName($dom, 'Z0LcW', 'div');
+    $Z0LcWAZCkJd = getElementsByClassName($dom, 'Z0LcW AZCkJd', 'div');
+
+
     $rcExpC =  getElementsByClassName($dom, 'rcExpC', 'div');
     $rcABP =  getElementsByClassName($dom, 'rcABP', 'div');
-    $df_con = getElementsByClassName($dom, 'rwrl rwrl_pri rwrl_padref', 'div');
+
     $b_secondaryFocus = getElementsByClassName($dom, 'b_secondaryFocus', 'div');
     //$edu_percent_simplepercentcalc_string_result = $dom->getElementById('edu_percent_simplepercentcalc_string_result')->div;
 
@@ -39,16 +61,33 @@ print "</pre>";
 
 //if ($edu_percent_simplepercentcalc_string_result) { echo $edu_percent_simplepercentcalc_string_result[0]->textContent;}
 
+
 if ($df_con) {
-    echo $df_con[0]->textContent;
+  //  print_r($df_con[0]); exit;
+    //echo htmlspecialchars(strip_tags($df_con[0]->textContent));exit;
+
+
+    $string = html_entity_decode($df_con[0]->textContent);
+    //$content = preg_replace("/\s|&nbsp;/",'',$string);
+    $content = str_replace('Â', "", $string);
+   // $content = str_replace(' ', "", $content);
+    //$content = html_entity_decode($content);
+
+
+    echo $content;
+
+    //&nbsp;
 } else if ($b_focusTextMedium) {
     echo $b_focusTextMedium[0]->textContent;
 } else if ($b_focusTextLarge) {
+    if ($Z0LcWAZCkJd) {
+        echo $Z0LcWAZCkJd[0]->textContent . " - ";
+    }
     echo $b_focusTextLarge[0]->textContent;
-} else if ($rcABP) {
-    echo $rcExpC[0]->textContent."".$rcABP[0]->textContent;
 } else if ($df_con) {
     echo $df_con[0]->textContent;
+} else if ($rcABP) {
+    echo $rcExpC[0]->textContent."".$rcABP[0]->textContent;
 } else if ($b_secondaryFocus) {
     for($i=0; $i<10; $i++){
         if (strlen($b_secondaryFocus[$i]->textContent)>1) {

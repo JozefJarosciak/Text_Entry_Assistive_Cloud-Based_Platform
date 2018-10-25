@@ -6,6 +6,8 @@ $path = explode('api', "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 //echo $path[0];
 
 $fullSentence = urldecode(htmlspecialchars(($_GET["s"])));
+$space = urldecode(htmlspecialchars(($_GET["space"])));
+
 //$fullSentence = removeCommonWords($fullSentence);
 $lastWord = urldecode(htmlspecialchars(($_GET["q"])));
 $twoWords = getLastWordsStr($fullSentence, 2);
@@ -37,8 +39,12 @@ $urlsToProcess = array(
     $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($twoWords),
     //$path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
 );
-$resultArray = multiRequest($urlsToProcess);
+
+if ($space==0) {
+    $resultArray = multiRequest($urlsToProcess);
+}
 //print_r( $resultArray);
+
 foreach ($resultArray as $key=>&$value) {
     if (strlen($value) <= 2) {
         unset($resultArray[$key]);
@@ -128,12 +134,49 @@ foreach ($resultArray as $key=>&$value) {
 
 }
 
+
+
+if ($space==1) {
+//echo $fullSentence."|<br>";
+$server = 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/';
+$url = $server . "google-parser.php?q=" . $fullSentence;
+//print $url;
+$bingParser = " ";
+
+$doc = new DOMDocument();
+$doc->loadHTMLFile($url);
+$xpath = new DOMXPath($doc);
+foreach($xpath->query("//script") as $script) {
+    $script->parentNode->removeChild($script);
+}
+$textContent = $doc->textContent;
+
+$bingParser = $textContent;
+//echo $bingParser;
+if (strlen($bingParser) > 1) {
+    //$resultArray[0] = $lastWord." is ".$bingParser;
+
+    $pieces = explode(' ', trim($fullSentence));
+    $last_word = array_pop($pieces);
+
+    $last_word = trim($last_word, ';');
+    //array_push($resultArray, $last_word." - ".$bingParser);
+    $bingParser = str_replace('Â', "", $bingParser);
+    array_push($resultArray, $last_word." (".$bingParser.")");
+}
+}
+
+
+
+
+
 $trimmedArray = array_map('trim', $resultArray);
 $result = array_filter($trimmedArray);
 $result = array_unique($result);
 
 
 $result = array_diff($result, [$lastWord]);
+
 
 /*
 usort($result, function($a, $b) {
@@ -158,6 +201,7 @@ print "</pre>\n";
 
 
 echo json_encode($result);
+
 
 
 function str_replace_once($str_pattern, $str_replacement, $string)
