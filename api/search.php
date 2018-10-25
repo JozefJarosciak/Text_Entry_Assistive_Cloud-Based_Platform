@@ -162,7 +162,8 @@ if (strlen($bingParser) > 1) {
     $last_word = trim($last_word, ';');
     //array_push($resultArray, $last_word." - ".$bingParser);
     $bingParser = str_replace('Â', "", $bingParser);
-    array_push($resultArray, $last_word." (".$bingParser.")");
+    $bingParser = str_replace("\xc2\xa0",' ',$bingParser);
+    array_push($resultArray, $last_word." [".$bingParser."]");
 }
 }
 

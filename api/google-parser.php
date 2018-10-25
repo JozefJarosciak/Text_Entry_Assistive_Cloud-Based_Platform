@@ -19,6 +19,9 @@ div.title (array)
 https://www.google.ca/search?sa=X&q=isaac+newton+siblings
 div.title (array)
 
+https://www.google.ca/search?sa=X&q=Toronto+has+a+population+of+
+kpd-ans kno-fb-ctx KBXm4e
+
  */
 
 $q = htmlspecialchars(($_GET["q"]));
@@ -41,9 +44,13 @@ try {
     $df_con = getElementsByClassName($dom, 'Z0LcW', 'div');
     $Z0LcWAZCkJd = getElementsByClassName($dom, 'Z0LcW AZCkJd', 'div');
 
+    $kpdans = getElementsByClassName($dom, 'kpd-ans kno-fb-ctx KBXm4e', 'div');
+
 
     $rcExpC =  getElementsByClassName($dom, 'rcExpC', 'div');
     $rcABP =  getElementsByClassName($dom, 'rcABP', 'div');
+
+
 
     $b_secondaryFocus = getElementsByClassName($dom, 'b_secondaryFocus', 'div');
     //$edu_percent_simplepercentcalc_string_result = $dom->getElementById('edu_percent_simplepercentcalc_string_result')->div;
@@ -63,20 +70,15 @@ print "</pre>";
 
 
 if ($df_con) {
-  //  print_r($df_con[0]); exit;
-    //echo htmlspecialchars(strip_tags($df_con[0]->textContent));exit;
 
-
-    $string = html_entity_decode($df_con[0]->textContent);
-    //$content = preg_replace("/\s|&nbsp;/",'',$string);
+    $string = str_replace("\xc2\xa0",' ',$df_con[0]->textContent);
+   // $string = html_entity_decode($df_con[0]->textContent);
     $content = str_replace('Â', "", $string);
-   // $content = str_replace(' ', "", $content);
-    //$content = html_entity_decode($content);
-
-
     echo $content;
-
-    //&nbsp;
+} else if ($kpdans) {
+    $string = str_replace("\xc2\xa0",' ',$kpdans[0]->textContent);
+    $content = str_replace('Â', "", $string);
+    echo $content;
 } else if ($b_focusTextMedium) {
     echo $b_focusTextMedium[0]->textContent;
 } else if ($b_focusTextLarge) {
