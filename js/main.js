@@ -799,10 +799,18 @@ function getTopHelp() {
                     // try if help comes up with something from wikipedia
                     // http://localhost/teap/api/wikipedia-api.php?q=Escape%20Plan%20is%20a%202013%20American
                    var wikiLink = "";
+
+
+                   if (hasNumber(firstSentence)==true) {
+                    var wikiLink2 = firstSentence.replace(/[0-9]/g, '');
+                    console.log("Wiki: " + wikiLink2);
+
+
                     $.ajax({
-                        url: hostname + "/api/wikipedia-api.php?q=" + firstSentence, success: function (data) {
+                        url: hostname + "/api/wikipedia-api.php?q=" + wikiLink2, success: function (data) {
                             console.log(data);
                             wikiLink = data;
+
 
                             $.ajax({
                                 url: hostname + "/api/duckduckgo-api.php?q=" + wikiLink, success: function (data) {
@@ -856,6 +864,7 @@ function getTopHelp() {
 
                         }
                         });
+                   }
 
                 //    if (wikiLink.length>0) {
 
@@ -1580,3 +1589,7 @@ $(document)
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
         this.rows = minRows + rows + 1;
     });
+
+function hasNumber(myString) {
+    return /\d/.test(myString);
+}
