@@ -794,7 +794,74 @@ function getTopHelp() {
                 var firstSentence = sentenceArray[0];
                 if (json.length > 2) {
                     document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
-                    //stop();
+
+
+                    // try if help comes up with something from wikipedia
+                    // http://localhost/teap/api/wikipedia-api.php?q=Escape%20Plan%20is%20a%202013%20American
+                   var wikiLink = "";
+                    $.ajax({
+                        url: hostname + "/api/wikipedia-api.php?q=" + firstSentence, success: function (data) {
+                            console.log(data);
+                            wikiLink = data;
+
+                            $.ajax({
+                                url: hostname + "/api/duckduckgo-api.php?q=" + wikiLink, success: function (data) {
+                                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                                    var dataFinal = data.split("|");
+
+                                    if (dataFinal[1]) {
+
+
+                                        var nameForGraph = dataFinal[0];
+                                        if (nameForGraph) {
+
+                                            var foundExist = 0;
+                                            for (var xx = 0; xx < nodes.length; xx++) {
+                                                var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                                                if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                                    foundExist++;
+                                                }
+                                            }
+                                            if (foundExist <= 0) {
+                                                if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
+                                                    createNodesEdges(nameForGraph, dataFinal[3]);
+                                                    showKnowledgeGraph();
+                                                }
+                                            }
+                                        }
+
+                                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+
+
+                                        try {
+                                            for (var xx = 4; xx < dataFinal.length; xx++) {
+                                                var dataFinal2 = dataFinal[xx].split(":");
+                                                if (dataFinal2[1].indexOf('local.js') < 0) {
+                                                    if (dataFinal2[1].indexOf('""') < 0) {
+                                                        if (dataFinal2[1].indexOf('undefined') < 0) {
+                                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } catch (e) {
+                                        }
+                                        document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
+                                        wordNotFound = 1;
+                                    }
+
+                                }
+                            });
+
+                        }
+                        });
+
+                //    if (wikiLink.length>0) {
+
+                 //   }
+
+
                 }
             });
         }
