@@ -139,7 +139,7 @@ foreach ($resultArray as $key=>&$value) {
 if ($space==1) {
 //echo $fullSentence."|<br>";
 $server = 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/';
-$url = $server . "google-parser.php?q=" . $fullSentence;
+$url = $server . "bing-parser.php?q=" . $fullSentence;
 //print $url;
 $bingParser = " ";
 

@@ -4,12 +4,29 @@ var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
 var researchList = [];
 
+function onoff() {
+    if (document.getElementById("myonoffswitch1").checked === true) {
+        location.reload();
+        //document.getElementById("quickHelp").style.display = "block";
+        //document.getElementById("headerDiscovery").style.display = "block";
+        //document.getElementById("knowledgeBox").style.display = "block";
+        //document.getElementById("textareatd").style.width = "45%";
+    } else {
+        document.getElementById("quickHelp").style.display = "none";
+        document.getElementById("headerDiscovery").style.display = "none";
+        document.getElementById("knowledgeBox").style.display = "none";
+        document.getElementById("textareatd").style.width = "100%";
+    }
+
+}
+
 $(function () {
     var availableTags = [];
     var word;
     var capitalizedResponse;
     var lastWord;
     var totalLength = 0;
+
 
 
 
@@ -81,10 +98,21 @@ $(function () {
         .on("keydown", function (event) {
 
 
+            if ((event.keyCode === 8) || (event.keyCode === 46)) {
+                var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                var countSaved = currentCountofKeystrokesSaved - 1;
+                document.getElementById("keystrokesSaved").innerText = countSaved;
+            }
+
+
+
+
             if ((event.keyCode === 190) || (event.keyCode === 32)) {
                 //  console.log("space or dot pressed");
                 $('#textarea').autocomplete("close");
-                getTopHelp();
+                if (document.getElementById("myonoffswitch1").checked === true) {
+                    getTopHelp();
+                }
                 // get top help ideas
 
 
@@ -120,7 +148,7 @@ $(function () {
                 var lastChar = request.term.substr(request.term.length - 1);
                 //console.log("!!!SPACE PRESSED!!! - '"+lastChar+"'");
 
-
+                if (document.getElementById("myonoffswitch1").checked === true) {
 
                                     if (lastChar==" ") {
 
@@ -130,7 +158,7 @@ $(function () {
                                         var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
                                         var lastLine = arrayOfLines.slice(-1)[0];
 
-                                        console.log("log: " + lastLine);
+                                        //console.log("log: " + lastLine);
                                         var spaceCount = lastLine.split(" ").length - 1;
 
                                         if (spaceCount>1) {
@@ -142,12 +170,13 @@ $(function () {
                                             // console.log("LAST SENTENCE: " + lastLine);
                                         }
 
-                                        if (document.getElementById("myonoffswitch1").checked === true) {
+
 
                                            // if ((lastWord) && (lastWord.toString().length >= 2)) {
                                                 console.log("START SEARCH");
                                                 //  availableTags = [];
 
+                                            /*
                                                     var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine+ "&space=1";
                                                     console.log(url2);
                                                     $.getJSON(url2, function (json) {
@@ -157,6 +186,9 @@ $(function () {
                                                         console.log(availableTags);
 
                                                         if (availableTags[0] != '') {
+
+
+
                                                             document.getElementById("shortHelp").innerHTML = " " + availableTags[0] + " <br> ";
 
 
@@ -242,7 +274,7 @@ $(function () {
                                                             });
 
 
-
+*/
 
                                                             /*
                                                             if (availableTags[0].length > 40) {
@@ -255,14 +287,14 @@ $(function () {
                                                         }
 
                                                         //response($.ui.autocomplete.filter(availableTags, lastWord));
-                                                    });
-                                        }
+                                                  //  });
+
 
 
 
 
                                          //   }
-                                        }
+                                       // }
 
                                     } else if (lastWord) {
                     if (lastWord.length >= 3) {
@@ -335,7 +367,7 @@ $(function () {
 
                 }
 
-
+                                    }
             },
             focus: function () {
                 // prevent value inserted on focus
@@ -423,7 +455,6 @@ function createNodesEdges(name,textForSearch) {
     //showNodeInfo();
 
     addNodesAround(name,nodes.length,textForSearch);
-
 }
 
 
@@ -591,7 +622,7 @@ function showNodeInfo() {
             if (dataFinal[0]) {
 
 
-                document.getElementById("topHelp").innerHTML = '<b>' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + " " +  dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+                document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + " " +  dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
 
                 if (dataFinal[5]) {
                     try {
@@ -601,7 +632,7 @@ function showNodeInfo() {
                             if (dataFinal2[1].indexOf('local.js') < 0) {
                                 if (dataFinal2[1].indexOf('""') < 0) {
                                     if (dataFinal2[1].indexOf('undefined') < 0) {
-                                        document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                        document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
                                     }
                                 }
                             }
@@ -611,7 +642,7 @@ function showNodeInfo() {
                         console.log(e);
                     }
                 }
-                document.getElementById("topHelp").innerHTML += '</td></tr></table>';
+                document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
 
 
                 var nameForGraph = dataFinal[0];
@@ -733,6 +764,8 @@ function countCharacters() {
 }
 
 function getTopHelp() {
+    document.getElementById("shortHelp").innerHTML = "";
+
     var textEntryContent = document.getElementById("textarea").value;
     var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
     var lastLine = arrayOfLines.slice(-1)[0];
@@ -749,6 +782,25 @@ function getTopHelp() {
 
     var wordNotFound = 0;
 
+    var lastword = getLastWord(lastLine);
+    if (lastword) {
+    if (lastword[0] !== lastword[0].toUpperCase()) {
+        if (spaceCount >= 2) {
+            var url2 = hostname + "api/bing-parser.php?q=" + lastLine + " ";
+            console.log(url2);
+            $.get(url2, function (json) {
+                json = json+'. ';
+                var sentenceArray = json.split(". ")
+                var firstSentence = sentenceArray[0];
+                if (json.length > 2) {
+                    document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
+                    //stop();
+                }
+            });
+        }
+        spaceCount = 0;
+    }
+    }
 
     if (spaceCount >= 1) {
         console.log("TOP HELP SEARCH: " + lastLine);
@@ -793,12 +845,14 @@ function getTopHelp() {
                                                 }
                                             }
                                             if (foundExist <= 0) {
-                                                createNodesEdges(nameForGraph,dataFinal[3]);
-                                                showKnowledgeGraph();
+                                                if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
+                                                    createNodesEdges(nameForGraph, dataFinal[3]);
+                                                    showKnowledgeGraph();
+                                                }
                                             }
                                         }
 
-                                        document.getElementById("topHelp").innerHTML = '<b> ' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
+                                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
 
 
                                         try {
@@ -807,14 +861,14 @@ function getTopHelp() {
                                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                                     if (dataFinal2[1].indexOf('""') < 0) {
                                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
                                                         }
                                                     }
                                                 }
                                             }
                                         } catch (e) {
                                         }
-                                        document.getElementById("topHelp").innerHTML += '</td></tr></table>';
+                                        document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
                                         wordNotFound = 1;
                                     }
 
@@ -831,7 +885,7 @@ function getTopHelp() {
                 //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
             }
         });
-   }
+
 
 
     if (wordNotFound <= 0) {
@@ -857,12 +911,14 @@ function getTopHelp() {
                                 }
                             }
                             if (foundExist <= 0) {
-                                createNodesEdges(nameForGraph,dataFinal[3]);
-                                showKnowledgeGraph();
+                                if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
+                                    createNodesEdges(nameForGraph, dataFinal[3]);
+                                    showKnowledgeGraph();
+                                }
                             }
                         }
 
-                        document.getElementById("topHelp").innerHTML = '<b> ' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
 
 
                         try {
@@ -871,14 +927,14 @@ function getTopHelp() {
                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                     if (dataFinal2[1].indexOf('""') < 0) {
                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
                                         }
                                     }
                                 }
                             }
                         } catch (e) {
                         }
-                        document.getElementById("topHelp").innerHTML += '</td></tr></table>';
+                        document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
                         wordNotFound = 1;
                     }
 
@@ -911,12 +967,14 @@ function getTopHelp() {
                                 }
                             }
                             if (foundExist <= 0) {
+                                if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
                                 createNodesEdges(nameForGraph,dataFinal[3]);
                                 showKnowledgeGraph();
+                                }
                             }
                         }
 
-                        document.getElementById("topHelp").innerHTML = '<b> ' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
 
 
                         try {
@@ -925,14 +983,14 @@ function getTopHelp() {
                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                     if (dataFinal2[1].indexOf('""') < 0) {
                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
                                         }
                                     }
                                 }
                             }
                         } catch (e) {
                         }
-                        document.getElementById("topHelp").innerHTML += '</td></tr></table>';
+                        document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
 
                     }
 
@@ -940,7 +998,7 @@ function getTopHelp() {
             });
         }
     }
-
+    }
 }
 
 function getLastWord(str) {

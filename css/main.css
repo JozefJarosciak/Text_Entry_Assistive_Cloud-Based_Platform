@@ -14,8 +14,7 @@ body {
     width:500px;
     align-text: left;
     border: 1px solid #e7e7e7;
-    vertical-align: middle;
-    align-content: center;
+    align-content: end;
 }
 
 .box {
@@ -50,7 +49,7 @@ body {
 }
 
 #mynetwork{
-    height: 1000px;
+    height: 800px;
     margin:fill;
     display: flex;
     flex-flow: column;
@@ -76,13 +75,17 @@ body {
 
 #shortHelp{
     background-color: #d8e1ff;
-    width: 95%;
-    font-size: 14px;
+    width: 100%;
+    font-size: 15px;
+    font-weight: normal;
+    text-align: center;
+    color: #280000;
 }
 
-h1 {
+h1,h2 {
     color: #4a9aff;
     margin-bottom: 0;
+    font-weight:bold;
 }
 
 h3 {

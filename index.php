@@ -27,8 +27,8 @@
 
         <table id="topHeaderTable">
             <tr>
-                <td> <h4>Text Entry Assistive Cloud-Based Platform</h4></td>
-                <td style="vertical-align: middle;"><table id="statsBox">
+                <td> <h2>Text Entry Assistive Cloud-Based Platform</h2></td>
+                <td><table id="statsBox">
                         <tr>
                             <th align="left">
                                 <small>Suggestions</small>
@@ -46,7 +46,7 @@
                         <tr>
                             <td>
                                 <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch1" class="onoffswitch-checkbox" id="myonoffswitch1" checked>
+                                    <input type="checkbox" name="onoffswitch1" class="onoffswitch-checkbox" id="myonoffswitch1" onclick="onoff()" checked>
                                     <label class="onoffswitch-label" for="myonoffswitch1">
                                         <span class="onoffswitch-inner"></span>
                                         <span class="onoffswitch-switch"></span>
@@ -78,11 +78,11 @@
 
         <table id="topTable">
             <tr>
-                <th><h3>Enter Text!</h3> <small id="detailHeader">(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
-                <th><h3>Discovery Panel</h3> <small id="detailHeader">(double click words to add it to text editor)</small></th>
+                <th><h3>ENTER TEXT</h3> <small id="detailHeader">(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
+                <th id="headerDiscovery"><h3>DETAILS</h3> <small id="detailHeader">(click words to add them to text editor)</small></th>
             </tr>
             <tr>
-                <td style="width:45%;">
+                <td id="textareatd" style="width:45%;">
 
                     <div id="appendEnabled">
                         <textarea id='textarea'></textarea>
@@ -109,8 +109,8 @@
 
     </div>
 
-    <div class="row content">
-        <h3>Knowledge/Relationship Graph</h3> <small id="detailHeader">(double click the nodes to load details | drag to re-arrange)</small>
+    <div class="row content" id="knowledgeBox">
+        <h3>RESEARCH AREA <small id="detailHeader">(double click the nodes to load details | drag to re-arrange)</small></h3>
         <div id="mynetwork" ondblclick="showNodeInfo()"></div>
     </div>
 

@@ -4,7 +4,8 @@ error_reporting(0);
 
 $q = htmlspecialchars(($_GET["q"]));
 $useTor = 0;
-$url = "https://www.bing.com/search?q=".urlencode($q);
+$url = "https://www.bing.com/search?q=".urlencode($q)."%20";
+//echo $url; exit;
 //$html = curl_get_contents_partial($url,$useTor,120000);
 $html = get_data($url,$useTor);
 //echo $html; exit;
@@ -24,6 +25,9 @@ try {
     $rcABP =  getElementsByClassName($dom, 'rcABP', 'div');
     $df_con = getElementsByClassName($dom, 'rwrl rwrl_pri rwrl_padref', 'div');
     $b_secondaryFocus = getElementsByClassName($dom, 'b_secondaryFocus', 'div');
+    $wob_t = getElementsByClassName($dom, 'wtr_currTemp b_focusTextLarge', 'div'); // temperature
+
+
     //$edu_percent_simplepercentcalc_string_result = $dom->getElementById('edu_percent_simplepercentcalc_string_result')->div;
 
    // $quotesText = getElementsByClassName($dom, 'quotesText', 'div');
@@ -39,23 +43,35 @@ print "</pre>";
 
 //if ($edu_percent_simplepercentcalc_string_result) { echo $edu_percent_simplepercentcalc_string_result[0]->textContent;}
 
+if ($wob_t) {
+   echo $wob_t[0]->textContent . "°F ";
+}
+
 if ($df_con) {
     echo $df_con[0]->textContent;
-} else if ($b_focusTextMedium) {
+}
+
+if ($b_focusTextMedium) {
     echo $b_focusTextMedium[0]->textContent;
-} else if ($b_focusTextLarge) {
+}
+
+if ($b_focusTextLarge) {
     echo $b_focusTextLarge[0]->textContent;
-} else if ($rcABP) {
+}
+
+if ($rcABP) {
     echo $rcExpC[0]->textContent."".$rcABP[0]->textContent;
-} else if ($df_con) {
-    echo $df_con[0]->textContent;
-} else if ($b_secondaryFocus) {
+}
+
+if ($b_secondaryFocus) {
     for($i=0; $i<10; $i++){
         if (strlen($b_secondaryFocus[$i]->textContent)>1) {
         echo $b_secondaryFocus[$i]->textContent.", ";
         }
     }
-} else if ($quotesText) {
+}
+
+if ($quotesText) {
     $quotes = explode(".", ($quotesText[0]->textContent));
     echo $quotes[0].".";
 }
@@ -76,6 +92,19 @@ function getElementsByID($dom, $ClassName, $tagName=null) {
         }
     }
     return $Matched;
+}
+
+function DOMinnerHTML(DOMNode $element)
+{
+    $innerHTML = "";
+    $children  = $element->childNodes;
+
+    foreach ($children as $child)
+    {
+        $innerHTML .= $element->ownerDocument->saveHTML($child);
+    }
+
+    return $innerHTML;
 }
 
 function getElementsByClassName($dom, $ClassName, $tagName=null) {
