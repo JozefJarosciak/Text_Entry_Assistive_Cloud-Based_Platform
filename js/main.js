@@ -793,16 +793,24 @@ function getTopHelp() {
                 var sentenceArray = json.split(". ")
                 var firstSentence = sentenceArray[0];
                 if (json.length > 2) {
-                    document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
 
+                    if (firstSentence.indexOf("Image:")<0) {
+                    document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
+                    } else {
+                        var firstSentence2 = splitMulti(firstSentence, ['.com', '.net', '.org', '.com', '.edu', '.gov', '.uk', '.au']);
+                        firstSentence = firstSentence2[1];
+                        document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
+                    }
 
                     // try if help comes up with something from wikipedia
                     // http://localhost/teap/api/wikipedia-api.php?q=Escape%20Plan%20is%20a%202013%20American
                    var wikiLink = "";
 
 
-                   if (hasNumber(firstSentence)==true) {
+                   //if (hasNumber(firstSentence)===false) {
                     var wikiLink2 = firstSentence.replace(/[0-9]/g, '');
+                    wikiLink2 = wikiLink2.split(/jul/i).join('');
+
                     console.log("Wiki: " + wikiLink2);
 
 
@@ -864,7 +872,7 @@ function getTopHelp() {
 
                         }
                         });
-                   }
+                //   }
 
                 //    if (wikiLink.length>0) {
 
@@ -961,7 +969,119 @@ function getTopHelp() {
                 //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
             }
         });
+    }
 
+
+    if (wordNotFound <= 0) {
+        var isnum = /^\d+$/.test(getLastWord(textEntryContent).removeStopWords());
+        if (isnum === false) {
+            $.ajax({
+                url: hostname + "/api/duckduckgo-api.php?q=" + getLastThreeWords(textEntryContent).removeStopWords(), success: function (data) {
+                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                    var dataFinal = data.split("|");
+
+                    if (dataFinal[1]) {
+
+
+                        var nameForGraph = dataFinal[0];
+                        if (nameForGraph) {
+
+                            var foundExist = 0;
+                            for (var xx = 0; xx < nodes.length; xx++) {
+                                var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                                if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                    foundExist++;
+                                }
+                            }
+                            if (foundExist <= 0) {
+                                if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
+                                    createNodesEdges(nameForGraph,dataFinal[3]);
+                                    showKnowledgeGraph();
+                                }
+                            }
+                        }
+
+                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+
+
+                        try {
+                            for (var xx = 4; xx < dataFinal.length; xx++) {
+                                var dataFinal2 = dataFinal[xx].split(":");
+                                if (dataFinal2[1].indexOf('local.js') < 0) {
+                                    if (dataFinal2[1].indexOf('""') < 0) {
+                                        if (dataFinal2[1].indexOf('undefined') < 0) {
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                        }
+                        document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
+
+                    }
+
+                }
+            });
+        }
+    }
+
+
+    if (wordNotFound <= 0) {
+        var isnum = /^\d+$/.test(getLastWord(textEntryContent).removeStopWords());
+        if (isnum === false) {
+            $.ajax({
+                url: hostname + "/api/duckduckgo-api.php?q=" + getLastTwoWords(textEntryContent).removeStopWords(), success: function (data) {
+                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                    var dataFinal = data.split("|");
+
+                    if (dataFinal[1]) {
+
+
+                        var nameForGraph = dataFinal[0];
+                        if (nameForGraph) {
+
+                            var foundExist = 0;
+                            for (var xx = 0; xx < nodes.length; xx++) {
+                                var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                                if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                    foundExist++;
+                                }
+                            }
+                            if (foundExist <= 0) {
+                                if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
+                                    createNodesEdges(nameForGraph,dataFinal[3]);
+                                    showKnowledgeGraph();
+                                }
+                            }
+                        }
+
+                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+
+
+                        try {
+                            for (var xx = 4; xx < dataFinal.length; xx++) {
+                                var dataFinal2 = dataFinal[xx].split(":");
+                                if (dataFinal2[1].indexOf('local.js') < 0) {
+                                    if (dataFinal2[1].indexOf('""') < 0) {
+                                        if (dataFinal2[1].indexOf('undefined') < 0) {
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                        }
+                        document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
+
+                    }
+
+                }
+            });
+        }
+    }
 
 
     if (wordNotFound <= 0) {
@@ -1020,61 +1140,11 @@ function getTopHelp() {
     }
 
 
-    if (wordNotFound <= 0) {
-        var isnum = /^\d+$/.test(getLastWord(textEntryContent).removeStopWords());
-        if (isnum === false) {
-            $.ajax({
-                url: hostname + "/api/duckduckgo-api.php?q=" + getLastTwoWords(textEntryContent).removeStopWords(), success: function (data) {
-                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
-
-                    var dataFinal = data.split("|");
-
-                    if (dataFinal[1]) {
 
 
-                        var nameForGraph = dataFinal[0];
-                        if (nameForGraph) {
-
-                            var foundExist = 0;
-                            for (var xx = 0; xx < nodes.length; xx++) {
-                                var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
-                                if (nameForGraph.toLowerCase().trim() === nameFinal) {
-                                    foundExist++;
-                                }
-                            }
-                            if (foundExist <= 0) {
-                                if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
-                                createNodesEdges(nameForGraph,dataFinal[3]);
-                                showKnowledgeGraph();
-                                }
-                            }
-                        }
-
-                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
 
 
-                        try {
-                            for (var xx = 4; xx < dataFinal.length; xx++) {
-                                var dataFinal2 = dataFinal[xx].split(":");
-                                if (dataFinal2[1].indexOf('local.js') < 0) {
-                                    if (dataFinal2[1].indexOf('""') < 0) {
-                                        if (dataFinal2[1].indexOf('undefined') < 0) {
-                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (e) {
-                        }
-                        document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
 
-                    }
-
-                }
-            });
-        }
-    }
-    }
 }
 
 function getLastWord(str) {
@@ -1091,6 +1161,14 @@ function getLastTwoWords(str) {
     str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
     // get the last word
     return str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
+}
+
+function getLastThreeWords(str) {
+    // strip punctuations
+    str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
+    str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
+    // get the last word
+    return str.trim().split(" ").reverse()[2] + " " + str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
 }
 
 String.prototype.removeStopWords = function () {
@@ -1592,4 +1670,13 @@ $(document)
 
 function hasNumber(myString) {
     return /\d/.test(myString);
+}
+
+function splitMulti(str, tokens){
+    var tempChar = tokens[0]; // We can use the first token as a temporary join character
+    for(var i = 1; i < tokens.length; i++){
+        str = str.split(tokens[i]).join(tempChar);
+    }
+    str = str.split(tempChar);
+    return str;
 }

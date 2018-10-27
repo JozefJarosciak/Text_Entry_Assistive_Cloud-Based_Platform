@@ -2,7 +2,7 @@
 error_reporting(0);
 
 
-$q = htmlspecialchars(($_GET["q"]));
+$q = $_GET["q"];
 $useTor = 0;
 $url = "https://www.bing.com/search?q=".urlencode($q)."%20";
 //echo $url; exit;
@@ -23,9 +23,12 @@ try {
     $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextLarge', 'div');
     $rcExpC =  getElementsByClassName($dom, 'rcExpC', 'div');
     $rcABP =  getElementsByClassName($dom, 'rcABP', 'div');
-    $df_con = getElementsByClassName($dom, 'rwrl rwrl_pri rwrl_padref', 'div');
+    $df_con = getElementsByClassName($dom, 'rwrl rwrl_sec rwrl_padref', 'div');
+    $rwrl = getElementsByClassName($dom, 'rwrl.rwrl_sec.rwrl_padref', 'div');
+
     $b_secondaryFocus = getElementsByClassName($dom, 'b_secondaryFocus', 'div');
     $wob_t = getElementsByClassName($dom, 'wtr_currTemp b_focusTextLarge', 'div'); // temperature
+    $accwrapper = getElementsByClassName($dom, 'acc-wrapper', 'div'); // celebrities
 
 
     //$edu_percent_simplepercentcalc_string_result = $dom->getElementById('edu_percent_simplepercentcalc_string_result')->div;
@@ -43,38 +46,50 @@ print "</pre>";
 
 //if ($edu_percent_simplepercentcalc_string_result) { echo $edu_percent_simplepercentcalc_string_result[0]->textContent;}
 
+
+
+
+if ($accwrapper) {
+        echo $accwrapper[0]->textContent;
+    }
+
+
 if ($wob_t) {
    echo $wob_t[0]->textContent . "°F ";
 }
 
-if ($df_con) {
-    echo $df_con[0]->textContent;
-}
+
 
 if ($b_focusTextMedium) {
     echo $b_focusTextMedium[0]->textContent;
+} else if ($b_focusTextLarge) {
+    echo $b_focusTextLarge[0]->textContent;
+} else  if ($b_secondaryFocus) {
+    for($i=0; $i<10; $i++){
+        if (strlen($b_secondaryFocus[$i]->textContent)>1) {
+            echo $b_secondaryFocus[$i]->textContent.", ";
+        }
+    }
+} else if ($df_con) {
+    echo $df_con[0]->textContent;
+} else if ($rwrl) {
+    echo $rwrl[0]->textContent;
 }
 
-if ($b_focusTextLarge) {
-    echo $b_focusTextLarge[0]->textContent;
-}
 
 if ($rcABP) {
     echo $rcExpC[0]->textContent."".$rcABP[0]->textContent;
 }
 
-if ($b_secondaryFocus) {
-    for($i=0; $i<10; $i++){
-        if (strlen($b_secondaryFocus[$i]->textContent)>1) {
-        echo $b_secondaryFocus[$i]->textContent.", ";
-        }
-    }
-}
+
 
 if ($quotesText) {
     $quotes = explode(".", ($quotesText[0]->textContent));
     echo $quotes[0].".";
 }
+
+
+
 
 
 function getElementsByID($dom, $ClassName, $tagName=null) {

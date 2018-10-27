@@ -76,8 +76,8 @@ body {
 #shortHelp{
     background-color: #d8e1ff;
     width: 100%;
-    font-size: 15px;
-    font-weight: normal;
+    font-size: 16px;
+    font-weight: bold;
     text-align: center;
     color: #280000;
 }
