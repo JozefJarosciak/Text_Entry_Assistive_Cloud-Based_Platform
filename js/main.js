@@ -449,8 +449,10 @@ function addNodesAround(name, id, textForSearch) {
             //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
         }
     });
-   // network.focus(id, {scale: 1.3});
-   // network.moveTo({position: {x: 0, y: 0}, scale: 1.3});
+   // if (initialNetworkVis>0) {
+        network.focus(id, {scale: 1.2});
+        network.moveTo({position: {x: 0, y: 0}, scale: 1.2});
+
 }
 
 function showKnowledgeGraph(id) {
@@ -461,7 +463,7 @@ function showKnowledgeGraph(id) {
         edges: edges
     };
 
-    var options = {};
+   // var options = {};
 
     var options = {
         //physics: {           barnesHut: {                avoidOverlap: 1            }},
@@ -500,7 +502,8 @@ function showKnowledgeGraph(id) {
 */
     //   console.log("Selected Node: " + id);
 
-
+    network.focus(id, {scale: 1.2});
+    network.moveTo({position: {x: 0, y: 0}, scale: 1.2});
 }
 
 function showNodeInfo() {
@@ -698,6 +701,8 @@ function getTopHelp() {
                                     var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
                                     if (nameForGraph.toLowerCase().trim() === nameFinal) {
                                         foundExist++;
+                                        showKnowledgeGraph(xx+1);
+                                        addNodesAround(nameForGraph,xx+1,data);
                                     }
                                 }
                                 if (foundExist <= 0) {
