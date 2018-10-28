@@ -3,6 +3,7 @@ var network;
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
 var researchList = [];
+var researchSentences = ["the"];
 var initialNetworkVis = 0;
 
 $(function () {
@@ -674,7 +675,7 @@ function getTopHelp() {
     }
 */
     $.ajax({
-        url: hostname + "/api/bing-text-analytics2.php?q=" + textEntryContent, success: function (data) {
+        url: hostname + "/api/bing-text-analytics2.php?w=1&q=" + textEntryContent, success: function (data) {
             //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
             var dataFinal = data.split("|");
@@ -690,7 +691,7 @@ function getTopHelp() {
 
                         var dataFinal = data.split("|");
 
-                        if (dataFinal[1]) {
+                        if (dataFinal[0]) {
 
 
                             var nameForGraph = dataFinal[0];
@@ -768,7 +769,7 @@ function getTopHelp() {
             json = json + '. ';
             var sentenceArray = json.split(". ")
             var firstSentence = sentenceArray[0];
-            if (json.length > 2) {
+            if ((json.length > 2) && (json.length < 25)) {
 
                 if (firstSentence.slice(-2) === ", ") {
                     firstSentence = firstSentence.substring(0, firstSentence.length-2);
@@ -779,12 +780,25 @@ function getTopHelp() {
                 }
 
                 if (firstSentence.indexOf("Image:") < 0) {
-                    document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
+                    console.log(researchSentences);
+                    if (arrayContains(firstSentence,researchSentences) === false) {
+                        document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> ";
+                        researchSentences.push(firstSentence);
+                    }
+
+
                 } else {
                     var firstSentence2 = splitMulti(firstSentence, ['.com', '.net', '.org', '.com', '.edu', '.gov', '.uk', '.au']);
+
                     firstSentence = firstSentence2[1];
-                    document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
+                    console.log(researchSentences);
+                    if (arrayContains(firstSentence,researchSentences) === false) {
+                        document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> ";
+                        researchSentences.push(firstSentence);
+                    }
+
                 }
+
 
                 // try if help comes up with something from wikipedia
                 var wikiLink = "";
@@ -795,7 +809,7 @@ function getTopHelp() {
 
                 console.log("Wiki: " + wikiLink2);
 
-
+/*
                 $.ajax({
                     url: hostname + "/api/wikipedia-api.php?q=" + wikiLink2, success: function (data) {
                         console.log("Wikipedia:" + data);
@@ -847,17 +861,17 @@ function getTopHelp() {
                                     }
                                     document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
                                     wordNotFound = 1;
-                                } else {
-
-
-
                                 }
+
+
 
                             }
                         });
 
                     }
                 });
+
+            */
             }
         });
     }
@@ -1652,7 +1666,10 @@ $(document)
         this.rows = minRows + rows + 1;
     });
 
-
+function arrayContains(needle, arrhaystack)
+{
+    return (arrhaystack.indexOf(needle) > -1);
+}
 
 /*
 
