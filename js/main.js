@@ -3,7 +3,7 @@ var network;
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
 var researchList = [];
-
+var initialNetworkVis = 0;
 
 $(function () {
     var availableTags = [];
@@ -330,10 +330,15 @@ function createNodesEdges(name, textForSearch) {
         console.log(researchList);
     }
 
-    //showNodeInfo();
+    //showNodeInfo();'
+    if (initialNetworkVis>0) {
+    network.focus(nodes.length + 1, {scale: 1.2});
+    network.moveTo({position: {x: 0, y: 0}, scale: 1.2});
+        addNodesAround(name, nodes.length, textForSearch);
+    }
 
 
-  //  addNodesAround(name, nodes.length, textForSearch);
+   //
  //   }
 }
 
@@ -426,8 +431,7 @@ function addNodesAround(name, id, textForSearch) {
 
 
                 //network.moveTo({position: {x:0, y:0},scale: 1.0});
-                network.focus(id, {scale: 1.0});
-                network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
+
                 //network.moveNode(id, 0, 0);
 
                 /*
@@ -445,7 +449,8 @@ function addNodesAround(name, id, textForSearch) {
             //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
         }
     });
-
+   // network.focus(id, {scale: 1.3});
+   // network.moveTo({position: {x: 0, y: 0}, scale: 1.3});
 }
 
 function showKnowledgeGraph(id) {
@@ -465,6 +470,7 @@ function showKnowledgeGraph(id) {
         width: '100%'
     };
 
+    /*
     if (id) {
         nodes.update({
             id: id,
@@ -476,8 +482,11 @@ function showKnowledgeGraph(id) {
         });
         network.moveNode(id, 0, 0);
     }
-
+*/
+    initialNetworkVis = initialNetworkVis+1;
+    if (initialNetworkVis===1) {
     network = new vis.Network(container, data, options);
+    }
     // var selectedArray = network.getSelectedNodes();
 
 
@@ -724,13 +733,13 @@ function getTopHelp() {
                                     //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
                                     if (data2) {
-                                        document.getElementById("topHelp").innerHTML = " <b> " + nodeObj.label + " </b> <br> " + data2 + " <br>";
-                                        if (nodeObj.label!=='I"s') {
-                                            addNodesAround(nodeObj.label, selectedArray[0], data2.removeStopWords());
-                                        }
+                                        document.getElementById("topHelp").innerHTML = " <b> " + nameForGraph + " </b> <br> " + data2 + " <br>";
+
+                                       //     addNodesAround(nameForGraph, selectedArray[0], data2.removeStopWords());
 
 
-                                        showKnowledgeGraph(selectedNodeID);
+
+                                        //showKnowledgeGraph(selectedNodeID);
                                     }
 
                                 }
