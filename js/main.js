@@ -333,8 +333,8 @@ function createNodesEdges(name, textForSearch) {
 
     //showNodeInfo();'
     if (initialNetworkVis>0) {
-    network.focus(nodes.length + 1, {scale: 1.2});
-    network.moveTo({position: {x: 0, y: 0}, scale: 1.2});
+    network.focus(nodes.length + 1, {scale: 1.1});
+    network.moveTo({position: {x: 0, y: 0}, scale: 1.1});
         addNodesAround(name, nodes.length, textForSearch);
     }
 
@@ -451,8 +451,8 @@ function addNodesAround(name, id, textForSearch) {
         }
     });
    // if (initialNetworkVis>0) {
-        network.focus(id, {scale: 1.2});
-        network.moveTo({position: {x: 0, y: 0}, scale: 1.2});
+        network.focus(id, {scale: 1.1});
+        network.moveTo({position: {x: 0, y: 0}, scale: 1.1});
 
 }
 
@@ -503,8 +503,8 @@ function showKnowledgeGraph(id) {
 */
     //   console.log("Selected Node: " + id);
 
-    network.focus(id, {scale: 1.2});
-    network.moveTo({position: {x: 0, y: 0}, scale: 1.2});
+    network.focus(id, {scale: 1.1});
+    network.moveTo({position: {x: 0, y: 0}, scale: 1.1});
 }
 
 function showNodeInfo() {
