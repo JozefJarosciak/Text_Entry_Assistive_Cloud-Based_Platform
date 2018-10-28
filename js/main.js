@@ -4,21 +4,6 @@ var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
 var researchList = [];
 
-function onoff() {
-    if (document.getElementById("myonoffswitch1").checked === true) {
-        location.reload();
-        //document.getElementById("quickHelp").style.display = "block";
-        //document.getElementById("headerDiscovery").style.display = "block";
-        //document.getElementById("knowledgeBox").style.display = "block";
-        //document.getElementById("textareatd").style.width = "45%";
-    } else {
-        document.getElementById("quickHelp").style.display = "none";
-        document.getElementById("headerDiscovery").style.display = "none";
-        document.getElementById("knowledgeBox").style.display = "none";
-        document.getElementById("textareatd").style.width = "100%";
-    }
-
-}
 
 $(function () {
     var availableTags = [];
@@ -26,9 +11,6 @@ $(function () {
     var capitalizedResponse;
     var lastWord;
     var totalLength = 0;
-
-
-
 
 
 // Overrides the default autocomplete filter function to
@@ -61,25 +43,8 @@ $(function () {
     }
 
     function extractLast(term) {
-        /*
-
-        var n = term.split(" ");
-        var word = n[n.length - 1];
-
-        */
         word = split(term).pop();
-
-        /*
-        if (word.length <= 2) {
-            n = term.split(".");
-            word = n[n.length - 1];
-            word = "-----";
-           // $('#textarea').autocomplete("close");
-        }
-        */
-
         if (word.length >= 3) {
-
             if (word.includes(".") === true) {
                 word = word.replace(/\r?\n|\r/, "");
                 word = word.substring(word.indexOf(".") + 1);
@@ -93,18 +58,15 @@ $(function () {
 
     }
 
-    $("#textarea")
-    // don't navigate away from the field on tab when selecting an item
-        .on("keydown", function (event) {
+    //$("#textarea").on("keydown", function (event) {
 
+    $("#textarea").keypress(function (event) {
 
             if ((event.keyCode === 8) || (event.keyCode === 46)) {
                 var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
                 var countSaved = currentCountofKeystrokesSaved - 1;
                 document.getElementById("keystrokesSaved").innerText = countSaved;
             }
-
-
 
 
             if ((event.keyCode === 190) || (event.keyCode === 32)) {
@@ -119,12 +81,8 @@ $(function () {
             } else {
 
                 if (event.keyCode === 13) {
-
                     console.log("enter pressed");
-                    // $('#textarea').autocomplete("search");
                 }
-
-                countCharacters();
 
                 if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
                     event.preventDefault();
@@ -132,7 +90,7 @@ $(function () {
 
             }
 
-
+            updateStatistics();
         })
         .autocomplete({
             delay: 200,
@@ -150,224 +108,100 @@ $(function () {
 
                 if (document.getElementById("myonoffswitch1").checked === true) {
 
-                                    if (lastChar==" ") {
-
-                                        // last sentence
-                                        textEntryContent = document.getElementById("textarea").value;
-
-                                        var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
-                                        var lastLine = arrayOfLines.slice(-1)[0];
-
-                                        //console.log("log: " + lastLine);
-                                        var spaceCount = lastLine.split(" ").length - 1;
-
-                                        if (spaceCount>1) {
-
-                                        if (lastLine.indexOf('.') > 0) {
-                                            lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
-                                            //  console.log("LAST SENTENCE: " + lastLine);
-                                        } else {
-                                            // console.log("LAST SENTENCE: " + lastLine);
-                                        }
-
-
-
-                                           // if ((lastWord) && (lastWord.toString().length >= 2)) {
-                                                console.log("START SEARCH");
-                                                //  availableTags = [];
-
-                                            /*
-                                                    var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine+ "&space=1";
-                                                    console.log(url2);
-                                                    $.getJSON(url2, function (json) {
-                                                        availableTags = [];
-                                                        //availableTags = json;
-                                                        availableTags.push(json.toString());
-                                                        console.log(availableTags);
-
-                                                        if (availableTags[0] != '') {
-
-
-
-                                                            document.getElementById("shortHelp").innerHTML = " " + availableTags[0] + " <br> ";
-
-
-
-                                                            $.ajax({
-                                                                url: hostname + "/api/google-knowledge-graph-api.php?d=1&q=" + availableTags[0], success: function (data) {
-                                                                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
-
-                                                                    var dataFinal = data.split("|");
-
-                                                                    for (var forLoop1 = 0; forLoop1 < dataFinal.length; forLoop1++) {
-
-                                                                        var nameForGraph = dataFinal[forLoop1];
-                                                                        if (nameForGraph) {
-
-                                                                            var foundExist = 0;
-                                                                            for (var xx = 0; xx < nodes.length; xx++) {
-                                                                                var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
-                                                                                if (nameForGraph.toLowerCase().trim() === nameFinal) {
-                                                                                    foundExist++;
-                                                                                }
-                                                                            }
-                                                                            if (foundExist <= 0) {
-
-
-                                                                                $.ajax({
-                                                                                    url: hostname + "/api/duckduckgo-api.php?q=" + nameForGraph.removeStopWords(), success: function (data) {
-                                                                                        //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
-
-                                                                                        var dataFinal = data.split("|");
-
-                                                                                        if (dataFinal[1]) {
-
-
-                                                                                            var nameForGraph = dataFinal[0];
-                                                                                            if (nameForGraph) {
-
-                                                                                                var foundExist = 0;
-                                                                                                for (var xx = 0; xx < nodes.length; xx++) {
-                                                                                                    var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
-                                                                                                    if (nameForGraph.toLowerCase().trim() === nameFinal) {
-                                                                                                        foundExist++;
-                                                                                                    }
-                                                                                                }
-                                                                                                if (foundExist <= 0) {
-                                                                                                    createNodesEdges(nameForGraph,dataFinal[3]);
-                                                                                                    showKnowledgeGraph();
-                                                                                                }
-                                                                                            }
-
-                                                                                            document.getElementById("topHelp").innerHTML = '<b> ' + dataFinal[0] + '</b><table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
-
-
-                                                                                            try {
-                                                                                                for (var xx = 4; xx < dataFinal.length; xx++) {
-                                                                                                    var dataFinal2 = dataFinal[xx].split(":");
-                                                                                                    if (dataFinal2[1].indexOf('local.js') < 0) {
-                                                                                                        if (dataFinal2[1].indexOf('""') < 0) {
-                                                                                                            if (dataFinal2[1].indexOf('undefined') < 0) {
-                                                                                                                document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + "</b>: " + dataFinal2[1] + "<br>";
-                                                                                                            }
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            } catch (e) {
-                                                                                            }
-                                                                                            document.getElementById("topHelp").innerHTML += '</td></tr></table>';
-                                                                                            wordNotFound = 1;
-                                                                                        }
-
-                                                                                    }
-                                                                                });
-
-
-
-                                                                            }
-                                                                        }
-
-                                                                    }
-
-                                                                    //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
-                                                                }
-                                                            });
-
-
-*/
-
-                                                            /*
-                                                            if (availableTags[0].length > 40) {
-                                                                document.getElementById("topHelp").innerHTML = " [" + availableTags[0].substring(availableTags[0].indexOf("[") + 1);
-                                                            } else {response(availableTags);}
-                                                           */
-
-                                                        } else {
-                                                            $('#textarea').autocomplete("close");
-                                                        }
-
-                                                        //response($.ui.autocomplete.filter(availableTags, lastWord));
-                                                  //  });
-
-
-
-
-
-                                         //   }
-                                       // }
-
-                                    } else if (lastWord) {
-                    if (lastWord.length >= 3) {
-
-
-                        console.log("LAST WORD: " + lastWord);
+                    if (lastChar == " ") {
 
                         // last sentence
                         textEntryContent = document.getElementById("textarea").value;
 
                         var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
                         var lastLine = arrayOfLines.slice(-1)[0];
-                        if (lastLine.indexOf('.') > 0) {
-                            lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
-                            //  console.log("LAST SENTENCE: " + lastLine);
+
+                        //console.log("log: " + lastLine);
+                        var spaceCount = lastLine.split(" ").length - 1;
+
+                        if (spaceCount > 1) {
+
+                            if (lastLine.indexOf('.') > 0) {
+                                lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
+                            } else
+
+                            console.log("START SEARCH");
+
+
                         } else {
-                            // console.log("LAST SENTENCE: " + lastLine);
+                            $('#textarea').autocomplete("close");
                         }
 
-                        if (document.getElementById("myonoffswitch1").checked === true) {
+                        updateStatistics();
 
-                            if ((lastWord) && (lastWord.toString().length >= 2)) {
-                                console.log("START SEARCH");
-                                //  availableTags = [];
+                    } else if (lastWord) {
+                        if (lastWord.length >= 3) {
 
-                                var stopWords = ['known', 'know', 'and', 'also', 'like', 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'need', 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"];
 
-                                var matches = stopWords.filter(function (windowValue) {
-                                    if (windowValue) {
-                                        return (windowValue.substring(0, lastWord.toLowerCase().length) === lastWord.toLowerCase());
-                                    }
-                                });
+                            console.log("LAST WORD: " + lastWord);
 
-                                if (matches.length <= 0) {
-                                    //console.log(hostname);
+                            // last sentence
+                            textEntryContent = document.getElementById("textarea").value;
 
-                                    /*
-                                    $.ajax({ url: hostname + "/api/search.php?q=" + lastLine + "&s=" + lastLine, success: function(data) {
-                                            var searchResult = document.createElement("searchResult");searchResult.innerHTML = data;
-                                            availableTags = JSON.parse(searchResult.innerText);
+                            var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
+                            var lastLine = arrayOfLines.slice(-1)[0];
+                            if (lastLine.indexOf('.') > 0) {
+                                lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
+                                //  console.log("LAST SENTENCE: " + lastLine);
+                            } else {
+                                // console.log("LAST SENTENCE: " + lastLine);
+                            }
 
-                                            console.log(availableTags);
-                                            //availableTags.push("Test");
+                            if (document.getElementById("myonoffswitch1").checked === true) {
+
+                                if ((lastWord) && (lastWord.toString().length >= 2)) {
+                                    console.log("START SEARCH");
+                                    //  availableTags = [];
+
+                                    var stopWords = ['known', 'know', 'and', 'also', 'like', 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'need', 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"];
+
+                                    var matches = stopWords.filter(function (windowValue) {
+                                        if (windowValue) {
+                                            return (windowValue.substring(0, lastWord.toLowerCase().length) === lastWord.toLowerCase());
+                                        }
+                                    });
+
+                                    if (matches.length <= 0) {
+                                        //console.log(hostname);
+
+                                        /*
+                                        $.ajax({ url: hostname + "/api/search.php?q=" + lastLine + "&s=" + lastLine, success: function(data) {
+                                                var searchResult = document.createElement("searchResult");searchResult.innerHTML = data;
+                                                availableTags = JSON.parse(searchResult.innerText);
+
+                                                console.log(availableTags);
+                                                //availableTags.push("Test");
+                                                response(availableTags);
+                                            } });
+                                            */
+
+                                        var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine + "&space=0";
+                                        console.log(url2);
+                                        $.getJSON(url2, function (json) {
+                                            availableTags = [];
+                                            availableTags = json;
+                                        //    console.log(availableTags);
                                             response(availableTags);
-                                        } });
-                                        */
-
-                                    var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine+ "&space=0";
-                                    console.log(url2);
-                                    $.getJSON(url2, function (json) {
-                                        availableTags = [];
-                                        availableTags = json;
-                                        console.log(availableTags);
+                                        })
 
 
-                                        response(availableTags);
-
-                                        //response($.ui.autocomplete.filter(availableTags, lastWord));
-                                    })
+                                    }
 
 
                                 }
-
-
                             }
+
+
                         }
-
-
+                        updateStatistics();
                     }
 
                 }
-
-                                    }
             },
             focus: function () {
                 // prevent value inserted on focus
@@ -376,10 +210,6 @@ $(function () {
             select: function (event, ui) {
 
                 var str = document.getElementById("textarea").value;
-                //
-
-                //  var pos = str.lastIndexOf(word);
-//       str = str.substring(0,pos) + ui.item.value + str.substring(pos+1)
 
                 console.log("STRING: " + str);
 
@@ -388,9 +218,6 @@ $(function () {
                 } else {
                     str = str.substring(0, (str.length - word.length));
                 }
-
-
-                //  $("label[for='helper2']").text(str);
 
                 console.log("SUBSTRING: " + str);
 
@@ -405,7 +232,9 @@ $(function () {
                 //$('#textarea').autocomplete('close');
 
 
-                countCharacters();
+                updateStatistics();
+
+
                 totalLength = Number(document.getElementById("totalLength").innerText);
                 var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
                 if (!lastWord) {
@@ -427,6 +256,49 @@ $(function () {
 
 });
 
+function updateStatistics() {
+
+    if (document.getElementById("textarea").value.length === 0) {
+        document.getElementById("wordCounter").innerText = "0";
+        document.getElementById("totalLength").innerText = "0";
+        document.getElementById("keystrokesSaved").innerText = "0";
+        document.getElementById("percentSaved").innerText = "0";
+    } else {
+        var totalLength = document.getElementById("textarea").value.length;
+        document.getElementById("totalLength").innerText = totalLength;
+
+        // percent saved
+        var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+        var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
+        document.getElementById("percentSaved").innerText = percentSaved.toString();
+
+        if (totalLength < 4) {
+            document.getElementById("keystrokesSaved").innerText = "0";
+            document.getElementById("percentSaved").innerText = "0";
+        }
+
+        // Count Words
+        var matches = (document.getElementById("textarea").value).match(/[\w\d\’\'-]+/gi);
+        var countWordsSaved = matches ? matches.length : 0;
+        document.getElementById("wordCounter").innerText = countWordsSaved.toString();
+    }
+}
+
+function onoff() {
+    if (document.getElementById("myonoffswitch1").checked === true) {
+        location.reload();
+        //document.getElementById("quickHelp").style.display = "block";
+        //document.getElementById("headerDiscovery").style.display = "block";
+        //document.getElementById("knowledgeBox").style.display = "block";
+        //document.getElementById("textareatd").style.width = "45%";
+    } else {
+        document.getElementById("quickHelp").style.display = "none";
+        document.getElementById("headerDiscovery").style.display = "none";
+        document.getElementById("knowledgeBox").style.display = "none";
+        document.getElementById("textareatd").style.width = "100%";
+    }
+
+}
 
 function initialIsCapital(word) {
     try {
@@ -444,7 +316,9 @@ function capitalizeFirstLetter(string) {
     }
 }
 
-function createNodesEdges(name,textForSearch) {
+function createNodesEdges(name, textForSearch) {
+    if (name!=='I"s') {
+
     if (nodes.length > 0) {
         nodes.add({id: nodes.length + 1, label: name, shape: 'box'});
         edges.add({from: 1, to: nodes.length});
@@ -454,18 +328,20 @@ function createNodesEdges(name,textForSearch) {
 
     //showNodeInfo();
 
-    addNodesAround(name,nodes.length,textForSearch);
+
+    addNodesAround(name, nodes.length, textForSearch);
+    }
 }
 
+function addNodesAround(name, id, textForSearch) {
 
-function addNodesAround(name,id,textForSearch) {
-
- //   console.log(textForSearch);
+    //   console.log(textForSearch);
 
     var colorNodes = getRandColor(5);
 
     //$.ajax({ url: hostname + "/api/google-knowledge-graph-api.php?d=1&q=" + name, success: function(data) {
-          $.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + textForSearch, success: function(data) {
+    $.ajax({
+        url: hostname + "/api/bing-text-analytics.php?q=" + textForSearch, success: function (data) {
 
             var dataFinal = data.split("|");
 
@@ -476,7 +352,7 @@ function addNodesAround(name,id,textForSearch) {
 
                     var foundExist = 0;
                     for (var xx = 0; xx < nodes.length; xx++) {
-                        var nameFinal = network.body.data.nodes._data[xx+1].label.toLowerCase().trim();
+                        var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
                         if (nameForGraph.toLowerCase().trim() === nameFinal) {
                             foundExist++;
                         }
@@ -486,76 +362,75 @@ function addNodesAround(name,id,textForSearch) {
                         var selectedArray = network.getSelectedNodes();
 
 
-
-
-
                         if (id) {
                             edges.add({from: id, to: nodes.length});
                         } else {
                             edges.add({from: selectedArray[0], to: nodes.length});
                         }
 
-                   }
+                    }
 
                 }
 
             }
-                  if (id) {
-                     // network.nodes.update({id:id, x:0, y: 0});
+            if (id) {
+                // network.nodes.update({id:id, x:0, y: 0});
 
-                      /*
-                      var $this = $('#textarea');
-                      var offset = $this.offset();
-                      var width = $this.width();
-                      var height = $this.height();
+                /*
+                var $this = $('#textarea');
+                var offset = $this.offset();
+                var width = $this.width();
+                var height = $this.height();
 
-                      var centerX = offset.left + width / 2;
-                      var centerY = offset.top + height / 2;
+                var centerX = offset.left + width / 2;
+                var centerY = offset.top + height / 2;
 */
-                      //network.nodes.focus({id:id, x:0, y: 0});
+                //network.nodes.focus({id:id, x:0, y: 0});
 
-                      for (var xx = 1; xx < nodes.length; xx++) {
-                          nodes.update({
-                              id:xx,
-                              x:undefined, y: undefined,
-                             fixed: {
-                                  x:false,
-                                  y:false
-                              }
-                          });
-                      }
+                for (var xx = 1; xx < nodes.length; xx++) {
+                    nodes.update({
+                        id: xx,
+                        x: undefined, y: undefined,
+                        fixed: {
+                            x: false,
+                            y: false
+                        }
+                    });
+                }
 
-                      nodes.update({
-                              id:id,
-                              x:0, y: 0,
-                          fixed: {
-                              x:true,
-                              y:true
-                          }
-                      });
+                nodes.update({
+                    id: id,
+                    x: 0, y: 0,
+                    fixed: {
+                        x: true,
+                        y: true
+                    }
+                });
 
 
-                      //network.moveTo({position: {x:0, y:0},scale: 1.0});
-                      network.focus(id,{scale: 1.0});
-                      network.moveTo({position: {x:0, y:0},scale: 1.0});
-                      //network.moveNode(id, 0, 0);
+                //network.moveTo({position: {x:0, y:0},scale: 1.0});
+                network.focus(id, {scale: 1.0});
+                network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
+                //network.moveNode(id, 0, 0);
 
-/*
-                      nodes.update({
-                          id:id,
-                          x:0, y: 0,
-                          fixed: {
-                              x:false,
-                              y:false
-                          }
-                      });
-                      network.moveNode(id, 0, 0);
-                      */
-                  }
+                /*
+                                      nodes.update({
+                                          id:id,
+                                          x:0, y: 0,
+                                          fixed: {
+                                              x:false,
+                                              y:false
+                                          }
+                                      });
+                                      network.moveNode(id, 0, 0);
+                                      */
+            }
             //  document.getElementById("topHelp").innerHTML = dataFinal[1].trim();
-        } });
+        }
+    });
 
 }
+
 function showKnowledgeGraph(id) {
     // create a network
     var container = document.getElementById('mynetwork');
@@ -578,18 +453,18 @@ function showKnowledgeGraph(id) {
 */
     if (id) {
         nodes.update({
-            id:id,
-            x:undefined, y: undefined,
+            id: id,
+            x: undefined, y: undefined,
             fixed: {
-                x:false,
-                y:false
+                x: false,
+                y: false
             }
         });
-    network.moveNode(id, 0, 0);
+        network.moveNode(id, 0, 0);
     }
 
     network = new vis.Network(container, data, options);
-  // var selectedArray = network.getSelectedNodes();
+    // var selectedArray = network.getSelectedNodes();
 
 
     /*
@@ -600,12 +475,14 @@ function showKnowledgeGraph(id) {
         });
     });
 */
- //   console.log("Selected Node: " + id);
+    //   console.log("Selected Node: " + id);
 
 
 }
 
 function showNodeInfo() {
+    document.getElementById("shortHelp").innerHTML = "";
+
     var selectedArray = network.getSelectedNodes();
     var nodeObj = network.body.data.nodes._data[selectedArray[0]];
     console.log(selectedArray[0] + " - " + nodeObj.label); //nodeObj.label to get label
@@ -622,17 +499,17 @@ function showNodeInfo() {
             if (dataFinal[0]) {
 
 
-                document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + " " +  dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+                document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + " " + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
 
                 if (dataFinal[5]) {
                     try {
-                        for (var xx = 4; xx < dataFinal.length-1; xx++) {
+                        for (var xx = 4; xx < dataFinal.length - 1; xx++) {
                             var dataFinal2 = dataFinal[xx].split(":");
 
                             if (dataFinal2[1].indexOf('local.js') < 0) {
                                 if (dataFinal2[1].indexOf('""') < 0) {
                                     if (dataFinal2[1].indexOf('undefined') < 0) {
-                                        document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
+                                        document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + " &nbsp;<br>";
                                     }
                                 }
                             }
@@ -656,12 +533,12 @@ function showNodeInfo() {
                         }
                     }
                     //if (foundExist <= 0) {
-                        //createNodesEdges(nameForGraph,dataFinal[3]);
+                    //createNodesEdges(nameForGraph,dataFinal[3]);
 
-
-                        addNodesAround(nameForGraph,selectedArray[0],dataFinal[3]);
-                        showKnowledgeGraph(selectedNodeID);
-
+                    if (nameForGraph!=='I"s') {
+                        addNodesAround(nameForGraph, selectedArray[0], data);
+                    }
+                    showKnowledgeGraph(selectedNodeID);
 
 
 //                       network.focus(selectedArray[0],{scale: 1,offset: {x:0, y:0}});
@@ -669,58 +546,63 @@ function showNodeInfo() {
                 }
 
 
+            } else {
 
+                $.ajax({
+                   // url: hostname + "/api/bing-parser.php?q=" + nodeObj.label, success: function (data2) {
+                    url: hostname + "/api/google-knowledge-graph-api.php?q=" + nodeObj.label, success: function (data2) {
+                        //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                        if (data2) {
+                            document.getElementById("topHelp").innerHTML = " <b> " + nodeObj.label + " </b> <br> " + data2 + " <br>";
+                            if (nodeObj.label!=='I"s') {
+                                addNodesAround(nodeObj.label, selectedArray[0], data2);
+                            }
+
+
+                            showKnowledgeGraph(selectedNodeID);
+                        }
+
+                    }
+                    });
             }
 
         }
 
     });
 
-    //addNodesAround(nodeObj.label);
 }
 
-
-function getRandColor(brightness){
+function getRandColor(brightness) {
     // Six levels of brightness from 0 to 5, 0 being the darkest
     var rgb = [Math.random() * 256, Math.random() * 256, Math.random() * 256];
-    var mix = [brightness*51, brightness*51, brightness*51]; //51 => 255/5
-    var mixedrgb = [rgb[0] + mix[0], rgb[1] + mix[1], rgb[2] + mix[2]].map(function(x){ return Math.round(x/2.0)})
+    var mix = [brightness * 51, brightness * 51, brightness * 51]; //51 => 255/5
+    var mixedrgb = [rgb[0] + mix[0], rgb[1] + mix[1], rgb[2] + mix[2]].map(function (x) {
+        return Math.round(x / 2.0)
+    })
     return "rgb(" + mixedrgb.join(",") + ")";
 }
 
 function enableHighlighting() {
-    /*
-    var s = window.getSelection();
-    s.modify('extend', 'backward', 'word');
-    var b = s.toString();
-
-    s.modify('extend', 'forward', 'word');
-    var a = s.toString();
-    s.modify('move', 'forward', 'character');
-    // alert(b+a);
-*/
-
-    var s = window.getSelection();
+      var s = window.getSelection();
     var range = s.getRangeAt(0);
     var node = s.anchorNode;
-    while(range.toString().indexOf(' ') != 0) {
-        range.setStart(node,(range.startOffset -1));
+    while (range.toString().indexOf(' ') != 0) {
+        range.setStart(node, (range.startOffset - 1));
     }
-    range.setStart(node, range.startOffset +1);
-    do{
-        range.setEnd(node,range.endOffset + 1);
+    range.setStart(node, range.startOffset + 1);
+    do {
+        range.setEnd(node, range.endOffset + 1);
 
-    }while(range.toString().indexOf(' ') == -1 && range.toString().trim() != '');
+    } while (range.toString().indexOf(' ') == -1 && range.toString().trim() != '');
     var str = range.toString().trim();
 
-    // $(this).css("background-color","Yellow");
     var wordHighligted = " " + str;
     wordHighligted = wordHighligted.replace(/\s\s+/g, ' ');
     wordHighligted = wordHighligted.replace(/ \s*$/, "");
     console.log("SELECTED: " + wordHighligted);
 
-    //  $('#textarea').append(wordHighligted);
-    $("#textarea").val($("#textarea").val().trim() + wordHighligted);
+     $("#textarea").val($("#textarea").val().trim() + wordHighligted);
 
 
     var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
@@ -733,35 +615,11 @@ function enableHighlighting() {
     document.getElementById("percentSaved").innerText = percentSaved.toString();
 
 
-    countCharacters();
+    updateStatistics();
 
-    //placeCaretAtEnd(document.getElementById('textarea'));
     document.getElementById('textarea').focus();
 
-    //$("#textarea").trigger({type: 'keypress', which: 13, keyCode: 13});
-    // jQuery('#textarea').trigger('click');
-
-    // });
-
 };
-
-function countCharacters() {
-    totalLength = document.getElementById("textarea").value.length + 1;
-    //console.log("Length: " + totalLength);
-    document.getElementById("totalLength").innerText = totalLength;
-
-    // percent saved
-    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-    var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
-    document.getElementById("percentSaved").innerText = percentSaved.toString();
-
-    if (totalLength < 4) {
-        document.getElementById("keystrokesSaved").innerText = "0";
-        document.getElementById("percentSaved").innerText = "0";
-    }
-
-
-}
 
 function getTopHelp() {
     document.getElementById("shortHelp").innerHTML = "";
@@ -784,106 +642,109 @@ function getTopHelp() {
 
     var lastword = getLastWord(lastLine);
     if (lastword) {
-    if (lastword[0] !== lastword[0].toUpperCase()) {
-        if (spaceCount >= 2) {
-            var url2 = hostname + "api/bing-parser.php?q=" + lastLine + " ";
-            console.log(url2);
-            $.get(url2, function (json) {
-                json = json+'. ';
-                var sentenceArray = json.split(". ")
-                var firstSentence = sentenceArray[0];
-                if (json.length > 2) {
+      //  if (lastword[0] !== lastword[0].toUpperCase()) {
+            if (spaceCount >= 2) {
+                var url2 = hostname + "api/bing-parser.php?q=" + lastLine + " is ";
+                console.log(url2);
+                $.get(url2, function (json) {
+                    json = json + '. ';
+                    var sentenceArray = json.split(". ")
+                    var firstSentence = sentenceArray[0];
+                    if (json.length > 2) {
 
-                    if (firstSentence.indexOf("Image:")<0) {
-                    document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
-                    } else {
-                        var firstSentence2 = splitMulti(firstSentence, ['.com', '.net', '.org', '.com', '.edu', '.gov', '.uk', '.au']);
-                        firstSentence = firstSentence2[1];
-                        document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
-                    }
+                        if (firstSentence.slice(-2) === ", ") {
+                            firstSentence = firstSentence.substring(0, firstSentence.length-2);
+                        }
 
-                    // try if help comes up with something from wikipedia
-                    // http://localhost/teap/api/wikipedia-api.php?q=Escape%20Plan%20is%20a%202013%20American
-                   var wikiLink = "";
+                        if (firstSentence.slice(-1) === ",") {
+                            firstSentence = firstSentence.substring(0, firstSentence.length-1);
+                        }
 
+                        if (firstSentence.indexOf("Image:") < 0) {
+                            document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
+                        } else {
+                            var firstSentence2 = splitMulti(firstSentence, ['.com', '.net', '.org', '.com', '.edu', '.gov', '.uk', '.au']);
+                            firstSentence = firstSentence2[1];
+                            document.getElementById("shortHelp").innerHTML = " " + firstSentence + " <br> ";
+                        }
 
-                   //if (hasNumber(firstSentence)===false) {
-                    var wikiLink2 = firstSentence.replace(/[0-9]/g, '');
-                    wikiLink2 = wikiLink2.split(/jul/i).join('');
+                        // try if help comes up with something from wikipedia
+                        var wikiLink = "";
 
-                    console.log("Wiki: " + wikiLink2);
+                        //if (hasNumber(firstSentence)===false) {
+                        var wikiLink2 = firstSentence.replace(/[0-9]/g, '');
+                        wikiLink2 = wikiLink2.split(/jul/i).join('');
 
-
-                    $.ajax({
-                        url: hostname + "/api/wikipedia-api.php?q=" + wikiLink2, success: function (data) {
-                            console.log(data);
-                            wikiLink = data;
-
-
-                            $.ajax({
-                                url: hostname + "/api/duckduckgo-api.php?q=" + wikiLink, success: function (data) {
-                                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
-
-                                    var dataFinal = data.split("|");
-
-                                    if (dataFinal[1]) {
+                        console.log("Wiki: " + wikiLink2);
 
 
-                                        var nameForGraph = dataFinal[0];
-                                        if (nameForGraph) {
+                        $.ajax({
+                            url: hostname + "/api/wikipedia-api.php?q=" + wikiLink2, success: function (data) {
+                                console.log("Wikipedia:" + data);
+                                wikiLink = data;
 
-                                            var foundExist = 0;
-                                            for (var xx = 0; xx < nodes.length; xx++) {
-                                                var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
-                                                if (nameForGraph.toLowerCase().trim() === nameFinal) {
-                                                    foundExist++;
+
+                                $.ajax({
+                                    url: hostname + "/api/duckduckgo-api.php?q=" + wikiLink, success: function (data) {
+                                        //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                                        var dataFinal = data.split("|");
+
+                                        if (dataFinal[3]) {
+
+
+                                            var nameForGraph = dataFinal[0];
+                                            if (nameForGraph) {
+
+                                                var foundExist = 0;
+                                                for (var xx = 0; xx < nodes.length; xx++) {
+                                                    var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                                                    if (nameForGraph.toLowerCase().trim() === nameFinal) {
+                                                        foundExist++;
+                                                    }
                                                 }
-                                            }
-                                            if (foundExist <= 0) {
-                                                if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
-                                                    createNodesEdges(nameForGraph, dataFinal[3]);
-                                                    showKnowledgeGraph();
-                                                }
-                                            }
-                                        }
-
-                                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
-
-
-                                        try {
-                                            for (var xx = 4; xx < dataFinal.length; xx++) {
-                                                var dataFinal2 = dataFinal[xx].split(":");
-                                                if (dataFinal2[1].indexOf('local.js') < 0) {
-                                                    if (dataFinal2[1].indexOf('""') < 0) {
-                                                        if (dataFinal2[1].indexOf('undefined') < 0) {
-                                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
-                                                        }
+                                                if (foundExist <= 0) {
+                                                    if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
+                                                        createNodesEdges(nameForGraph, data);
+                                                        showKnowledgeGraph();
                                                     }
                                                 }
                                             }
-                                        } catch (e) {
+
+                                            document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
+
+
+                                            try {
+                                                for (var xx = 4; xx < dataFinal.length; xx++) {
+                                                    var dataFinal2 = dataFinal[xx].split(":");
+                                                    if (dataFinal2[1].indexOf('local.js') < 0) {
+                                                        if (dataFinal2[1].indexOf('""') < 0) {
+                                                            if (dataFinal2[1].indexOf('undefined') < 0) {
+                                                                document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + " &nbsp;<br>";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            } catch (e) {
+                                            }
+                                            document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
+                                            wordNotFound = 1;
+                                        } else {
+
+
+
                                         }
-                                        document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
-                                        wordNotFound = 1;
+
                                     }
+                                });
 
-                                }
-                            });
-
-                        }
+                            }
                         });
-                //   }
-
-                //    if (wikiLink.length>0) {
-
-                 //   }
-
-
-                }
-            });
-        }
-        spaceCount = 0;
-    }
+                    }
+                });
+            }
+            spaceCount = 0;
+       // }
     }
 
     if (spaceCount >= 1) {
@@ -930,7 +791,7 @@ function getTopHelp() {
                                             }
                                             if (foundExist <= 0) {
                                                 if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
-                                                    createNodesEdges(nameForGraph, dataFinal[3]);
+                                                    createNodesEdges(nameForGraph, data);
                                                     showKnowledgeGraph();
                                                 }
                                             }
@@ -945,7 +806,7 @@ function getTopHelp() {
                                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                                     if (dataFinal2[1].indexOf('""') < 0) {
                                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
+                                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + " &nbsp;<br>";
                                                         }
                                                     }
                                                 }
@@ -960,7 +821,6 @@ function getTopHelp() {
                             });
 
 
-
                         }
                     }
 
@@ -972,16 +832,16 @@ function getTopHelp() {
     }
 
 
-    if (wordNotFound <= 0) {
+    if (wordNotFound === 0) {
         var isnum = /^\d+$/.test(getLastWord(textEntryContent).removeStopWords());
         if (isnum === false) {
             $.ajax({
-                url: hostname + "/api/duckduckgo-api.php?q=" + getLastThreeWords(textEntryContent).removeStopWords(), success: function (data) {
+                url: hostname + "/api/duckduckgo-api.php?q=" + getLastThreeWords(textEntryContent), success: function (data) {
                     //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
                     var dataFinal = data.split("|");
 
-                    if (dataFinal[1]) {
+                    if (dataFinal[3]) {
 
 
                         var nameForGraph = dataFinal[0];
@@ -996,13 +856,13 @@ function getTopHelp() {
                             }
                             if (foundExist <= 0) {
                                 if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
-                                    createNodesEdges(nameForGraph,dataFinal[3]);
+                                    createNodesEdges(nameForGraph, data);
                                     showKnowledgeGraph();
                                 }
                             }
                         }
 
-                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
 
 
                         try {
@@ -1011,13 +871,14 @@ function getTopHelp() {
                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                     if (dataFinal2[1].indexOf('""') < 0) {
                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + " &nbsp;<br>";
                                         }
                                     }
                                 }
                             }
                         } catch (e) {
                         }
+                        wordNotFound = 1;
                         document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
 
                     }
@@ -1028,16 +889,16 @@ function getTopHelp() {
     }
 
 
-    if (wordNotFound <= 0) {
+    if (wordNotFound === 0) {
         var isnum = /^\d+$/.test(getLastWord(textEntryContent).removeStopWords());
         if (isnum === false) {
             $.ajax({
-                url: hostname + "/api/duckduckgo-api.php?q=" + getLastTwoWords(textEntryContent).removeStopWords(), success: function (data) {
+                url: hostname + "/api/duckduckgo-api.php?q=" + getLastTwoWords(textEntryContent), success: function (data) {
                     //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
                     var dataFinal = data.split("|");
 
-                    if (dataFinal[1]) {
+                    if (dataFinal[3]) {
 
 
                         var nameForGraph = dataFinal[0];
@@ -1052,13 +913,13 @@ function getTopHelp() {
                             }
                             if (foundExist <= 0) {
                                 if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
-                                    createNodesEdges(nameForGraph,dataFinal[3]);
+                                    createNodesEdges(nameForGraph, data);
                                     showKnowledgeGraph();
                                 }
                             }
                         }
 
-                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
 
 
                         try {
@@ -1067,7 +928,7 @@ function getTopHelp() {
                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                     if (dataFinal2[1].indexOf('""') < 0) {
                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + " &nbsp;<br>";
                                         }
                                     }
                                 }
@@ -1075,7 +936,7 @@ function getTopHelp() {
                         } catch (e) {
                         }
                         document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
-
+                        wordNotFound = 1;
                     }
 
                 }
@@ -1084,7 +945,7 @@ function getTopHelp() {
     }
 
 
-    if (wordNotFound <= 0) {
+    if (wordNotFound === 0) {
         var isnum = /^\d+$/.test(getLastWord(textEntryContent).removeStopWords());
         if (isnum === false) {
             $.ajax({
@@ -1108,13 +969,13 @@ function getTopHelp() {
                             }
                             if (foundExist <= 0) {
                                 if (nameForGraph[0] === nameForGraph[0].toUpperCase()) {
-                                    createNodesEdges(nameForGraph, dataFinal[3]);
+                                    createNodesEdges(nameForGraph, data);
                                     showKnowledgeGraph();
                                 }
                             }
                         }
 
-                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " +  dataFinal[3] + '<br><br>';
+                        document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
 
 
                         try {
@@ -1123,7 +984,7 @@ function getTopHelp() {
                                 if (dataFinal2[1].indexOf('local.js') < 0) {
                                     if (dataFinal2[1].indexOf('""') < 0) {
                                         if (dataFinal2[1].indexOf('undefined') < 0) {
-                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + "<br>";
+                                            document.getElementById("topHelp").innerHTML += " <b> " + dataFinal2[0] + " </b>: " + dataFinal2[1] + " &nbsp;<br>";
                                         }
                                     }
                                 }
@@ -1138,13 +999,6 @@ function getTopHelp() {
             });
         }
     }
-
-
-
-
-
-
-
 }
 
 function getLastWord(str) {
@@ -1169,6 +1023,15 @@ function getLastThreeWords(str) {
     str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
     // get the last word
     return str.trim().split(" ").reverse()[2] + " " + str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
+}
+
+function splitMulti(str, tokens) {
+    var tempChar = tokens[0]; // We can use the first token as a temporary join character
+    for (var i = 1; i < tokens.length; i++) {
+        str = str.split(tokens[i]).join(tempChar);
+    }
+    str = str.split(tempChar);
+    return str;
 }
 
 String.prototype.removeStopWords = function () {
@@ -1644,15 +1507,6 @@ String.prototype.removeStopWords = function () {
     return cleansed_string.replace(/^\s+|\s+$/g, "");
 }
 
-function stripHtml(html) {
-    // Create a new div element
-    var temporalDivElement = document.createElement("div");
-    // Set the HTML content with the providen
-    temporalDivElement.innerHTML = html;
-    // Retrieve the text property of the element (cross-browser support)
-    return temporalDivElement.textContent || temporalDivElement.innerText || "";
-}
-
 // Applied globally on all textareas with the "autoExpand" class
 $(document)
     .one('focus.autoExpand', 'textarea.autoExpand', function () {
@@ -1668,15 +1522,25 @@ $(document)
         this.rows = minRows + rows + 1;
     });
 
+
+
+/*
+
+$(document).keydown(function(e){
+    updateStatistics();
+});
+
+function stripHtml(html) {
+    // Create a new div element
+    var temporalDivElement = document.createElement("div");
+    // Set the HTML content with the providen
+    temporalDivElement.innerHTML = html;
+    // Retrieve the text property of the element (cross-browser support)
+    return temporalDivElement.textContent || temporalDivElement.innerText || "";
+}
+
 function hasNumber(myString) {
     return /\d/.test(myString);
 }
 
-function splitMulti(str, tokens){
-    var tempChar = tokens[0]; // We can use the first token as a temporary join character
-    for(var i = 1; i < tokens.length; i++){
-        str = str.split(tokens[i]).join(tempChar);
-    }
-    str = str.split(tempChar);
-    return str;
-}
+*/

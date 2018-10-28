@@ -47,7 +47,7 @@ print "</pre>";
 */
 
 for ($i = 0; $i <= count($return[documents][0][entities])-1; $i++) {
-    if ($i<=10) {
+    if ($i<=30) {
     echo $return[documents][0][entities][$i][wikipediaId]."|";
     }
 }

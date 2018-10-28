@@ -28,21 +28,21 @@ foreach($response['itemListElement'] as $element) {
     if ($level==0) {
 
 
-    echo $element['resultScore'] . '<br/>';
-echo $element['result']['name'] . '<br/>';
-echo $element['result']['description'] . '<br/>';
-echo $element['result']['image']['contentUrl']. '<br/>';
-echo $element['result']['detailedDescription']['url'] . '<br/>';
-echo $element['result']['detailedDescription']['articleBody'] . '<br/>';
-echo $element['result']['@type']['0'] . '<br/>';
+   // echo $element['resultScore'] . '<br/>';
+echo " <h3>".$element['result']['name'] . ' </h3><br/>';
+echo " ".$element['result']['description'] . ' <br/>';
+//echo $element['result']['image']['contentUrl']. '<br/>';
+//echo " ".$element['result']['detailedDescription']['url'] . ' <br/>';
+echo " ".$element['result']['detailedDescription']['articleBody'] . ' <br/>';
+//echo $element['result']['@type']['0'] . '<br/>';
 
 $kgmid = str_replace('kg:/', 'kgmid=/', $element['result']['@id']);
-echo 'https://www.google.com/search?q=%20&kponly&'.$kgmid . '<br/><hr>';
+//echo 'https://www.google.com/search?q=%20&kponly&'.$kgmid . '<br/><br/>';
 
     } else {
 
         if (strpos($element['result']['detailedDescription']['url'], 'wikipedia') !== false) {
-            echo $element['result']['name'] . '|';
+         //   echo $element['result']['name'] . '|';
         }
     }
 
