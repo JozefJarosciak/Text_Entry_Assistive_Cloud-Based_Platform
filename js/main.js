@@ -333,8 +333,8 @@ function createNodesEdges(name, textForSearch) {
 
     //showNodeInfo();'
     if (initialNetworkVis>0) {
-    network.focus(nodes.length + 1, {scale: 1.1});
-    network.moveTo({position: {x: 0, y: 0}, scale: 1.1});
+    network.focus(nodes.length + 1, {scale: 1.0});
+    network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
         addNodesAround(name, nodes.length, textForSearch);
     }
 
@@ -451,8 +451,8 @@ function addNodesAround(name, id, textForSearch) {
         }
     });
    // if (initialNetworkVis>0) {
-        network.focus(id, {scale: 1.1});
-        network.moveTo({position: {x: 0, y: 0}, scale: 1.1});
+        network.focus(id, {scale: 1.0});
+        network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
 
 }
 
@@ -503,8 +503,8 @@ function showKnowledgeGraph(id) {
 */
     //   console.log("Selected Node: " + id);
 
-    network.focus(id, {scale: 1.1});
-    network.moveTo({position: {x: 0, y: 0}, scale: 1.1});
+    network.focus(id, {scale: 1.0});
+    network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
 }
 
 function showNodeInfo() {
@@ -675,7 +675,7 @@ function getTopHelp() {
     }
 */
     $.ajax({
-        url: hostname + "/api/bing-text-analytics2.php?w=1&q=" + textEntryContent, success: function (data) {
+        url: hostname + "/api/bing-text-analytics2.php?w=0&q=" + textEntryContent, success: function (data) {
             //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
             var dataFinal = data.split("|");
@@ -714,7 +714,7 @@ function getTopHelp() {
                                 }
                             }
 
-                            document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '<br><br>';
+                            document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '  &nbsp;<br><br>';
 
 
                             try {
@@ -769,7 +769,14 @@ function getTopHelp() {
             json = json + '. ';
             var sentenceArray = json.split(". ")
             var firstSentence = sentenceArray[0];
-            if ((json.length > 2) && (json.length < 25)) {
+            //if ((json.length > 2) && (json.length < 25)) {
+                if (json.length > 2) {
+
+                   firstSentence = firstSentence.split(' ').slice(0,3).join(' ');
+
+                if (firstSentence.slice(-3) === "...") {
+                    firstSentence = firstSentence.substring(0, firstSentence.length-3);
+                }
 
                 if (firstSentence.slice(-2) === ", ") {
                     firstSentence = firstSentence.substring(0, firstSentence.length-2);
@@ -782,7 +789,7 @@ function getTopHelp() {
                 if (firstSentence.indexOf("Image:") < 0) {
                     console.log(researchSentences);
                     if (arrayContains(firstSentence,researchSentences) === false) {
-                        document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> ";
+                        document.getElementById("shortHelp").innerHTML = " Research Suggestion: " + firstSentence + " <br> "; // check for last 3 words
                         researchSentences.push(firstSentence);
                     }
 
@@ -793,7 +800,7 @@ function getTopHelp() {
                     firstSentence = firstSentence2[1];
                     console.log(researchSentences);
                     if (arrayContains(firstSentence,researchSentences) === false) {
-                        document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> ";
+                        document.getElementById("shortHelp").innerHTML = " Research Suggestion: " + firstSentence + " <br> ";
                         researchSentences.push(firstSentence);
                     }
 
@@ -801,13 +808,25 @@ function getTopHelp() {
 
 
                 // try if help comes up with something from wikipedia
-                var wikiLink = "";
+                var wikiLink = firstSentence;
 
                 //if (hasNumber(firstSentence)===false) {
-                var wikiLink2 = firstSentence.replace(/[0-9]/g, '');
-                wikiLink2 = wikiLink2.split(/jul/i).join('');
+              //  var wikiLink2 = firstSentence.replace(/[0-9]/g, '');
+               // wikiLink2 = wikiLink2.split(/jan/i).join('').split(/feb/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('');
 
-                console.log("Wiki: " + wikiLink2);
+
+                $.ajax({
+                    url: hostname + "/api/wikipedia-api.php?q=" + wikiLink, success: function (data) {
+                        console.log("Wikipedia:" + data);
+                        console.log(researchSentences);
+                        wikiLink = data;
+                        if (arrayContains(data,researchSentences) === false) {
+                            document.getElementById("shortHelp").innerHTML = " Research Suggestion: " + data + " <br> ";
+                            researchSentences.push(data);
+                        }
+                    }
+                    });
+                        console.log("Wiki: " + wikiLink);
             }
         });
     }
