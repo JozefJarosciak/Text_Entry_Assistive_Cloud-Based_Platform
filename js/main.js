@@ -1,4 +1,4 @@
-var hostname = window.location.href;
+var hostname = window.location.href.split('?')[0];
 var network;
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
@@ -13,6 +13,15 @@ $(function () {
     var lastWord;
     var totalLength = 0;
 
+/*
+    var url = new URL(window.location.href);
+    var s1 = url.searchParams.get("s1");
+    var s2 = url.searchParams.get("s2");
+    if (s1 === "1") {s1 = "checked"} else {s1 = ""}
+    if (s2 === "1") {s2 = "checked"} else {s2 = ""}
+    console.log("PARAMETER 1: "+s1);
+    console.log("PARAMETER 2: "+s2);
+*/
 
 // Overrides the default autocomplete filter function to
 // search only from the beginning of the string
@@ -63,37 +72,39 @@ $(function () {
 
     $("#textarea").keypress(function (event) {
 
-            if ((event.keyCode === 8) || (event.keyCode === 46)) {
-                var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-                var countSaved = currentCountofKeystrokesSaved - 1;
-                document.getElementById("keystrokesSaved").innerText = countSaved;
-            }
-
-        if (event.keyCode === 13) {
-            console.log("enter pressed");
-
-            $('#textarea').autocomplete("close");
+        //if (document.getElementById("transcriptionSwitch").checked === true) {
+        if ((event.keyCode === 8) || (event.keyCode === 46)) {
+            var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+            var countSaved = currentCountofKeystrokesSaved - 1;
+            document.getElementById("keystrokesSaved").innerText = countSaved;
         }
 
-            if ((event.keyCode === 190) || (event.keyCode === 32)) {
-                //  console.log("space or dot pressed");
-                $('#textarea').autocomplete("close");
-
-                if (document.getElementById("myonoffswitch1").checked === true) {
-                    getTopHelp();
-                }
-                // get top help ideas
 
 
-            } else {
+        if ((event.keyCode === 190) || (event.keyCode === 32)) {
+            //  console.log("space or dot pressed");
+            $('#textarea').autocomplete("close");
 
-
-
-                if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
-                    event.preventDefault();
-                }
-
+            if (document.getElementById("creativeWritingSwitch").checked === true) {
+                getTopHelp();
             }
+            // get top help ideas
+
+
+        } else {
+
+            if (event.keyCode === 13) {
+                console.log("enter pressed");
+
+                $('#textarea').autocomplete("close");
+            }
+            if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
+                event.preventDefault();
+            }
+
+        }
+
+   // }
 
             updateStatistics();
         })
@@ -105,13 +116,13 @@ $(function () {
             appendTo: '#appendEnabled',
             source: function (request, response) {
                 // delegate back to autocomplete, but extract the last term
-
+                if (document.getElementById("transcriptionSwitch").checked === true) {
                 lastWord = extractLast(request.term);
                 lastWordSpace = extractLast(request.term.trim());
                 var lastChar = request.term.substr(request.term.length - 1);
                 //console.log("!!!SPACE PRESSED!!! - '"+lastChar+"'");
 
-                if (document.getElementById("myonoffswitch1").checked === true) {
+
 
                     if (lastChar == " ") {
 
@@ -157,7 +168,7 @@ $(function () {
                                 // console.log("LAST SENTENCE: " + lastLine);
                             }
 
-                            if (document.getElementById("myonoffswitch1").checked === true) {
+
 
                                 if ((lastWord) && (lastWord.toString().length >= 2)) {
                                     console.log("START SEARCH");
@@ -199,7 +210,7 @@ $(function () {
 
 
                                 }
-                            }
+
 
 
                         }
@@ -209,10 +220,14 @@ $(function () {
                 }
             },
             focus: function () {
-                // prevent value inserted on focus
-                return false;
+                if (document.getElementById("transcriptionSwitch").checked === true) {
+                    // prevent value inserted on focus
+                    return false;
+                }
             },
             select: function (event, ui) {
+                if (document.getElementById("transcriptionSwitch").checked === true) {
+
                 if (event.keyCode !== 190) {
 
                     var str = document.getElementById("textarea").value;
@@ -259,6 +274,7 @@ $(function () {
                     return false;
                 }
             }
+            }
         });
 
 });
@@ -284,6 +300,11 @@ function updateStatistics() {
             document.getElementById("percentSaved").innerText = "0";
         }
 
+        if ((document.getElementById("transcriptionSwitch").checked === false) && (document.getElementById("creativeWritingSwitch").checked === false)) {
+            document.getElementById("keystrokesSaved").innerText = "0";
+            document.getElementById("percentSaved").innerText = "0";
+        }
+
         // Count Words
         var matches = (document.getElementById("textarea").value).match(/[\w\d\’\'-]+/gi);
         var countWordsSaved = matches ? matches.length : 0;
@@ -291,20 +312,55 @@ function updateStatistics() {
     }
 }
 
-function onoff() {
-    if (document.getElementById("myonoffswitch1").checked === true) {
-        location.reload();
-        //document.getElementById("quickHelp").style.display = "block";
-        //document.getElementById("headerDiscovery").style.display = "block";
-        //document.getElementById("knowledgeBox").style.display = "block";
-        //document.getElementById("textareatd").style.width = "45%";
+function creativeWritingOnOff() {
+    if (document.getElementById("creativeWritingSwitch").checked === true) {
+        //location.reload();
+        document.getElementById("quickHelp").style.display = "block";
+        document.getElementById("headerDiscovery").style.display = "block";
+        document.getElementById("knowledgeBox").style.display = "block";
+        document.getElementById("shortHelp").style.display = "block";
+        document.getElementById("textareatd").style.width = "45%";
+        document.getElementById("textarea").value = "";
+        document.getElementById("wordCounter").innerText = "0";
+        document.getElementById("totalLength").innerText = "0";
+        document.getElementById("keystrokesSaved").innerText = "0";
+        document.getElementById("percentSaved").innerText = "0";
+        document.getElementById('textarea').focus();
     } else {
+        document.getElementById("textarea").value = "";
         document.getElementById("quickHelp").style.display = "none";
         document.getElementById("headerDiscovery").style.display = "none";
         document.getElementById("knowledgeBox").style.display = "none";
+        document.getElementById("shortHelp").style.display = "none";
         document.getElementById("textareatd").style.width = "100%";
+        document.getElementById("textarea").value = "";
+        document.getElementById("wordCounter").innerText = "0";
+        document.getElementById("totalLength").innerText = "0";
+        document.getElementById("keystrokesSaved").innerText = "0";
+        document.getElementById("percentSaved").innerText = "0";
+        document.getElementById('textarea').focus();
     }
 }
+
+
+function transcriptionOnOff() {
+    if (document.getElementById("transcriptionSwitch").checked === true) {
+        document.getElementById("textarea").value = "";
+        document.getElementById("wordCounter").innerText = "0";
+        document.getElementById("totalLength").innerText = "0";
+        document.getElementById("keystrokesSaved").innerText = "0";
+        document.getElementById("percentSaved").innerText = "0";
+        document.getElementById('textarea').focus();
+    } else {
+        document.getElementById("textarea").value = "";
+        document.getElementById("wordCounter").innerText = "0";
+        document.getElementById("totalLength").innerText = "0";
+        document.getElementById("keystrokesSaved").innerText = "0";
+        document.getElementById("percentSaved").innerText = "0";
+        document.getElementById('textarea').focus();
+    }
+}
+
 
 function initialIsCapital(word) {
     try {
@@ -821,7 +877,7 @@ function getTopHelp() {
                 $.ajax({
                     url: hostname + "/api/wikipedia-api.php?q=" + wikiLink, success: function (data) {
                         console.log("Wikipedia:" + data);
-                        console.log(researchSentences);
+                        console.log(researchSentences);//
                         wikiLink = data;
                         if (arrayContains(data,researchSentences) === false) {
                             if (data.toLowerCase().indexOf("undefined")<0) {

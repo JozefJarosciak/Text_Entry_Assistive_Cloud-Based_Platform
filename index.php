@@ -31,10 +31,10 @@
                 <td><table id="statsBox">
                         <tr>
                             <th align="left">
-                                <small>Suggestions</small>
+                                <small>Creative Writing</small>
                             </th>
                             <th align="left">
-                                <small>Research</small>
+                                <small>Transcription</small>
                             </th>
                             <th align="left">
                                 <small>Character Count</small>
@@ -49,8 +49,8 @@
                         <tr>
                             <td>
                                 <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch1" class="onoffswitch-checkbox" id="myonoffswitch1" onclick="onoff()" checked>
-                                    <label class="onoffswitch-label" for="myonoffswitch1">
+                                    <input type="checkbox" name="creativeWritingSwitch" class="onoffswitch-checkbox" id="creativeWritingSwitch" onclick="creativeWritingOnOff()" checked>
+                                    <label class="onoffswitch-label" for="creativeWritingSwitch">
                                         <span class="onoffswitch-inner"></span>
                                         <span class="onoffswitch-switch"></span>
                                     </label>
@@ -58,8 +58,8 @@
                             </td>
                             <td>
                                 <div class="onoffswitch">
-                                    <input type="checkbox" name="onoffswitch2" class="onoffswitch-checkbox" id="myonoffswitch2" onclick="onoff2()" checked>
-                                    <label class="onoffswitch-label" for="myonoffswitch2">
+                                    <input type="checkbox" name="transcriptionSwitch" class="onoffswitch-checkbox" id="transcriptionSwitch" onclick="transcriptionOnOff()" checked>
+                                    <label class="onoffswitch-label" for="transcriptionSwitch">
                                         <span class="onoffswitch-inner"></span>
                                         <span class="onoffswitch-switch"></span>
                                     </label>
