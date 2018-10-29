@@ -3,7 +3,7 @@ var network;
 var nodes = new vis.DataSet([]);
 var edges = new vis.DataSet([]);
 var researchList = [];
-var researchSentences = ["the"];
+var researchSentences = ["undefined"];
 var initialNetworkVis = 0;
 
 $(function () {
@@ -582,12 +582,9 @@ function showNodeInfo() {
 
                         if (data2) {
                             document.getElementById("topHelp").innerHTML = " <b> " + nodeObj.label + " </b> <br> " + data2 + " <br>";
-                            if (nodeObj.label!=='I"s') {
+
                                 addNodesAround(nodeObj.label, selectedArray[0], data2.removeStopWords());
-                            }
-
-
-                            showKnowledgeGraph(selectedNodeID);
+                               showKnowledgeGraph(selectedNodeID);
                         }
 
                     }
@@ -733,23 +730,24 @@ function getTopHelp() {
                             document.getElementById("topHelp").innerHTML += ' </td></tr></table>';
                             wordNotFound = 1;
                         } else {
-                            $.ajax({
-                                // url: hostname + "/api/bing-parser.php?q=" + nodeObj.label, success: function (data2) {
-                                url: hostname + "/api/google-knowledge-graph-api.php?q=" + nameForGraph, success: function (data2) {
-                                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+                            if (nameForGraph){
+                                $.ajax({
+                                    // url: hostname + "/api/bing-parser.php?q=" + nodeObj.label, success: function (data2) {
+                                    url: hostname + "/api/google-knowledge-graph-api.php?q=" + nameForGraph, success: function (data2) {
+                                        //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
-                                    if (data2) {
-                                        document.getElementById("topHelp").innerHTML = " <b> " + nameForGraph + " </b> <br> " + data2 + " <br>";
+                                        if (data2) {
+                                            document.getElementById("topHelp").innerHTML = " <b> " + nameForGraph + " </b> <br> " + data2 + " <br>";
 
-                                       //     addNodesAround(nameForGraph, selectedArray[0], data2.removeStopWords());
+                                            //     addNodesAround(nameForGraph, selectedArray[0], data2.removeStopWords());
 
 
+                                            //showKnowledgeGraph(selectedNodeID);
+                                        }
 
-                                        //showKnowledgeGraph(selectedNodeID);
                                     }
-
-                                }
-                            });
+                                });
+                        }
                         }
 
                     }
@@ -772,7 +770,7 @@ function getTopHelp() {
             //if ((json.length > 2) && (json.length < 25)) {
                 if (json.length > 2) {
 
-                   firstSentence = firstSentence.split(' ').slice(0,3).join(' ');
+                   firstSentence = firstSentence.split(' ').slice(0,10).join(' ');
 
                 if (firstSentence.slice(-3) === "...") {
                     firstSentence = firstSentence.substring(0, firstSentence.length-3);
@@ -789,7 +787,7 @@ function getTopHelp() {
                 if (firstSentence.indexOf("Image:") < 0) {
                     console.log(researchSentences);
                     if (arrayContains(firstSentence,researchSentences) === false) {
-                        document.getElementById("shortHelp").innerHTML = " Research Suggestion: " + firstSentence + " <br> "; // check for last 3 words
+                        document.getElementById("shortHelp").innerHTML = " Hint: " + firstSentence + " <br> "; // check for last 3 words
                         researchSentences.push(firstSentence);
                     }
 
@@ -800,7 +798,7 @@ function getTopHelp() {
                     firstSentence = firstSentence2[1];
                     console.log(researchSentences);
                     if (arrayContains(firstSentence,researchSentences) === false) {
-                        document.getElementById("shortHelp").innerHTML = " Research Suggestion: " + firstSentence + " <br> ";
+                        document.getElementById("shortHelp").innerHTML = " Hint: " + firstSentence + " <br> ";
                         researchSentences.push(firstSentence);
                     }
 
@@ -810,7 +808,7 @@ function getTopHelp() {
                 // try if help comes up with something from wikipedia
                 var wikiLink = firstSentence;
 
-                //if (hasNumber(firstSentence)===false) {
+                if (hasNumber(wikiLink)===false) {
               //  var wikiLink2 = firstSentence.replace(/[0-9]/g, '');
                // wikiLink2 = wikiLink2.split(/jan/i).join('').split(/feb/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('');
 
@@ -821,13 +819,18 @@ function getTopHelp() {
                         console.log(researchSentences);
                         wikiLink = data;
                         if (arrayContains(data,researchSentences) === false) {
-                            document.getElementById("shortHelp").innerHTML = " Research Suggestion: " + data + " <br> ";
+                            if (data.toLowerCase().indexOf("undefined")<0) {
+                            document.getElementById("shortHelp").innerHTML = " Hint: " + data + " <br> ";
                             researchSentences.push(data);
+                            }
                         }
                     }
                     });
+
+
+
                         console.log("Wiki: " + wikiLink);
-            }
+            }}
         });
     }
 
@@ -1362,6 +1365,9 @@ function arrayContains(needle, arrhaystack)
 {
     return (arrhaystack.indexOf(needle) > -1);
 }
+function hasNumber(myString) {
+    return /\d/.test(myString);
+}
 
 /*
 
@@ -1378,8 +1384,6 @@ function stripHtml(html) {
     return temporalDivElement.textContent || temporalDivElement.innerText || "";
 }
 
-function hasNumber(myString) {
-    return /\d/.test(myString);
-}
+
 
 */

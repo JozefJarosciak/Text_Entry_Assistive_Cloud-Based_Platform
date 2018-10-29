@@ -85,13 +85,13 @@
                 <td id="textareatd" style="width:45%;">
 
                     <div id="appendEnabled">
+                        <div id="shortHelp" onclick="enableHighlighting()"></div>
                         <textarea id='textarea'></textarea>
                     </div>
                 </td>
                 <td id="quickHelpCell">
                     <div id="quickHelp">
-                        <div id="shortHelp" onclick="enableHighlighting()"></div>
-                        <small>
+                       <small>
                             <span id="topHelp" onclick="enableHighlighting()">
                             </span>
                         </small>

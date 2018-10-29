@@ -11,11 +11,15 @@ print "<pre>";print_r($json);print "</pre>";
 
 $data = json_decode($json,true);
 
+try {
+    if ($data) {
 if ($data['query']['search'][0]['title']) {
    // $result =  str_replace(" ","_",$data['query']['search'][0]['title']);
     $result =  $data['query']['search'][0]['title'];
     echo $result;
 }
+}
+} catch (Exception $e) {}
 
 //
 

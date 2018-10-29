@@ -23,8 +23,8 @@ try {
     $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextLarge', 'div');
     $rcExpC =  getElementsByClassName($dom, 'rcExpC', 'div');
     $rcABP =  getElementsByClassName($dom, 'rcABP', 'div');
-    $df_con = getElementsByClassName($dom, 'rwrl rwrl_sec rwrl_padref', 'div');
-    $rwrl = getElementsByClassName($dom, 'rwrl.rwrl_sec.rwrl_padref', 'div');
+   // $df_con = getElementsByClassName($dom, 'rwrl rwrl_sec rwrl_padref', 'div');
+    // $rwrl = getElementsByClassName($dom, 'rwrl.rwrl_sec.rwrl_padref', 'div');
 
     $b_secondaryFocus = getElementsByClassName($dom, 'b_secondaryFocus', 'div');
     $wob_t = getElementsByClassName($dom, 'wtr_currTemp b_focusTextLarge', 'div'); // temperature
