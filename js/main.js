@@ -77,7 +77,12 @@ $(function () {
         if (document.getElementById("creativeWritingSwitch").checked === false) {
             var typedText = document.getElementById("textarea").value;
             var sentencesText = document.getElementById("transcribeText").innerText;
-            document.getElementById("similarityCalculation").innerHTML = Math.round(((similarity(typedText.trim(), sentencesText.trim())*100)) * 100) / 100 + "%" ;
+            var similscore = Math.round(((similarity(typedText.trim(), sentencesText.trim())*100)) * 100) / 100;
+            if (similscore<98.25) {
+            document.getElementById("similarityCalculation").innerHTML = similscore + " %" ;
+            } else {
+                document.getElementById("similarityCalculation").innerHTML = "100 %" ;
+            }
         }
         //if (document.getElementById("transcriptionSwitch").checked === true) {
         if ((event.keyCode === 8) || (event.keyCode === 46)) {
