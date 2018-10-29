@@ -84,7 +84,7 @@ $(function () {
         if ((event.keyCode === 190) || (event.keyCode === 32)) {
             //  console.log("space or dot pressed");
             $('#textarea').autocomplete("close");
-
+            document.getElementById("shortHelp").innerHTML = "";
             if (document.getElementById("creativeWritingSwitch").checked === true) {
                 getTopHelp();
             }
