@@ -314,18 +314,31 @@ function updateStatistics() {
 
 function creativeWritingOnOff() {
     if (document.getElementById("creativeWritingSwitch").checked === true) {
-        //location.reload();
+        location.reload();
+        /*
         document.getElementById("quickHelp").style.display = "block";
         document.getElementById("headerDiscovery").style.display = "block";
         document.getElementById("knowledgeBox").style.display = "block";
         document.getElementById("shortHelp").style.display = "block";
         document.getElementById("textareatd").style.width = "45%";
         document.getElementById("textarea").value = "";
+        document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
         document.getElementById("totalLength").innerText = "0";
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
+
+
+        nodes = []; nodes = new vis.DataSet([]);
+        edges = [];edges = new vis.DataSet([]);
+        var container = document.getElementById('mynetwork');
+        var data = {nodes: nodes, edges: edges};
+        var options = {autoResize: true,height: '100%',width: '100%'};
+        network = new vis.Network(container, data, options);
+        network.update();
+        network.refresh();
         document.getElementById('textarea').focus();
+        */
     } else {
         document.getElementById("textarea").value = "";
         document.getElementById("quickHelp").style.display = "none";
@@ -334,31 +347,40 @@ function creativeWritingOnOff() {
         document.getElementById("shortHelp").style.display = "none";
         document.getElementById("textareatd").style.width = "100%";
         document.getElementById("textarea").value = "";
+        document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
         document.getElementById("totalLength").innerText = "0";
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
+        nodes = []; nodes = new vis.DataSet([]);
+        edges = [];edges = new vis.DataSet([]);
+        var container = document.getElementById('mynetwork');
+        var data = {nodes: nodes, edges: edges};
+        var options = {autoResize: true,height: '100%',width: '100%'};
+        network = new vis.Network(container, data, options);
+        network.update();
+        network.refresh();
         document.getElementById('textarea').focus();
     }
 }
 
 
 function transcriptionOnOff() {
-    if (document.getElementById("transcriptionSwitch").checked === true) {
         document.getElementById("textarea").value = "";
+        document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
         document.getElementById("totalLength").innerText = "0";
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
+        nodes = []; nodes = new vis.DataSet([]);
+        edges = [];edges = new vis.DataSet([]);
+        var container = document.getElementById('mynetwork');
+        var data = {nodes: nodes, edges: edges};
+        var options = {autoResize: true,height: '100%',width: '100%'};
+        network = new vis.Network(container, data, options);
+        network.update();
+        network.refresh();
         document.getElementById('textarea').focus();
-    } else {
-        document.getElementById("textarea").value = "";
-        document.getElementById("wordCounter").innerText = "0";
-        document.getElementById("totalLength").innerText = "0";
-        document.getElementById("keystrokesSaved").innerText = "0";
-        document.getElementById("percentSaved").innerText = "0";
-        document.getElementById('textarea').focus();
-    }
 }
 
 
