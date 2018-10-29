@@ -61,6 +61,15 @@ body {
     border: 1px dotted grey;
 }
 
+#transcribeText {
+    border:1px solid lightblue;
+    width:90%;
+    text-align: left;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #quickHelpCell {
     min-height: 250px;
     max-height: 250px;

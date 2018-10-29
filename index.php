@@ -121,6 +121,11 @@
 
     </div>
 
+    <div id="transcribeText">
+        <b>Transcribe the following text:</b><br><br>
+        Test text.
+    </div>
+
     <div class="row content" id="knowledgeBox">
         <h3>RESEARCH AREA <small id="detailHeader">(double click the nodes to load details | drag to re-arrange)</small></h3>
         <div id="mynetwork" ondblclick="showNodeInfo()"></div>

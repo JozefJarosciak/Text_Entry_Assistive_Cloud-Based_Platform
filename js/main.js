@@ -7,6 +7,7 @@ var researchSentences = ["undefined"];
 var initialNetworkVis = 0;
 
 $(function () {
+    document.getElementById("transcribeText").style.display = "none";
     var availableTags = [];
     var word;
     var capitalizedResponse;
@@ -316,6 +317,7 @@ function creativeWritingOnOff() {
     if (document.getElementById("creativeWritingSwitch").checked === true) {
         location.reload();
     } else {
+        document.getElementById("transcribeText").style.display = "block";
         document.getElementById("textarea").value = "";
         document.getElementById("quickHelp").style.display = "none";
         document.getElementById("headerDiscovery").style.display = "none";
