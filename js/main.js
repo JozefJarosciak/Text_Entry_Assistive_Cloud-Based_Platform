@@ -705,7 +705,7 @@ function enableHighlighting() {
 };
 
 function getTopHelp() {
-    document.getElementById("shortHelp").innerHTML = "";
+  //  document.getElementById("shortHelp").innerHTML = "";
 
     var textEntryContent = document.getElementById("textarea").value;
     var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
