@@ -34,6 +34,9 @@
                                 <small>Suggestions</small>
                             </th>
                             <th align="left">
+                                <small>Research</small>
+                            </th>
+                            <th align="left">
                                 <small>Character Count</small>
                             </th>
                             <th align="left">
@@ -54,14 +57,23 @@
                                 </div>
                             </td>
                             <td>
+                                <div class="onoffswitch">
+                                    <input type="checkbox" name="onoffswitch2" class="onoffswitch-checkbox" id="myonoffswitch2" onclick="onoff2()" checked>
+                                    <label class="onoffswitch-label" for="myonoffswitch2">
+                                        <span class="onoffswitch-inner"></span>
+                                        <span class="onoffswitch-switch"></span>
+                                    </label>
+                                </div>
+                            </td>
+                            <td style="background-color:#f3f3f3;border:1px solid #cecece;">
                                 <b><label id="totalLength">0</label></b>
                             </td>
 
-                            <td>
+                            <td style="background-color:#f3f3f3;border:1px solid #cecece;">
                                 <b><label id="wordCounter">0</label></b>
                             </td>
 
-                            <td>
+                            <td style="background-color:#f3f3f3;border:1px solid #cecece;">
                                 <b><label id="keystrokesSaved">0</label></b> (<label id="percentSaved">0</label>%)
                             </td>
                         </tr>
@@ -86,7 +98,7 @@
 
                     <div id="appendEnabled">
                         <div id="shortHelp" onclick="enableHighlighting()"></div>
-                        <textarea id='textarea'></textarea>
+                        <textarea id='textarea' spellcheck="false"></textarea>
                     </div>
                 </td>
                 <td id="quickHelpCell">

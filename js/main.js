@@ -69,10 +69,16 @@ $(function () {
                 document.getElementById("keystrokesSaved").innerText = countSaved;
             }
 
+        if (event.keyCode === 13) {
+            console.log("enter pressed");
+
+            $('#textarea').autocomplete("close");
+        }
 
             if ((event.keyCode === 190) || (event.keyCode === 32)) {
                 //  console.log("space or dot pressed");
                 $('#textarea').autocomplete("close");
+
                 if (document.getElementById("myonoffswitch1").checked === true) {
                     getTopHelp();
                 }
@@ -81,9 +87,7 @@ $(function () {
 
             } else {
 
-                if (event.keyCode === 13) {
-                    console.log("enter pressed");
-                }
+
 
                 if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
                     event.preventDefault();
@@ -209,49 +213,51 @@ $(function () {
                 return false;
             },
             select: function (event, ui) {
+                if (event.keyCode !== 190) {
 
-                var str = document.getElementById("textarea").value;
+                    var str = document.getElementById("textarea").value;
 
-                console.log("STRING: " + str);
+                    console.log("STRING: " + str);
 
-                if (str.slice(-1) == " ") {
-                    str = str.substring(0, (str.length - word.length) - 1);
-                } else {
-                    str = str.substring(0, (str.length - word.length));
+                    if (str.slice(-1) == " ") {
+                        str = str.substring(0, (str.length - word.length) - 1);
+                    } else {
+                        str = str.substring(0, (str.length - word.length));
+                    }
+
+                    console.log("SUBSTRING: " + str);
+
+                    if (initialIsCapital(lastWord) === true) {
+                        capitalizedResponse = capitalizeFirstLetter(ui.item.value);
+                    } else {
+                        capitalizedResponse = ui.item.value;
+                    }
+
+                    //document.getElementById("textarea").value = str + capitalizedResponse + " " ;
+                    document.getElementById("textarea").value = str + capitalizedResponse;
+                    //$('#textarea').autocomplete('close');
+
+
+                    updateStatistics();
+
+
+                    totalLength = Number(document.getElementById("totalLength").innerText);
+                    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                    if (!lastWord) {
+                        lastWord = "";
+                    }
+                    var countSaved = currentCountofKeystrokesSaved + Number(ui.item.value.length - lastWord.length);
+                    console.log("Words: " + lastWord + " - " + ui.item.value + " | Saved: " + countSaved);
+                    document.getElementById("keystrokesSaved").innerText = countSaved;
+
+
+                    // percent saved
+                    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                    var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
+                    document.getElementById("percentSaved").innerText = percentSaved.toString();
+
+                    return false;
                 }
-
-                console.log("SUBSTRING: " + str);
-
-                if (initialIsCapital(lastWord) === true) {
-                    capitalizedResponse = capitalizeFirstLetter(ui.item.value);
-                } else {
-                    capitalizedResponse = ui.item.value;
-                }
-
-                //document.getElementById("textarea").value = str + capitalizedResponse + " " ;
-                document.getElementById("textarea").value = str + capitalizedResponse;
-                //$('#textarea').autocomplete('close');
-
-
-                updateStatistics();
-
-
-                totalLength = Number(document.getElementById("totalLength").innerText);
-                var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-                if (!lastWord) {
-                    lastWord = "";
-                }
-                var countSaved = currentCountofKeystrokesSaved + Number(ui.item.value.length - lastWord.length);
-                console.log("Words: " + lastWord + " - " + ui.item.value + " | Saved: " + countSaved);
-                document.getElementById("keystrokesSaved").innerText = countSaved;
-
-
-                // percent saved
-                var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-                var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
-                document.getElementById("percentSaved").innerText = percentSaved.toString();
-
-                return false;
             }
         });
 
@@ -298,7 +304,6 @@ function onoff() {
         document.getElementById("knowledgeBox").style.display = "none";
         document.getElementById("textareatd").style.width = "100%";
     }
-
 }
 
 function initialIsCapital(word) {
