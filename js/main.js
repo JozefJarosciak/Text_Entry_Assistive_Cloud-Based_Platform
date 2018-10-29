@@ -845,10 +845,10 @@ function getTopHelp() {
 
                 if (firstSentence.indexOf("Image:") < 0) {
                     console.log(researchSentences);
-                    if (arrayContains(firstSentence,researchSentences) === false) {
+                    //if (arrayContains(firstSentence,researchSentences) === false) {
                         document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> "; // check for last 3 words
                         researchSentences.push(firstSentence);
-                    }
+                    //}
 
 
                 } else {
@@ -856,10 +856,10 @@ function getTopHelp() {
 
                     firstSentence = firstSentence2[1];
                     console.log(researchSentences);
-                    if (arrayContains(firstSentence,researchSentences) === false) {
+                    //if (arrayContains(firstSentence,researchSentences) === false) {
                         document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> ";
                         researchSentences.push(firstSentence);
-                    }
+                    //}
 
                 }
 
