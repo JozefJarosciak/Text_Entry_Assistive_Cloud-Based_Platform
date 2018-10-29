@@ -567,7 +567,7 @@ function showKnowledgeGraph(id) {
 }
 
 function showNodeInfo() {
-    document.getElementById("shortHelp").innerHTML = "";
+ //   document.getElementById("shortHelp").innerHTML = "";
 
     var selectedArray = network.getSelectedNodes();
     var nodeObj = network.body.data.nodes._data[selectedArray[0]];
@@ -846,7 +846,7 @@ function getTopHelp() {
                 if (firstSentence.indexOf("Image:") < 0) {
                     console.log(researchSentences);
                     if (arrayContains(firstSentence,researchSentences) === false) {
-                        document.getElementById("shortHelp").innerHTML = " Hint: " + firstSentence + " <br> "; // check for last 3 words
+                        document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> "; // check for last 3 words
                         researchSentences.push(firstSentence);
                     }
 
@@ -857,7 +857,7 @@ function getTopHelp() {
                     firstSentence = firstSentence2[1];
                     console.log(researchSentences);
                     if (arrayContains(firstSentence,researchSentences) === false) {
-                        document.getElementById("shortHelp").innerHTML = " Hint: " + firstSentence + " <br> ";
+                        document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> ";
                         researchSentences.push(firstSentence);
                     }
 
@@ -879,7 +879,7 @@ function getTopHelp() {
                         wikiLink = data;
                         if (arrayContains(data,researchSentences) === false) {
                             if (data.toLowerCase().indexOf("undefined")<0) {
-                            document.getElementById("shortHelp").innerHTML = " Hint: " + data + " <br> ";
+                            document.getElementById("shortHelp").innerHTML = " Research: " + data + " <br> ";
                             researchSentences.push(data);
                             }
                         }
