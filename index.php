@@ -121,9 +121,14 @@
 
     </div>
 
-    <div id="transcribeText">
-        <b>Transcribe the following text:</b><br><br>
-        Test text.
+    <div id="transcribeTextWrapper">
+    <b>Transcribe the following text:</b><br><br>
+    <div id="transcribeText">Arnold Schwarzenegger and Sylvester Stallone are both famous because of bodybuilding.</div>
+    </div>
+
+    <div id="similarityCalculationWrapper">
+        <br><b>Similarity Score:</b>
+    <div id="similarityCalculation">0%</div>
     </div>
 
     <div class="row content" id="knowledgeBox">
