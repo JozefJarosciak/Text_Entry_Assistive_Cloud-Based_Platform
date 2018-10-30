@@ -15,6 +15,7 @@ var keyPressesRun = false;
 $(function () {
     document.getElementById("transcribeTextWrapper").style.display = "none";
     document.getElementById("similarityCalculationWrapper").style.display = "none";
+    document.getElementById("detailStat").style.display = "none";
     getRandomWords();
 
     var availableTags = [];
@@ -110,12 +111,13 @@ $(function () {
             if ((similscore>=99.9) && (similscoreRun==false)) {
 
                 similscoreRun = true;
-                document.getElementById("resultToSend").innerHTML = "<br><br><b>Transcription Test Result:</b>" +
+                document.getElementById("resultToSend").innerHTML = "<br><br><h1 id='resultHighlight'>Transcription Test Result:</h1>" +
                     " Total Key Presses: " + keyPresses.toString() +
                     " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText +
                     " | Completed: " + document.getElementById("similarityCalculation").innerText +
                     " | Total Time: " + document.getElementById("output2").innerText ;
 
+                document.getElementById("detailStat").style.display = "none";
                 startPause2();
             }
 
@@ -392,8 +394,11 @@ function creativeWritingOnOff() {
     } else {
         getRandomWords();
         keyPresses = 0; keyPressesRun = false; similscoreRun = false; reset2();
+        document.getElementById("output2").innerHTML = "00:00:00";
+        document.getElementById("resultToSend").innerHTML = "";
         document.getElementById("transcribeTextWrapper").style.display = "block";
         document.getElementById("similarityCalculationWrapper").style.display = "block";
+        document.getElementById("detailStat").style.display = "block";
         document.getElementById("textarea").value = "";
         document.getElementById("quickHelp").style.display = "none";
         document.getElementById("headerDiscovery").style.display = "none";
@@ -425,13 +430,16 @@ function creativeWritingOnOff() {
 
 function transcriptionOnOff() {
         keyPresses = 0; keyPressesRun = false; similscoreRun = false; reset2();
+        document.getElementById("output2").innerHTML = "00:00:00";
+        document.getElementById("resultToSend").innerHTML = "";
         document.getElementById("textarea").value = "";
         document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
         document.getElementById("totalLength").innerText = "0";
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
-        nodes = []; nodes = new vis.DataSet([]);
+    document.getElementById("detailStat").style.display = "block";
+    nodes = []; nodes = new vis.DataSet([]);
         edges = [];edges = new vis.DataSet([]);
         var container = document.getElementById('mynetwork');
         var data = {nodes: nodes, edges: edges};

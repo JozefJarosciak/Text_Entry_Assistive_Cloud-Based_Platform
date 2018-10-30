@@ -14,23 +14,6 @@ body {
     min-width: 10rem;
 }
 
-#output2 {
-    color: #343a40;
-    background-color: #f8f9fa;
-    border-radius: 0.5rem;
-    border:1px solid #e68580;
-    height: 20px;
-    width:200px;
-    text-align: center;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.space-fix {
-}
-
-
 
 
 #topHeaderTable {
@@ -117,6 +100,9 @@ transcribeTextWrapper{
     padding: 5px;
 }
 
+#resultHighlight{
+    color: #008000;
+}
 
 #similarityCalculation {
     border:1px solid #e68580;
@@ -127,6 +113,17 @@ transcribeTextWrapper{
     margin-left: auto;
     margin-right: auto;
 }
+
+#output2 {
+    border:1px solid #e68580;
+    height: 20px;
+    width:200px;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 
 mark{
     background: #ffcad2;

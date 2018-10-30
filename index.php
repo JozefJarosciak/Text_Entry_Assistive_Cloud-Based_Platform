@@ -131,17 +131,26 @@
     </div>
 
     <div id="similarityCalculationWrapper">
-        <b>Completed:</b>
-        <div id="similarityCalculation">0%</div><br>
-
-        <b>Time:</b>
-        <div class="container text-center">
-            <div id="output2">00:00:00</div>
-        </div>
-
+    <table id="detailStat" style="width: 98%">
+        <tbody>
+     <tr>
+         <td>
+             <b>Completed:</b>
+             <div id="similarityCalculation">0%</div>
+         <td>
+             <b>Time:</b>
+             <div id="output2">00:00:00</div>
+         </td>
+     </tr>
+        </tbody>
+    </table>
         <div id="resultToSend"></div><br><br>
-
     </div>
+
+
+
+
+
 
 
 
