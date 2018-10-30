@@ -5,10 +5,18 @@ var edges = new vis.DataSet([]);
 var researchList = [];
 var researchSentences = ["undefined"];
 var initialNetworkVis = 0;
+var time = 0;
+var running = 0;
+var xg = document.getElementById("reset");
+var keyPresses = 0;
+var displayHelp = 0;
+
 
 $(function () {
     document.getElementById("transcribeTextWrapper").style.display = "none";
     document.getElementById("similarityCalculationWrapper").style.display = "none";
+    getRandomWords();
+
     var availableTags = [];
     var word;
     var capitalizedResponse;
@@ -70,19 +78,38 @@ $(function () {
 
     }
 
-    //$("#textarea").on("keydown", function (event) {
+    $("#textarea").keydown(function(e) {
+        var code = e.keyCode || e.which;
+        if (code == '9') {
+            e.preventDefault();
+            //placeCaretAtEnd(document.getElementById("textarea"));
+            //pasteHtmlAtCaret ('  ');
+            $('#textarea').autocomplete("close");
+            return false;
+        }
+
+    });
 
     $("#textarea").keyup(function (event) {
+
+        keyPresses = keyPresses+1;
 
         if (document.getElementById("creativeWritingSwitch").checked === false) {
             var typedText = document.getElementById("textarea").value;
             var sentencesText = document.getElementById("transcribeText").innerText;
             var similscore = Math.round(((similarity(typedText.trim(), sentencesText.trim())*100)) * 100) / 100;
-            if (similscore<99.80) {
+            //if (similscore<99.95) {
             document.getElementById("similarityCalculation").innerHTML = similscore + " %" ;
-            } else {
-                document.getElementById("similarityCalculation").innerHTML = "100 %" ;
+            //} else {                document.getElementById("similarityCalculation").innerHTML = "100 %" ;            }
+
+            if (document.getElementById("wordCounter").innerText==="1") {
+                startPause();
             }
+
+            if (similscore===100) {
+                startPause();
+            }
+
         }
         //if (document.getElementById("transcriptionSwitch").checked === true) {
         if ((event.keyCode === 8) || (event.keyCode === 46)) {
@@ -91,7 +118,20 @@ $(function () {
             document.getElementById("keystrokesSaved").innerText = countSaved;
         }
 
+/*
+        lastWord = getLastWord(document.getElementById("textarea").value);
+        if (lastWord) {
+            $("#transcribeText").mark(lastWord);
+        }
+*/
 
+        if ((event.keyCode === 13) || (event.keyCode === 190) || (event.keyCode === 188)) {
+            displayHelp = 1;
+            console.log(event.keyCode);
+        } else {
+            displayHelp = 0;
+            console.log(event.keyCode);
+        }
 
         if ((event.keyCode === 190) || (event.keyCode === 32)) {
             //  console.log("space or dot pressed");
@@ -102,12 +142,19 @@ $(function () {
             }
             // get top help ideas
 
+            if (event.keyCode === 32) {
+                lastWord = getLastWord(document.getElementById("textarea").value);
+                if (lastWord) {
+                    var optionsMark = {"separateWordSearch":true,"value": "exactly",}
+                    $("#transcribeText").mark(lastWord,optionsMark);
+                }
+            }
 
         } else {
 
             if (event.keyCode === 13) {
                 console.log("enter pressed");
-
+                //event.preventDefault();
                 $('#textarea').autocomplete("close");
             }
             if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
@@ -128,8 +175,13 @@ $(function () {
             appendTo: '#appendEnabled',
             source: function (request, response) {
                 // delegate back to autocomplete, but extract the last term
+
                 if (document.getElementById("transcriptionSwitch").checked === true) {
-                lastWord = extractLast(request.term);
+
+
+                    lastWord = getLastWord(request.term);
+
+
                 lastWordSpace = extractLast(request.term.trim());
                 var lastChar = request.term.substr(request.term.length - 1);
                 //console.log("!!!SPACE PRESSED!!! - '"+lastChar+"'");
@@ -197,27 +249,27 @@ $(function () {
                                     if (matches.length <= 0) {
                                         //console.log(hostname);
 
-                                        /*
-                                        $.ajax({ url: hostname + "/api/search.php?q=" + lastLine + "&s=" + lastLine, success: function(data) {
-                                                var searchResult = document.createElement("searchResult");searchResult.innerHTML = data;
-                                                availableTags = JSON.parse(searchResult.innerText);
-
-                                                console.log(availableTags);
-                                                //availableTags.push("Test");
-                                                response(availableTags);
-                                            } });
-                                            */
-
                                         var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine + "&space=0";
+
+                                        if (document.getElementById("creativeWritingSwitch").checked === false) {
+                                            url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine + "&space=0&t=1";
+                                        }
+                                        if (displayHelp===0) {
                                         console.log(url2);
                                         $.getJSON(url2, function (json) {
                                             availableTags = [];
                                             availableTags = json;
                                         //    console.log(availableTags);
-                                            response(availableTags);
-                                        })
 
 
+                                                response(availableTags);
+
+                                        });
+
+                                        } else {
+                                            availableTags = [];
+                                            lastWord = "";
+                                        }
                                     }
 
 
@@ -234,11 +286,14 @@ $(function () {
             focus: function () {
                 if (document.getElementById("transcriptionSwitch").checked === true) {
                     // prevent value inserted on focus
+
                     return false;
                 }
             },
             select: function (event, ui) {
                 if (document.getElementById("transcriptionSwitch").checked === true) {
+
+
 
                 if (event.keyCode !== 190) {
 
@@ -283,8 +338,17 @@ $(function () {
                     var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
                     document.getElementById("percentSaved").innerText = percentSaved.toString();
 
+                    /*
+                    lastWord = getLastWord(document.getElementById("textarea").value);
+                    if (lastWord) {
+                        $("#transcribeText").mark(lastWord);
+                    }
+*/
+
+
                     return false;
                 }
+
             }
             }
         });
@@ -300,7 +364,8 @@ function updateStatistics() {
         document.getElementById("percentSaved").innerText = "0";
     } else {
         var totalLength = document.getElementById("textarea").value.length;
-        document.getElementById("totalLength").innerText = totalLength;
+        //document.getElementById("totalLength").innerText = totalLength; keyPresses
+        document.getElementById("totalLength").innerText = keyPresses.toString();
 
         // percent saved
         var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
@@ -359,7 +424,6 @@ function creativeWritingOnOff() {
     }
 }
 
-
 function transcriptionOnOff() {
         document.getElementById("textarea").value = "";
         document.getElementById("topHelp").innerHTML = "";
@@ -376,6 +440,7 @@ function transcriptionOnOff() {
       //  network.update();
        // network.refresh();
         document.getElementById('textarea').focus();
+    getRandomWords();
 }
 
 
@@ -915,6 +980,17 @@ function getTopHelp() {
 
 
 
+
+}
+
+function getRandomWords() {
+    document.getElementById("textarea").value = "LOADING...";
+    var url2 = hostname + "api/randomwords.php";
+    $.get(url2, function (randomwords) {
+        document.getElementById("transcribeText").innerText = randomwords;
+    });
+    document.getElementById("textarea").value = "";
+    document.getElementById("similarityCalculation").innerText = "";
 
 }
 
@@ -1489,6 +1565,56 @@ function editDistance(s1, s2) {
 }
 
 
+
+
+function startPause() {
+    if (running == 0) {
+        running = 1;
+        increment();
+        document.getElementById("startPause").innerHTML = "Pause";
+    } else {
+        running = 0;
+        document.getElementById("startPause").innerHTML = "Resume";
+    }
+}
+
+function toggle() {
+    if (xg.style.display === "none") {
+        xg.style.display = "inline-block";
+    } else {
+        xg.style.display = "none";
+    }
+}
+
+function reset() {
+    running = 0;
+    time = 0;
+    document.getElementById("startPause").innerHTML = "Start";
+    document.getElementById("output").innerHTML = "00:00:00";
+}
+
+function increment() {
+    if (running == 1) {
+        setTimeout(function() {
+            time++;
+            var mins = Math.floor(time / 10 / 60);
+            if (mins <= 9) {
+                mins = "0" + mins;
+            }
+            var secs = Math.floor(time / 10);
+            if (secs <= 9) {
+                secs = "0" + secs;
+            }
+            var tenths = Math.floor(time % 10);
+            if (tenths <= 9) {
+                tenths = "0" + tenths;
+            }
+            document.getElementById("output").innerHTML =
+                mins + ":" + secs + ":" + tenths;
+            increment();
+        }, 100);
+    }
+}
 /*
 
 

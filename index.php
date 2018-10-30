@@ -8,6 +8,7 @@
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/jquery-ui.min.js"></script>
+    <script src="js/jquery.mark.min.js"></script>
     <script src="js/vis.min.js"></script>
     <script src="js/main.js"></script>
 
@@ -88,9 +89,17 @@
 
 <br>
 
+        <div id="transcribeTextWrapper">
+            <b>&nbsp;Transcribe the following randomly selected words or </b><button onclick="getRandomWords()">Select Different Words</button>
+            <br><br>
+            <div id="transcribeText"></div><br>
+        </div>
+
+
+
         <table id="topTable">
             <tr>
-                <th><h3>ENTER TEXT</h3> <small id="detailHeader">(use TAB/ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
+                <th><h3>ENTER TEXT</h3> <small id="detailHeader">(use TAB or ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
                 <th id="headerDiscovery"><h3>DETAILS</h3> <small id="detailHeader">(click words to add them to text editor)</small></th>
             </tr>
             <tr>
@@ -121,22 +130,20 @@
 
     </div>
 
-    <div id="transcribeTextWrapper">
-    <h2> Transcribe the following text:</h2><br><br>
-    <div id="transcribeText">
-        The Electroencephalography and Electromyography research presentation outlined all the important historical data in a comprehensive qualitative and quantitative assessment report.
-        <br><br>
-        Arnold Schwarzenegger and Sylvester Stallone were the quintessential action heroes of the eighties who exemplified manliness and encouraged massive uptake of bodybuilding especially among the youngest audience.
-        <br><br>
-        According to Environment Canada, so far the only unsurpassed and best possible substitutes for chlorofluorocarbons are hydrofluorocarbons and hydrochlorofluorocarbons primarily because of their low occupancy times in the atmosphere.
-        <br><br>
-    </div>
+    <div id="similarityCalculationWrapper">
+        <b>Completed:</b>
+        <div id="similarityCalculation">0%</div><br><br>
+
+        <b>Time:</b>
+        <div class="container text-center">
+            <div id="output">00:00:00</div>
+            <div class="space-fix"></div>
+        </div>
+
     </div>
 
-    <div id="similarityCalculationWrapper">
-        <br><b>Similarity Score:</b>
-    <div id="similarityCalculation">0%</div>
-    </div>
+
+
 
     <div class="row content" id="knowledgeBox">
         <h3>RESEARCH AREA <small id="detailHeader">(double click the nodes to load details | drag to re-arrange)</small></h3>

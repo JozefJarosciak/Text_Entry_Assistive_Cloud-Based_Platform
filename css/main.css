@@ -6,6 +6,33 @@ body {
     max-width: 1366px;
 }
 
+
+.container {
+}
+
+.btn {
+    min-width: 10rem;
+}
+
+#output {
+    color: #343a40;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    border:1px solid #e68580;
+    height: 20px;
+    width:200px;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.space-fix {
+}
+
+
+
+
 #topHeaderTable {
     width:100%;
 }
@@ -61,15 +88,14 @@ body {
     border: 1px dotted grey;
 }
 
-#transcribeText {
-     border:1px solid lightblue;
-     width:98%;
-     text-align: left;
-     display: block;
-     margin-left: auto;
-     margin-right: auto;
-     padding: 5px;
- }
+transcribeTextWrapper{
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-spacing: 5px;
+    width: 98%;
+}
 
 #similarityCalculationWrapper {
     text-align: center;
@@ -77,6 +103,21 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+
+
+#transcribeText {
+    font-family: "Helvetica", Times, serif;
+    font-size: 16px;
+    border:1px solid lightblue;
+    width:98%;
+    text-align: left;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+}
+
+
 #similarityCalculation {
     border:1px solid #e68580;
     height: 20px;
@@ -87,6 +128,10 @@ body {
     margin-right: auto;
 }
 
+mark{
+    background: orange;
+    color: black;
+}
 
 #quickHelpCell {
     min-height: 250px;
@@ -131,12 +176,12 @@ h3 {
 
 textarea{
     font-family: "Helvetica", Times, serif;
+    font-size: 16px;
     overflow-x: hidden;
     width: 100%;
     max-width: 99%;
     min-height: 250px;
     max-height: 250px;
-    font-size: 16px;
     border-radius: 6px;
     box-shadow: 2px 2px #ebebeb;
     border: 2px solid #cccccc;

@@ -2,6 +2,7 @@
 error_reporting(0);
 $q = htmlspecialchars((($_GET["q"])));
 $offset = htmlspecialchars((($_GET["f"])));
+$charLen = htmlspecialchars((($_GET["c"])));
 
 $servername = "localhost";
 $dbname = "dictionaries";
@@ -19,7 +20,13 @@ if ($conn->connect_error) {
 //$sql = 'select * from textentry where word like "'.$q.'%" and word not like "'.$q.'"  order by LENGTH(word) ASC, rank ASC limit 10';
 //$sql = 'select * from textentry where word like "'.$q.'%" and word not like "'.$q.'"  order by rank ASC limit 3';
 
-$sql = 'select word from en_english479k where word like "'.$q.'%" and word not like "'.$q.'" and word not like "%-%" order by -rank DESC limit 1 OFFSET '.$offset;
+if ($charLen) {
+    $lenghtLimit = "AND CHAR_LENGTH(word) >= ".$charLen." AND word NOT LIKE '% %' AND word NOT LIKE '%.%' AND word NOT LIKE '%-%' AND word NOT LIKE '%s' AND word NOT LIKE '%ed' AND word NOT LIKE '%al' and word NOT LIKE '%z%' and word NOT LIKE '%s%'";
+} else {
+    $lenghtLimit = "AND CHAR_LENGTH(word) >= 0";
+}
+
+$sql = 'select word from en_english479k where word like "'.$q.'%" and word not like "'.$q.'" and word not like "%-%" '.$lenghtLimit.' order by -rank DESC limit 1 OFFSET '.$offset;
 
 
 $result = $conn->query($sql);

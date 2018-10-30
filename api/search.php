@@ -7,8 +7,8 @@ $path = explode('api', "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 
 $fullSentence = urldecode(htmlspecialchars(($_GET["s"])));
 $space = urldecode(htmlspecialchars(($_GET["space"])));
+$transcription = urldecode(htmlspecialchars(($_GET["t"])));
 
-//$fullSentence = removeCommonWords($fullSentence);
 $lastWord = urldecode(htmlspecialchars(($_GET["q"])));
 $twoWords = getLastWordsStr($fullSentence, 2);
 $threeWords = getLastWordsStr($fullSentence, 3);
@@ -32,18 +32,28 @@ if (strlen($twoWords) === strlen($threeWords)) {
 //'http://www.jarosciak.com/textentry/api/wikipedia-suggest.php?q=%' . urlencode($threeWords),
 //'http://www.jarosciak.com/textentry/api/google-suggestqueries.php?q=' . urlencode($threeWords),
 
-$urlsToProcess = array(
-    'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=0',
-    'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=1',
-    'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=2',
-    //'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=3',
-    $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($lastWord),
-    $path[0].'api/google-suggestqueries.php?q=' . urlencode($lastWord),
-    //$path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
 
-   // $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($twoWords),
-    //$path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
-);
+
+if ($transcription==='1') {
+    $urlsToProcess = array(
+        'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=0&c=10',
+        'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=1&c=10',
+        'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=2&c=10',
+        'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=3&c=10'
+    );
+} else {
+    $urlsToProcess = array(
+        'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=0',
+        'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=1',
+        //'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=3',
+        $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($lastWord),
+        $path[0].'api/google-suggestqueries.php?q=' . urlencode($lastWord),
+        //$path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
+        $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($twoWords),
+        //$path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
+    );
+}
+
 
 if ($space==0) {
     $resultArray = multiRequest($urlsToProcess);
