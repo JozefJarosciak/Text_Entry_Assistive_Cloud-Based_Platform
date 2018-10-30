@@ -124,11 +124,12 @@
     <div id="transcribeTextWrapper">
     <h2> Transcribe the following text:</h2><br><br>
     <div id="transcribeText">
-        The Electroencephalography and Electromyography research presentation outlined all the historical data in a comprehensive qualitative and quantitative assessment report.
+        The Electroencephalography and Electromyography research presentation outlined all the important historical data in a comprehensive qualitative and quantitative assessment report.
         <br><br>
-        Arnold Schwarzenegger and Sylvester Stallone were the quintessentially important action heroes of the eighties who exemplified manliness and encouraged massive uptake of bodybuilding especially among the youngest audience.
+        Arnold Schwarzenegger and Sylvester Stallone were the quintessential action heroes of the eighties who exemplified manliness and encouraged massive uptake of bodybuilding especially among the youngest audience.
         <br><br>
-        There are many reasons for children to underperform at school, such as, medical problems, average intelligence, specific learning disability, attention deficit hyperactivity disorder or emotional problems, however the physical, environmental and sociodemographic factors should also never be underestimated.<br>
+        According to Environment Canada, so far the only unsurpassed and best possible substitutes for chlorofluorocarbons are hydrofluorocarbons and hydrochlorofluorocarbons primarily because of their low occupancy times in the atmosphere.
+        <br><br>
     </div>
     </div>
 

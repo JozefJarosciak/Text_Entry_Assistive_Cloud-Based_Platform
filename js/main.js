@@ -336,6 +336,11 @@ function creativeWritingOnOff() {
         document.getElementById("knowledgeBox").style.display = "none";
         document.getElementById("shortHelp").style.display = "none";
         document.getElementById("textareatd").style.width = "100%";
+        document.getElementById("quickHelpCell").style.maxHeight = "160px";
+        document.getElementById("quickHelpCell").style.minHeight = "160px";
+        document.getElementById("textarea").style.maxHeight = "160px";
+        document.getElementById("textarea").style.minHeight = "160px";
+        document.getElementById("topTable").style.maxHeight = "160px";
         document.getElementById("textarea").value = "";
         document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
