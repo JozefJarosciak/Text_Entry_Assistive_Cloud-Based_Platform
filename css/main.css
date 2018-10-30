@@ -14,7 +14,7 @@ body {
     min-width: 10rem;
 }
 
-#output {
+#output2 {
     color: #343a40;
     background-color: #f8f9fa;
     border-radius: 0.5rem;
@@ -129,8 +129,9 @@ transcribeTextWrapper{
 }
 
 mark{
-    background: orange;
+    background: #ffcad2;
     color: black;
+    text-decoration: line-through;
 }
 
 #quickHelpCell {

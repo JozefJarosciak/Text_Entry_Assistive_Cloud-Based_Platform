@@ -38,7 +38,7 @@
                                 <small>Transcription</small>
                             </th>
                             <th align="left">
-                                <small>Character Count</small>
+                                <small>KeyPress Count</small>
                             </th>
                             <th align="left">
                                 <small>Word Count</small>
@@ -99,7 +99,7 @@
 
         <table id="topTable">
             <tr>
-                <th><h3>ENTER TEXT</h3> <small id="detailHeader">(use TAB or ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
+                <th><h3>ENTER TEXT</h3> <small id="detailHeader">(use ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
                 <th id="headerDiscovery"><h3>DETAILS</h3> <small id="detailHeader">(click words to add them to text editor)</small></th>
             </tr>
             <tr>
@@ -132,13 +132,14 @@
 
     <div id="similarityCalculationWrapper">
         <b>Completed:</b>
-        <div id="similarityCalculation">0%</div><br><br>
+        <div id="similarityCalculation">0%</div><br>
 
         <b>Time:</b>
         <div class="container text-center">
-            <div id="output">00:00:00</div>
-            <div class="space-fix"></div>
+            <div id="output2">00:00:00</div>
         </div>
+
+        <div id="resultToSend"></div><br><br>
 
     </div>
 

@@ -5,12 +5,12 @@ var edges = new vis.DataSet([]);
 var researchList = [];
 var researchSentences = ["undefined"];
 var initialNetworkVis = 0;
-var time = 0;
-var running = 0;
-var xg = document.getElementById("reset");
+var time2 = 0;
+var running2 = 0;
 var keyPresses = 0;
 var displayHelp = 0;
-
+var similscoreRun = false;
+var keyPressesRun = false;
 
 $(function () {
     document.getElementById("transcribeTextWrapper").style.display = "none";
@@ -102,12 +102,21 @@ $(function () {
             document.getElementById("similarityCalculation").innerHTML = similscore + " %" ;
             //} else {                document.getElementById("similarityCalculation").innerHTML = "100 %" ;            }
 
-            if (document.getElementById("wordCounter").innerText==="1") {
-                startPause();
+            if ((keyPresses>=1) && (keyPressesRun==false)){
+                startPause2();
+                keyPressesRun = true;
             }
 
-            if (similscore===100) {
-                startPause();
+            if ((similscore>=99.9) && (similscoreRun==false)) {
+
+                similscoreRun = true;
+                document.getElementById("resultToSend").innerHTML = "<br><br><b>Transcription Test Result:</b>" +
+                    " Total Key Presses: " + keyPresses.toString() +
+                    " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText +
+                    " | Completed: " + document.getElementById("similarityCalculation").innerText +
+                    " | Total Time: " + document.getElementById("output2").innerText ;
+
+                startPause2();
             }
 
         }
@@ -118,12 +127,6 @@ $(function () {
             document.getElementById("keystrokesSaved").innerText = countSaved;
         }
 
-/*
-        lastWord = getLastWord(document.getElementById("textarea").value);
-        if (lastWord) {
-            $("#transcribeText").mark(lastWord);
-        }
-*/
 
         if ((event.keyCode === 13) || (event.keyCode === 190) || (event.keyCode === 188)) {
             displayHelp = 1;
@@ -145,12 +148,14 @@ $(function () {
             if (event.keyCode === 32) {
                 lastWord = getLastWord(document.getElementById("textarea").value);
                 if (lastWord) {
-                    var optionsMark = {"separateWordSearch":true,"value": "exactly",}
+                    var optionsMark = {"separateWordSearch":true,"value": "exactly"}
                     $("#transcribeText").mark(lastWord,optionsMark);
                 }
             }
 
         } else {
+
+
 
             if (event.keyCode === 13) {
                 console.log("enter pressed");
@@ -158,7 +163,7 @@ $(function () {
                 $('#textarea').autocomplete("close");
             }
             if (event.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
-                event.preventDefault();
+                        event.preventDefault();
             }
 
         }
@@ -338,15 +343,7 @@ $(function () {
                     var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
                     document.getElementById("percentSaved").innerText = percentSaved.toString();
 
-                    /*
-                    lastWord = getLastWord(document.getElementById("textarea").value);
-                    if (lastWord) {
-                        $("#transcribeText").mark(lastWord);
-                    }
-*/
-
-
-                    return false;
+                                       return false;
                 }
 
             }
@@ -393,6 +390,8 @@ function creativeWritingOnOff() {
     if (document.getElementById("creativeWritingSwitch").checked === true) {
         location.reload();
     } else {
+        getRandomWords();
+        keyPresses = 0; keyPressesRun = false; similscoreRun = false; reset2();
         document.getElementById("transcribeTextWrapper").style.display = "block";
         document.getElementById("similarityCalculationWrapper").style.display = "block";
         document.getElementById("textarea").value = "";
@@ -425,6 +424,7 @@ function creativeWritingOnOff() {
 }
 
 function transcriptionOnOff() {
+        keyPresses = 0; keyPressesRun = false; similscoreRun = false; reset2();
         document.getElementById("textarea").value = "";
         document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
@@ -990,7 +990,7 @@ function getRandomWords() {
         document.getElementById("transcribeText").innerText = randomwords;
     });
     document.getElementById("textarea").value = "";
-    document.getElementById("similarityCalculation").innerText = "";
+    document.getElementById("similarityCalculation").innerText = "0%";
 
 }
 
@@ -1565,53 +1565,49 @@ function editDistance(s1, s2) {
 }
 
 
-
-
-function startPause() {
-    if (running == 0) {
-        running = 1;
-        increment();
-        document.getElementById("startPause").innerHTML = "Pause";
+function startPause2() {
+    if (running2 == 0) {
+        running2 = 1;
+        increment2();
+       // document.getElementById("startPause2").innerHTML = "Pause";
     } else {
-        running = 0;
-        document.getElementById("startPause").innerHTML = "Resume";
+        running2 = 0;
+        //document.getElementById("startPause2").innerHTML = "Resume";
     }
 }
 
-function toggle() {
-    if (xg.style.display === "none") {
-        xg.style.display = "inline-block";
-    } else {
-        xg.style.display = "none";
-    }
+function reset2() {
+    running2 = 0;
+    time2 = 0;
+//    document.getElementById("startPause2").innerHTML = "Start";
+    document.getElementById("output2").innerHTML = "00:00:00";
 }
 
-function reset() {
-    running = 0;
-    time = 0;
-    document.getElementById("startPause").innerHTML = "Start";
-    document.getElementById("output").innerHTML = "00:00:00";
-}
-
-function increment() {
-    if (running == 1) {
+function increment2() {
+    if (running2 == 1) {
         setTimeout(function() {
-            time++;
-            var mins = Math.floor(time / 10 / 60);
-            if (mins <= 9) {
-                mins = "0" + mins;
+            time2++;
+            var mins2 = Math.floor(time2 / 10 / 60);
+            var secs2 = Math.floor(time2 / 10 % 60);
+            var tenths2 = time2 % 10;
+
+            if (mins2 < 10) {
+                mins2 = "0" + mins2;
             }
-            var secs = Math.floor(time / 10);
-            if (secs <= 9) {
-                secs = "0" + secs;
+
+            if (secs2 < 10) {
+                secs2 = "0" + secs2;
             }
-            var tenths = Math.floor(time % 10);
-            if (tenths <= 9) {
-                tenths = "0" + tenths;
-            }
-            document.getElementById("output").innerHTML =
-                mins + ":" + secs + ":" + tenths;
-            increment();
+
+            document.getElementById("output2").innerHTML = mins2 + ":" + secs2 + ":" + "0" + tenths2;
+
+            /// ===============================
+            /// This is your fix
+            /// ===============================
+            // increment();
+            increment2();
+            /// ===============================
+
         }, 100);
     }
 }
