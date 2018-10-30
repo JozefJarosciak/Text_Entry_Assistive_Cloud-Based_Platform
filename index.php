@@ -122,8 +122,14 @@
     </div>
 
     <div id="transcribeTextWrapper">
-    <b>Transcribe the following text:</b><br><br>
-    <div id="transcribeText">Arnold Schwarzenegger and Sylvester Stallone are both famous because of bodybuilding.</div>
+    <h2> Transcribe the following text:</h2><br><br>
+    <div id="transcribeText">
+        The Electroencephalography and Electromyography research presentation outlined all the historical data in a comprehensive qualitative and quantitative assessment report.
+        <br><br>
+        Arnold Schwarzenegger and Sylvester Stallone were the quintessentially important action heroes of the eighties who exemplified manliness and encouraged massive uptake of bodybuilding especially among the youngest audience.
+        <br><br>
+        There are many reasons for children to underperform at school, such as, medical problems, average intelligence, specific learning disability, attention deficit hyperactivity disorder or emotional problems, however the physical, environmental and sociodemographic factors should also never be underestimated.<br>
+    </div>
     </div>
 
     <div id="similarityCalculationWrapper">

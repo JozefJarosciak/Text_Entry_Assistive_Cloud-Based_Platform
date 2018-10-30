@@ -72,13 +72,13 @@ $(function () {
 
     //$("#textarea").on("keydown", function (event) {
 
-    $("#textarea").keypress(function (event) {
+    $("#textarea").keyup(function (event) {
 
         if (document.getElementById("creativeWritingSwitch").checked === false) {
             var typedText = document.getElementById("textarea").value;
             var sentencesText = document.getElementById("transcribeText").innerText;
             var similscore = Math.round(((similarity(typedText.trim(), sentencesText.trim())*100)) * 100) / 100;
-            if (similscore<98.25) {
+            if (similscore<99.80) {
             document.getElementById("similarityCalculation").innerHTML = similscore + " %" ;
             } else {
                 document.getElementById("similarityCalculation").innerHTML = "100 %" ;
