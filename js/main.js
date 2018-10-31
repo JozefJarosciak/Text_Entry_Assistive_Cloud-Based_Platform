@@ -113,9 +113,9 @@ $(function () {
                 similscoreRun = true;
                 document.getElementById("resultToSend").innerHTML = "<br><br><h1 id='resultHighlight'>Transcription Test Result:</h1>" +
                     " Total Key Presses: " + keyPresses.toString() +
-                    " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText +
-                    " | Completed: " + document.getElementById("similarityCalculation").innerText +
-                    " | Total Time: " + document.getElementById("output2").innerText ;
+                    " | Total Characters: " + document.getElementById("totalCharacters").innerText +
+                    " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText + " (" + document.getElementById("percentSaved").innerText + "%)" +
+                    " | Time to Complete: " + document.getElementById("output2").innerText ;
 
                 document.getElementById("detailStat").style.display = "none";
                 startPause2();
@@ -359,22 +359,28 @@ function updateStatistics() {
     if (document.getElementById("textarea").value.length === 0) {
         document.getElementById("wordCounter").innerText = "0";
         document.getElementById("totalLength").innerText = "0";
+        document.getElementById("totalCharacters").innerText = "0";
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
     } else {
         var totalLength = document.getElementById("textarea").value.length;
-        //document.getElementById("totalLength").innerText = totalLength; keyPresses
         document.getElementById("totalLength").innerText = keyPresses.toString();
+        document.getElementById("totalCharacters").innerText = totalLength.toString();
+
 
         // percent saved
         var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-        var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
+        var currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
+
+        var percentSaved = Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100);
         document.getElementById("percentSaved").innerText = percentSaved.toString();
 
+        /*
         if (totalLength < 4) {
             document.getElementById("keystrokesSaved").innerText = "0";
             document.getElementById("percentSaved").innerText = "0";
         }
+        */
 
         if ((document.getElementById("transcriptionSwitch").checked === false) && (document.getElementById("creativeWritingSwitch").checked === false)) {
             document.getElementById("keystrokesSaved").innerText = "0";
@@ -414,6 +420,7 @@ function creativeWritingOnOff() {
         document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
         document.getElementById("totalLength").innerText = "0";
+        document.getElementById("totalCharacters").innerText = "0";
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
         nodes = []; nodes = new vis.DataSet([]);
@@ -436,6 +443,7 @@ function transcriptionOnOff() {
         document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
         document.getElementById("totalLength").innerText = "0";
+        document.getElementById("totalCharacters").innerText = "0";
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
     document.getElementById("detailStat").style.display = "block";

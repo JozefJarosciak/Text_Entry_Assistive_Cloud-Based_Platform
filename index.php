@@ -38,7 +38,7 @@
                                 <small>Transcription</small>
                             </th>
                             <th align="left">
-                                <small>KeyPress Count</small>
+                                <small>KeyPress/Char Count</small>
                             </th>
                             <th align="left">
                                 <small>Word Count</small>
@@ -67,7 +67,7 @@
                                 </div>
                             </td>
                             <td style="background-color:#f3f3f3;border:1px solid #cecece;">
-                                <b><label id="totalLength">0</label></b>
+                                <b><label id="totalLength">0</label></b> (<label id="totalCharacters">0</label>)
                             </td>
 
                             <td style="background-color:#f3f3f3;border:1px solid #cecece;">
@@ -110,7 +110,7 @@
                         <textarea id='textarea' spellcheck="false"></textarea>
                     </div>
                 </td>
-                <td id="quickHelpCell">
+                <td id="quickHelpCell" style="width:50%;">
                     <div id="quickHelp">
                        <small>
                             <span id="topHelp" onclick="enableHighlighting()">
