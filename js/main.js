@@ -16,6 +16,8 @@ $(function () {
     document.getElementById("transcribeTextWrapper").style.display = "none";
     document.getElementById("similarityCalculationWrapper").style.display = "none";
     document.getElementById("detailStat").style.display = "none";
+    document.getElementById("form_container").style.display = "none";
+
     getRandomWords();
 
     var availableTags = [];
@@ -95,6 +97,13 @@ $(function () {
 
         keyPresses = keyPresses+1;
 
+        if (document.getElementById("creativeWritingSwitch").checked === true) {
+            if (Number(document.getElementById("wordCounter").innerText) >= 100) {
+                document.getElementById("form_container").style.display = "block";
+                saveToDB(false,1);
+            }
+        }
+
         if (document.getElementById("creativeWritingSwitch").checked === false) {
             var typedText = document.getElementById("textarea").value;
             var sentencesText = document.getElementById("transcribeText").innerText;
@@ -108,18 +117,25 @@ $(function () {
                 keyPressesRun = true;
             }
 
-            if ((similscore>=99.9) && (similscoreRun==false)) {
+            if ((similscore>=99.99) && (similscoreRun==false)) {
 
                 similscoreRun = true;
-                document.getElementById("resultToSend").innerHTML = "<br><br><h1 id='resultHighlight'>Transcription Test Result:</h1>" +
+
+                /*
+                document.getElementById("form_container").innerHTML = "<br><br><h1 id='resultHighlight'>Transcription Test Result:</h1>" +
                     " Total Key Presses: " + keyPresses.toString() +
                     " | Total Characters: " + document.getElementById("totalCharacters").innerText +
                     " | Total Words: " + document.getElementById("wordCounter").innerText +
-                    " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText + " (" + document.getElementById("percentSaved").innerText + " %)" +
+                    " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText +
                     " | Time to Complete: " + document.getElementById("output2").innerText ;
 
+                */
                 document.getElementById("detailStat").style.display = "none";
+                document.getElementById("form_container").style.display = "block";
+
                 startPause2();
+                saveToDB(false,0);
+                alert("\n\nTest Completed!\n\nPlease fill up the form below and press the 'Submit Results' button!");
             }
 
         }
@@ -260,7 +276,7 @@ $(function () {
                                         var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine + "&space=0";
 
                                         if (document.getElementById("creativeWritingSwitch").checked === false) {
-                                            url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine + "&space=0&t=1";
+                                            url2 = hostname + "api/search.php?q=" + lastWord + "&s=&space=0&t=1";
                                         }
                                         if (displayHelp===0) {
                                         console.log(url2);
@@ -409,12 +425,12 @@ function creativeWritingOnOff() {
         getRandomWords();
         keyPresses = 0; keyPressesRun = false; similscoreRun = false; reset2();
         document.getElementById("output2").innerHTML = "00:00:00";
-        document.getElementById("resultToSend").innerHTML = "";
         document.getElementById("transcribeTextWrapper").style.display = "block";
         document.getElementById("similarityCalculationWrapper").style.display = "block";
         document.getElementById("detailStat").style.display = "block";
         document.getElementById("textarea").value = "";
         document.getElementById("quickHelp").style.display = "none";
+        document.getElementById("form_container").style.display = "none";
         document.getElementById("headerDiscovery").style.display = "none";
         document.getElementById("knowledgeBox").style.display = "none";
         document.getElementById("shortHelp").style.display = "none";
@@ -446,7 +462,6 @@ function creativeWritingOnOff() {
 function transcriptionOnOff() {
         keyPresses = 0; keyPressesRun = false; similscoreRun = false; reset2();
         document.getElementById("output2").innerHTML = "00:00:00";
-        document.getElementById("resultToSend").innerHTML = "";
         document.getElementById("textarea").value = "";
         document.getElementById("topHelp").innerHTML = "";
         document.getElementById("wordCounter").innerText = "0";
@@ -455,6 +470,7 @@ function transcriptionOnOff() {
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
     document.getElementById("detailStat").style.display = "block";
+    document.getElementById("form_container").style.display = "none";
     nodes = []; nodes = new vis.DataSet([]);
         edges = [];edges = new vis.DataSet([]);
         var container = document.getElementById('mynetwork');
@@ -955,7 +971,7 @@ function getTopHelp() {
                 if (firstSentence.indexOf("Image:") < 0) {
                     console.log(researchSentences);
                     //if (arrayContains(firstSentence,researchSentences) === false) {
-                        document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> "; // check for last 3 words
+                        document.getElementById("shortHelp").innerHTML = " Instant Answer: " + firstSentence + " <br> "; // check for last 3 words
                         researchSentences.push(firstSentence);
                     //}
 
@@ -966,7 +982,7 @@ function getTopHelp() {
                     firstSentence = firstSentence2[1];
                     console.log(researchSentences);
                     //if (arrayContains(firstSentence,researchSentences) === false) {
-                        document.getElementById("shortHelp").innerHTML = " Research: " + firstSentence + " <br> ";
+                        document.getElementById("shortHelp").innerHTML = " Instant Answer: " + firstSentence + " <br> ";
                         researchSentences.push(firstSentence);
                     //}
 
@@ -1016,6 +1032,28 @@ function getRandomWords() {
     });
     document.getElementById("textarea").value = "";
     document.getElementById("similarityCalculation").innerText = "0%";
+
+
+    keyPresses = 0; keyPressesRun = false; similscoreRun = false; reset2();
+    document.getElementById("output2").innerHTML = "00:00:00";
+    document.getElementById("textarea").value = "";
+    document.getElementById("topHelp").innerHTML = "";
+    document.getElementById("wordCounter").innerText = "0";
+    document.getElementById("totalLength").innerText = "0";
+    document.getElementById("totalCharacters").innerText = "0";
+    document.getElementById("keystrokesSaved").innerText = "0";
+    document.getElementById("percentSaved").innerText = "0";
+    document.getElementById("detailStat").style.display = "block";
+    document.getElementById("form_container").style.display = "none";
+    nodes = []; nodes = new vis.DataSet([]);
+    edges = [];edges = new vis.DataSet([]);
+    var container = document.getElementById('mynetwork');
+    var data = {nodes: nodes, edges: edges};
+    var options = {autoResize: true,height: '100%',width: '100%'};
+    network = new vis.Network(container, data, options);
+    //  network.update();
+    // network.refresh();
+    document.getElementById('textarea').focus();
 
 }
 
@@ -1635,6 +1673,60 @@ function increment2() {
 
         }, 100);
     }
+}
+
+function saveToDB(response,message) {
+
+    var testtype = 0;
+
+    if (document.getElementById("transcriptionSwitch").checked === true) {
+        testtype = 1;
+    } else {
+        testtype = 2;
+    }
+
+    if ((document.getElementById("creativeWritingSwitch").checked === true) && (document.getElementById("transcriptionSwitch").checked === true)) {
+        testtype = 3;
+    } else if ((document.getElementById("creativeWritingSwitch").checked === true) && (document.getElementById("transcriptionSwitch").checked === false)) {
+        testtype = 4;
+    }
+
+    var postResultUrl = hostname + "api/sendresult.php?";
+
+    var gender = "Other";
+
+    if (document.getElementById("gender1").checked === true) {
+        gender = "Male";
+    } else if (document.getElementById("gender2").checked === true) {
+        gender = "Female";
+    }
+
+    $.post(
+        postResultUrl,
+        {   n: document.getElementById("your_name").value,
+            e: document.getElementById("email").value,
+            a: document.getElementById("age").value,
+            g: gender,
+            tk: keyPresses.toString(),
+            tc: document.getElementById("totalCharacters").innerText,
+            tw: document.getElementById("wordCounter").innerText,
+            sk: document.getElementById("keystrokesSaved").innerText,
+            ttc: document.getElementById("output2").innerText,
+            tt: testtype.toString()
+        },
+        function(datar) {
+            if (response===true) {
+                alert("Thank you, we've received your test result!");
+
+            } else {
+
+                if (message===1) {
+                    alert("Thank you, this test has completed. We've saved your test results!");
+                }
+            }
+        }
+    );
+   // alert("Thanks you, we've received your test result!");
 }
 /*
 

@@ -35,7 +35,7 @@
                                 <small>Creative Writing</small>
                             </th>
                             <th align="left">
-                                <small>Transcription</small>
+                                <small>Autocomplete</small>
                             </th>
                             <th align="left">
                                 <small>KeyPress/Char Count</small>
@@ -144,7 +144,20 @@
      </tr>
         </tbody>
     </table>
-        <div id="resultToSend"></div><br><br>
+
+
+            <div id="form_container">
+            <h1><a>Please Fill Up The Form and Submit Results</a></h1>
+            Full Name: <input type="text" id="your_name" size="35" value=""><br>
+            Your Email: <input type="email" id="email" size="35" value=""><br>
+            Age: <input type="number" id="age" value=""><br>
+            Gender: <input type="radio" name="gender" id="gender1" value="Male"> Male
+            <input type="radio" name="gender" id="gender2" value="Female"> Female
+            <br>
+            <button onclick="saveToDB(true,0)">Submit Results</button><br><br>
+        </div>
+
+
     </div>
 
 

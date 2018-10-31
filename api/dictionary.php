@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 //$sql = 'select * from textentry where word like "'.$q.'%" and word not like "'.$q.'"  order by rank ASC limit 3';
 
 if ($charLen) {
-    $lenghtLimit = "AND CHAR_LENGTH(word) >= ".$charLen." AND word NOT LIKE '% %' AND word NOT LIKE '%.%' AND word NOT LIKE '%-%' AND word NOT LIKE '%s' AND word NOT LIKE '%ed' AND word NOT LIKE '%al' and word NOT LIKE '%z%' and word NOT LIKE '%s%'";
+    $lenghtLimit = "AND rank<50000 AND (ASCII(word) BETWEEN 97 AND 122) AND CHAR_LENGTH(word) >= ".$charLen." AND word NOT LIKE '% %' AND word NOT LIKE '%.%' AND word NOT LIKE '%-%' AND word NOT LIKE '%s' AND word NOT LIKE '%ed' AND word NOT LIKE '%al' and word NOT LIKE '%z%' and word NOT LIKE '%s%'";
 } else {
     $lenghtLimit = "AND CHAR_LENGTH(word) >= 0";
 }
@@ -46,10 +46,12 @@ if ($result->num_rows > 0) {
 }
  else {
 
-
+     if ($charLen) {
+         $lenghtLimit = "AND CHAR_LENGTH(word) >= ".$charLen;
+     }
 //$sql = 'select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)=CHAR_LENGTH("'.$q.'") UNION select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)=CHAR_LENGTH("'.$q.'")+1 UNION select * from en_english479k where SOUNDEX(word) like SOUNDEX("'.$q.'") and CHAR_LENGTH(word)=CHAR_LENGTH("'.$q.'")-1 order by -rank DESC limit 6';
 
-     $sql = 'SELECT * FROM en_english479k WHERE word <> "'.$q.'" and SOUNDEX(word) like SOUNDEX("'.$q.'") and levenshtein(word, "'.$q.'")<=2 order by -rank desc, -levenshtein(word, "'.$q.'") desc limit 1';
+     $sql = 'SELECT * FROM en_english479k WHERE word <> "'.$q.'" and SOUNDEX(word) like SOUNDEX("'.$q.'") and levenshtein(word, "'.$q.'")<=2 '.$lenghtLimit.' order by -rank desc, -levenshtein(word, "'.$q.'") desc limit 1';
 
 $result = $conn->query($sql);
 $rows = array();

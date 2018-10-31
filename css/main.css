@@ -20,6 +20,10 @@ body {
     width:100%;
 }
 
+#form_container {
+    line-height: 25px;
+}
+
 #statsBox {
     width:560px;
     align-text: left;
