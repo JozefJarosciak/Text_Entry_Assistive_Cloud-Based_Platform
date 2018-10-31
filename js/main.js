@@ -114,7 +114,8 @@ $(function () {
                 document.getElementById("resultToSend").innerHTML = "<br><br><h1 id='resultHighlight'>Transcription Test Result:</h1>" +
                     " Total Key Presses: " + keyPresses.toString() +
                     " | Total Characters: " + document.getElementById("totalCharacters").innerText +
-                    " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText + " (" + document.getElementById("percentSaved").innerText + "%)" +
+                    " | Total Words: " + document.getElementById("wordCounter").innerText +
+                    " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText + " (" + document.getElementById("percentSaved").innerText + " %)" +
                     " | Time to Complete: " + document.getElementById("output2").innerText ;
 
                 document.getElementById("detailStat").style.display = "none";
@@ -132,10 +133,10 @@ $(function () {
 
         if ((event.keyCode === 13) || (event.keyCode === 190) || (event.keyCode === 188)) {
             displayHelp = 1;
-            console.log(event.keyCode);
+           // console.log(event.keyCode);
         } else {
             displayHelp = 0;
-            console.log(event.keyCode);
+            //console.log(event.keyCode);
         }
 
         if ((event.keyCode === 190) || (event.keyCode === 32)) {
@@ -306,7 +307,7 @@ $(function () {
 
                     var str = document.getElementById("textarea").value;
 
-                    console.log("STRING: " + str);
+                    //console.log("STRING: " + str);
 
                     if (str.slice(-1) == " ") {
                         str = str.substring(0, (str.length - word.length) - 1);
@@ -314,7 +315,7 @@ $(function () {
                         str = str.substring(0, (str.length - word.length));
                     }
 
-                    console.log("SUBSTRING: " + str);
+                    //console.log("SUBSTRING: " + str);
 
                     if (initialIsCapital(lastWord) === true) {
                         capitalizedResponse = capitalizeFirstLetter(ui.item.value);
@@ -341,10 +342,17 @@ $(function () {
 
 
                     // percent saved
-                    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-                    var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
-                    document.getElementById("percentSaved").innerText = percentSaved.toString();
 
+                    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                    var currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
+                    var percentSaved3 = (Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100));
+                    document.getElementById("percentSaved").innerText = percentSaved3.toString();
+
+                    /*
+                    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                    var percentSaved2 = Math.floor(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100) / 100;
+                    document.getElementById("percentSaved").innerText = percentSaved2.toString();
+                    */
                                        return false;
                 }
 
@@ -372,8 +380,8 @@ function updateStatistics() {
         var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
         var currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
 
-        var percentSaved = Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100);
-        document.getElementById("percentSaved").innerText = percentSaved.toString();
+        var percentSaved3 = (Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100));
+        document.getElementById("percentSaved").innerText = percentSaved3.toString();
 
         /*
         if (totalLength < 4) {
@@ -792,11 +800,12 @@ function enableHighlighting() {
     var countSaved = currentCountofKeystrokesSaved + wordHighligted.length;
     document.getElementById("keystrokesSaved").innerText = countSaved;
 
+    /*
     // percent saved
     var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
     var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
     document.getElementById("percentSaved").innerText = percentSaved.toString();
-
+*/
 
     updateStatistics();
 
