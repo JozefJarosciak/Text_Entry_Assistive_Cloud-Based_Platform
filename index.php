@@ -135,7 +135,7 @@
         <tbody>
      <tr>
          <td>
-             <b>Completed:</b>
+             <b>Progress:</b>
              <div id="similarityCalculation">0%</div>
          <td>
              <b>Time:</b>
