@@ -14,6 +14,13 @@ $timeToComplete = urldecode(htmlspecialchars(($_POST["ttc"])));
 
 $testType = urldecode(htmlspecialchars(($_POST["tt"])));
 $textarea = urldecode(htmlspecialchars(($_POST["t"])));
+$similarity = urldecode(htmlspecialchars(($_POST["s"])));
+$transcribedText = urldecode(htmlspecialchars(($_POST["wt"])));
+
+$wordpredictions = urldecode(htmlspecialchars(($_POST["wp"])));
+$wordpredictionscount = urldecode(htmlspecialchars(($_POST["wc"])));
+$wordlookupscount = urldecode(htmlspecialchars(($_POST["wlc"])));
+$wordlookups = urldecode(htmlspecialchars(($_POST["wl"])));
 
 $user_ip = getUserIP();
 
@@ -45,8 +52,8 @@ $result = $conn->query($sql);
 */
 
 
-$stmt = $conn->prepare("INSERT INTO dictionaries.teapresults (ipaddress, name, email, gender, age, totalkeypresses, totalcharacters, totalwords, savedkeystrokes, timetocomplete, secondstocomplete, testtype, textarea) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("ssssiiiiisiis", $user_ip, $name, $email, $gender, $age, $totalKeypresses, $totalCharacters, $totalWords, $savedKeystrokes, $timeToComplete, $time_seconds, $testType, $textarea );
+$stmt = $conn->prepare("INSERT INTO dictionaries.teapresults (ipaddress, name, email, gender, age, totalkeypresses, totalcharacters, totalwords, savedkeystrokes, timetocomplete, secondstocomplete, testtype, similarity, textarea, transcribedText, wordpredictionscount, wordpredictions, wordlookupscount, wordlookups) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssiiiiisiidssisis", $user_ip, $name, $email, $gender, $age, $totalKeypresses, $totalCharacters, $totalWords, $savedKeystrokes, $timeToComplete, $time_seconds, $testType, $similarity, $textarea, $transcribedText, $wordpredictionscount, $wordpredictions, $wordlookupscount, $wordlookups );
 $stmt->execute();
 $stmt->close();
 $conn->close();
