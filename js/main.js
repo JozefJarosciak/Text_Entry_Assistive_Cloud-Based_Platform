@@ -93,14 +93,38 @@ $(function () {
 
     });
 
+
+
     $("#textarea").keyup(function (event) {
 
         keyPresses = keyPresses+1;
+        if ((keyPresses>=1) && (keyPressesRun==false)){
+            startPause2();
+            keyPressesRun = true;
+        }
 
         if (document.getElementById("creativeWritingSwitch").checked === true) {
             if (Number(document.getElementById("wordCounter").innerText) >= 100) {
-                document.getElementById("form_container").style.display = "block";
-                saveToDB(false,1);
+                //document.getElementById("form_container").style.display = "block";
+                startPause2();
+                saveToDB(false,0);
+
+                $( "#form_container" ).dialog({
+                    resizable: false,
+                    height: "auto",
+                    width: 500,
+                    modal: true,
+                    buttons: {
+                        "Submit Results": function() {
+                            saveToDB(true,0);
+                            $( this ).dialog( "close" );
+                        },
+                        Cancel: function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                });
+
             }
         }
 
@@ -131,11 +155,26 @@ $(function () {
 
                 */
                 document.getElementById("detailStat").style.display = "none";
-                document.getElementById("form_container").style.display = "block";
+                //document.getElementById("form_container").style.display = "block";
 
                 startPause2();
                 saveToDB(false,0);
-                alert("\n\nTest Completed!\n\nPlease fill up the form below and press the 'Submit Results' button!");
+
+                $( "#form_container" ).dialog({
+                    resizable: false,
+                    height: "auto",
+                    width: 500,
+                    modal: true,
+                    buttons: {
+                        "Submit Results": function() {
+                            saveToDB(true,0);
+                            $( this ).dialog( "close" );
+                        },
+                        Cancel: function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                });
             }
 
         }
@@ -430,7 +469,7 @@ function creativeWritingOnOff() {
         document.getElementById("detailStat").style.display = "block";
         document.getElementById("textarea").value = "";
         document.getElementById("quickHelp").style.display = "none";
-        document.getElementById("form_container").style.display = "none";
+      //  document.getElementById("form_container").style.display = "none";
         document.getElementById("headerDiscovery").style.display = "none";
         document.getElementById("knowledgeBox").style.display = "none";
         document.getElementById("shortHelp").style.display = "none";
@@ -470,7 +509,7 @@ function transcriptionOnOff() {
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
     document.getElementById("detailStat").style.display = "block";
-    document.getElementById("form_container").style.display = "none";
+    //document.getElementById("form_container").style.display = "none";
     nodes = []; nodes = new vis.DataSet([]);
         edges = [];edges = new vis.DataSet([]);
         var container = document.getElementById('mynetwork');
@@ -1044,7 +1083,7 @@ function getRandomWords() {
     document.getElementById("keystrokesSaved").innerText = "0";
     document.getElementById("percentSaved").innerText = "0";
     document.getElementById("detailStat").style.display = "block";
-    document.getElementById("form_container").style.display = "none";
+//    document.getElementById("form_container").style.display = "none";
     nodes = []; nodes = new vis.DataSet([]);
     edges = [];edges = new vis.DataSet([]);
     var container = document.getElementById('mynetwork');
@@ -1712,14 +1751,14 @@ function saveToDB(response,message) {
             tw: document.getElementById("wordCounter").innerText,
             sk: document.getElementById("keystrokesSaved").innerText,
             ttc: document.getElementById("output2").innerText,
-            tt: testtype.toString()
+            tt: testtype.toString(),
+            t: document.getElementById("textarea").value
         },
         function(datar) {
             if (response===true) {
                 alert("Thank you, we've received your test result!");
-
+                location.reload();
             } else {
-
                 if (message===1) {
                     alert("Thank you, this test has completed. We've saved your test results!");
                 }

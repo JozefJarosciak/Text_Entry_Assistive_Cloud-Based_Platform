@@ -13,6 +13,7 @@ $savedKeystrokes = urldecode(htmlspecialchars(($_POST["sk"])));
 $timeToComplete = urldecode(htmlspecialchars(($_POST["ttc"])));
 
 $testType = urldecode(htmlspecialchars(($_POST["tt"])));
+$textarea = urldecode(htmlspecialchars(($_POST["t"])));
 
 $user_ip = getUserIP();
 
@@ -36,10 +37,19 @@ echo $pieces[2]."<br>";
 //echo $timeToComplete; exit;
 
 
+/*
 
-$sql = "INSERT INTO `dictionaries`.`teapresults` (`ipaddress`, `email`, `gender`, `age`, `totalkeypresses`, `totalcharacters`, `totalwords`, `savedkeystrokes`, `timetocomplete`, `secondstocomplete`, `testtype`) VALUES ";
-$sql .= "('".$user_ip."', '".$email."', '".$gender."', '".$age."', '".$totalKeypresses."', '".$totalCharacters."', '".$totalWords."', '".$savedKeystrokes."', '".$timeToComplete."', '".$time_seconds."', '".$testType."');";
+$sql = "INSERT INTO `dictionaries`.`teapresults` (`ipaddress`, `email`, `gender`, `age`, `totalkeypresses`, `totalcharacters`, `totalwords`, `savedkeystrokes`, `timetocomplete`, `secondstocomplete`, `testtype`, `textarea`) VALUES ";
+$sql .= "('".$user_ip."', '".$email."', '".$gender."', '".$age."', '".$totalKeypresses."', '".$totalCharacters."', '".$totalWords."', '".$savedKeystrokes."', '".$timeToComplete."', '".$time_seconds."', '".$testType."', '".$textarea."');";
 $result = $conn->query($sql);
+*/
+
+
+$stmt = $conn->prepare("INSERT INTO dictionaries.teapresults (ipaddress, name, email, gender, age, totalkeypresses, totalcharacters, totalwords, savedkeystrokes, timetocomplete, secondstocomplete, testtype, textarea) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->bind_param("ssssiiiiisiis", $user_ip, $name, $email, $gender, $age, $totalKeypresses, $totalCharacters, $totalWords, $savedKeystrokes, $timeToComplete, $time_seconds, $testType, $textarea );
+$stmt->execute();
+$stmt->close();
+$conn->close();
 
 function getUserIP()
 {

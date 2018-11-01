@@ -146,15 +146,28 @@
     </table>
 
 
-            <div id="form_container">
-            <h1><a>Please Fill Up The Form and Submit Results</a></h1>
-            Full Name: <input type="text" id="your_name" size="35" value=""><br>
-            Your Email: <input type="email" id="email" size="35" value=""><br>
-            Age: <input type="number" id="age" value=""><br>
-            Gender: <input type="radio" name="gender" id="gender1" value="Male"> Male
+        <!--
+                    <div id="form_container">
+                    <h1><a>Please Fill Up The Form and Submit Results</a></h1>
+                    Full Name: <input type="text" id="your_name" size="35" value=""><br>
+                    Your Email: <input type="email" id="email" size="35" value=""><br>
+                    Age: <input type="number" id="age" value=""><br>
+                    Gender: <input type="radio" name="gender" id="gender1" value="Male"> Male
+                    <input type="radio" name="gender" id="gender2" value="Female"> Female
+                    <br>
+                    <button onclick="saveToDB(true,0)">Submit Results</button><br><br>
+                </div>
+        -->
+
+
+        <div id="form_container" title="Thank you for participating in our study!">
+            <br><b>Please fill up all of the fields below and press the 'Submit Results' button.</b><br><br>
+            Full Name:<br><input type="text" id="your_name" size="35" value=""><br><br>
+            Your Email:<br><input type="email" id="email" size="35" value=""><br><br>
+            Age:<br><input type="number" id="age" value=""><br><br>
+            Gender:<br><input type="radio" name="gender" id="gender1" value="Male"> Male
             <input type="radio" name="gender" id="gender2" value="Female"> Female
-            <br>
-            <button onclick="saveToDB(true,0)">Submit Results</button><br><br>
+
         </div>
 
 
