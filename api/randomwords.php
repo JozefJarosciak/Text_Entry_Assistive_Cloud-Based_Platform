@@ -14,7 +14,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = 'SELECT word FROM en_english479k WHERE word IN (SELECT word FROM en_english479k WHERE CHAR_LENGTH(word) >= 12 AND word NOT LIKE "% %" AND word NOT LIKE "%.%" AND word NOT LIKE "%-%" AND word NOT LIKE "%s" AND word NOT LIKE "%ed" AND word NOT LIKE "%al" and word NOT LIKE "%z%" and word NOT LIKE "%s%" AND (ASCII(word) BETWEEN 97 AND 122) AND rank<50000) group by left(word, 2) ORDER BY RAND() LIMIT 51';
+$sql = 'SELECT word FROM en_english479k WHERE word IN (SELECT word FROM en_english479k WHERE CHAR_LENGTH(word) >= 10 AND word NOT LIKE "% %" AND word NOT LIKE "%.%" AND word NOT LIKE "%-%" AND word NOT LIKE "%s" AND word NOT LIKE "%ed" AND word NOT LIKE "%al" and word NOT LIKE "%z%" and word NOT LIKE "%s%" AND (ASCII(word) BETWEEN 97 AND 122) AND rank<50000) group by left(word, 2) ORDER BY RAND() LIMIT 55';
 
 $result = $conn->query($sql);
 $rows = array();

@@ -13,6 +13,7 @@ var displayHelp = 0;
 var similscoreRun = false;
 var keyPressesRun = false;
 var savedList = [];
+var savedListTerms = [];
 
 $(function () {
     document.getElementById("transcribeTextWrapper").style.display = "none";
@@ -362,7 +363,8 @@ $(function () {
                         }
                         var countSaved = currentCountofKeystrokesSaved + Number(ui.item.value.length - lastWord.length);
                         console.log("Words: " + lastWord + " - " + ui.item.value + " | Saved: " + countSaved);
-                        savedList.push(lastWord + "|" + ui.item.value + "|" + Number(ui.item.value.length - lastWord.length))
+                        savedList.push(lastWord + "|" + ui.item.value + "|" + Number(ui.item.value.length - lastWord.length));
+                        savedListTerms.push(ui.item.value);
                         document.getElementById("keystrokesSaved").innerText = countSaved;
 
 
@@ -433,6 +435,7 @@ function creativeWritingOnOff() {
     } else {
         getRandomWords();
         savedList = [];
+        savedListTerms = [];
         researchTopics = [];
         keyPresses = 0;
         keyPressesRun = false;
@@ -477,7 +480,7 @@ function creativeWritingOnOff() {
 }
 
 function transcriptionOnOff() {
-    savedList = [];
+    savedList = []; savedListTerms = [];
     researchTopics = [];
     keyPresses = 0;
     keyPressesRun = false;
@@ -733,7 +736,7 @@ function showNodeInfo() {
 
                 researchTopics.push(dataFinal[0]);
                 document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + " " + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + ' &nbsp;<br><br>';
-
+                savedListTerms.push(dataFinal[0]);
                 if (dataFinal[5]) {
                     try {
                         for (var xx = 4; xx < dataFinal.length - 1; xx++) {
@@ -928,7 +931,7 @@ function getTopHelp() {
                             }
                             researchTopics.push(dataFinal[0]);
                             document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '  &nbsp;<br><br>';
-
+                            savedListTerms.push(dataFinal[0]);
 
                             try {
                                 for (var xx = 4; xx < dataFinal.length; xx++) {
@@ -977,6 +980,21 @@ function getTopHelp() {
     });
 
     if (spaceCount >= 1) {
+
+        if (spaceCount>3) {
+
+
+            savedListTerms = uniq(savedListTerms);
+            if (savedListTerms[savedListTerms.length-1] === getLast3Words(lastLine).removeStopWords()) {
+                lastLine =  savedListTerms[savedListTerms.length-2] + " " + getLast3Words(lastLine).removeStopWords();
+            }else {
+                lastLine =  savedListTerms[savedListTerms.length-1] + " " + getLast3Words(lastLine).removeStopWords();
+            }
+
+            console.log("Adjusted Last Line:" + lastLine)
+        }
+
+
         var url2 = hostname + "api/bing-parser.php?q=" + lastLine;
         console.log(url2);
         $.get(url2, function (json) {
@@ -1003,7 +1021,7 @@ function getTopHelp() {
                 if (firstSentence.indexOf("Image:") < 0) {
                     //  console.log(researchSentences);
                     //if (arrayContains(firstSentence,researchSentences) === false) {
-                    document.getElementById("shortHelp").innerHTML = " Instant Answer: " + firstSentence + " <br> "; // check for last 3 words
+                    document.getElementById("shortHelp").innerHTML = " Suggestion: " + firstSentence + " <br> "; // check for last 3 words
                     researchSentences.push(firstSentence);
                     //}
 
@@ -1014,7 +1032,7 @@ function getTopHelp() {
                     firstSentence = firstSentence2[1];
                     // console.log(researchSentences);
                     //if (arrayContains(firstSentence,researchSentences) === false) {
-                    document.getElementById("shortHelp").innerHTML = " Instant Answer: " + firstSentence + " <br> ";
+                    document.getElementById("shortHelp").innerHTML = " Suggestion: " + firstSentence + " <br> ";
                     researchSentences.push(firstSentence);
                     //}
 
@@ -1036,7 +1054,7 @@ function getTopHelp() {
                             wikiLink = data;
                             if (arrayContains(data, researchSentences) === false) {
                                 if (data.toLowerCase().indexOf("undefined") < 0) {
-                                    document.getElementById("shortHelp").innerHTML = " Research: " + data + " <br> ";
+                                    document.getElementById("shortHelp").innerHTML = " Suggestion: " + data + " <br> ";
                                     researchSentences.push(data);
                                 }
                             }
@@ -1097,6 +1115,14 @@ function getLastWord(str) {
     str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
     // get the last word
     return str.trim().split(" ").reverse()[0];
+}
+
+function getLast3Words(str) {
+    // strip punctuations
+    str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
+    str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
+    // get the last word
+    return str.trim().split(" ").reverse()[2] + " " + str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
 }
 
 function splitMulti(str, tokens) {
@@ -1230,12 +1256,16 @@ function saveToDB(response, message) {
         gender = "Female";
     }
 
-    var lastWrd = getLastWord(document.getElementById("transcribeText").innerText);
+    var lastWrd = getLast5Words(document.getElementById("transcribeText").innerText);
     var sentencesText = document.getElementById("transcribeText").innerText.replace(lastWrd, "").trim();
     var typedText = document.getElementById("textarea").value.trim();
+    typedText = typedText.replace(/[\n\r]/g, ' ');
+
+
     var similarityScore = Math.round(((similarity(typedText.trim(), sentencesText.trim()) * 100)) * 100) / 100;
 
     researchTopics = uniq(researchTopics);
+
     $.post(
         postResultUrl,
         {
@@ -1250,7 +1280,7 @@ function saveToDB(response, message) {
             ttc: document.getElementById("output2").innerText,
             tt: testtype.toString(),
             s: similarityScore,
-            t: document.getElementById("textarea").value,
+            t: typedText,
             wt: sentencesText,
             wc: savedList.length,
             wp: savedList.join(";"),
@@ -1784,18 +1814,12 @@ $(document)
         this.rows = minRows + rows + 1;
     });
 
-function getLastTwoWords(str) {
-    // strip punctuations
-    str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
-    str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
-    // get the last word
-    return str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
-}
 
-function getLastThreeWords(str) {
+
+function getLast5Words(str) {
     // strip punctuations
     str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
     str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
     // get the last word
-    return str.trim().split(" ").reverse()[2] + " " + str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
+    return str.trim().split(" ").reverse()[4] + " " + str.trim().split(" ").reverse()[3] + " " + str.trim().split(" ").reverse()[2] + " " + str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
 }
