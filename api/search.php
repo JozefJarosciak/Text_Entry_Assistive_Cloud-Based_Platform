@@ -38,7 +38,7 @@ if ($transcription>0) {
     $urlsToProcess = array(
         'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=0&c=12',
         'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=1&c=12',
-        'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=2&c=12',
+    //    'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=2&c=12',
 //        'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=3&c=10'
     );
 } else {

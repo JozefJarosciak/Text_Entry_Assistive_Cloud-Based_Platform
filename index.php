@@ -190,12 +190,12 @@
 
 
     <div class="row footer">
-        <small><b>Thesis:</b> JJ-H00058995; <b>Requirements:</b> Chrome 69+, Min. Resolution: 1024x768; <a
+        <small><b>UOL Dissertation:</b> H00058995; <b>Requirements:</b> Chrome 69+, Min. Resolution: 1024x768; <a
                     href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">Open Source</a>
             under <a href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform/blob/master/LICENSE.md" target="_blank">AGPL-3.0</a>
             ; ©
             <script>document.write(new Date().getFullYear())</script>
-            J.Jarosciak.
+            Jozef Jarosciak.
         </small>
 
         </div>
