@@ -364,7 +364,7 @@ $(function () {
                         var countSaved = currentCountofKeystrokesSaved + Number(ui.item.value.length - lastWord.length);
                         console.log("Words: " + lastWord + " - " + ui.item.value + " | Saved: " + countSaved);
                         savedList.push(lastWord + "|" + ui.item.value + "|" + Number(ui.item.value.length - lastWord.length));
-                        savedListTerms.push(ui.item.value);
+                       // savedListTerms.push(ui.item.value);
                         document.getElementById("keystrokesSaved").innerText = countSaved;
 
 
@@ -732,7 +732,7 @@ function showNodeInfo() {
 
             var dataFinal = data.split("|");
 
-            if (dataFinal[0]) {
+            if (dataFinal[1]) {
 
                 researchTopics.push(dataFinal[0]);
                 document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + " " + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + ' &nbsp;<br><br>';
@@ -907,7 +907,7 @@ function getTopHelp() {
 
                         var dataFinal = data.split("|");
 
-                        if (dataFinal[0]) {
+                        if (dataFinal[1]) {
 
 
                             var nameForGraph = dataFinal[0];
@@ -980,11 +980,9 @@ function getTopHelp() {
     });
 
     if (spaceCount >= 1) {
+        savedListTerms = uniq(savedListTerms);
+        if (spaceCount>4) {
 
-        if (spaceCount>3) {
-
-
-            savedListTerms = uniq(savedListTerms);
             if (savedListTerms[savedListTerms.length-1] === getLast3Words(lastLine).removeStopWords()) {
                 lastLine =  savedListTerms[savedListTerms.length-2] + " " + getLast3Words(lastLine).removeStopWords();
             }else {

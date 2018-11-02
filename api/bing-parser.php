@@ -21,6 +21,7 @@ try {
     $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
     $b_focusTextMedium = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
     $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextLarge', 'div');
+    $b_focusTextSmall = getElementsByClassName($dom, 'b_focusTextSmall', 'div');
     $rcExpC =  getElementsByClassName($dom, 'rcExpC', 'div');
     $rcABP =  getElementsByClassName($dom, 'rcABP', 'div');
    // $df_con = getElementsByClassName($dom, 'rwrl rwrl_sec rwrl_padref', 'div');
@@ -60,7 +61,9 @@ if ($wob_t) {
 
 
 
-if ($b_focusTextMedium) {
+if ($b_focusTextSmall) {
+    echo $b_focusTextSmall[0]->textContent;
+} else if ($b_focusTextMedium) {
     echo $b_focusTextMedium[0]->textContent;
 } else if ($b_focusTextLarge) {
     echo $b_focusTextLarge[0]->textContent;
