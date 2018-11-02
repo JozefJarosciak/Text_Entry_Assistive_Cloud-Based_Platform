@@ -189,7 +189,7 @@
     </div>
 
 
-
+<!--
     <div class="row footer">
         <small><b>UOL Dissertation:</b> H00058995; <b>Requirements:</b> Chrome 69+, Min. Resolution: 1024x768; <a
                     href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">Open Source</a>
@@ -200,11 +200,36 @@
         </small>
 
         </div>
+-->
 
+    <div class="row footer">
+        <small><b>UOL Dissertation:</b> H00058995; <b>Requirements:</b> Chrome 69+, Min. Resolution: 1024x768; Open Source under AGPL-3.0; © <script>document.write(new Date().getFullYear())</script> Jozef Jarosciak.
+        </small>
 
+    </div>
 
 
 </div>
+
+
+
+<!-- Default Statcounter code for Jarosciak.com Textentry
+http://www.jarosciak.com/textentry/ -->
+<script type="text/javascript">
+    var sc_project=11862997;
+    var sc_invisible=1;
+    var sc_security="5d0e23fa";
+</script>
+<script type="text/javascript"
+        src="https://www.statcounter.com/counter/counter.js"
+        async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+                                      href="http://statcounter.com/" target="_blank"><img
+                    class="statcounter"
+                    src="//c.statcounter.com/11862997/0/5d0e23fa/1/" alt="Web
+Analytics"></a></div></noscript>
+<!-- End of Statcounter Code -->
+
 
 </body>
 

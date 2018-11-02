@@ -984,7 +984,9 @@ function getTopHelp() {
         if (spaceCount>4) {
 
             if (savedListTerms[savedListTerms.length-1] === getLast3Words(lastLine).removeStopWords()) {
+                if(typeof savedListTerms[savedListTerms.length-2] !== 'undefined') {
                 lastLine =  savedListTerms[savedListTerms.length-2] + " " + getLast3Words(lastLine).removeStopWords();
+                }
             }else {
                 lastLine =  savedListTerms[savedListTerms.length-1] + " " + getLast3Words(lastLine).removeStopWords();
             }
