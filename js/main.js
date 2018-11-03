@@ -891,8 +891,9 @@ function getTopHelp() {
         }
     */
     $.ajax({
-        url: hostname + "/api/bing-text-analytics2.php?w=0&q=" + textEntryContent, success: function (data) {
-            //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+       // url: hostname + "/api/wikipedia-api.php?q=" + textEntryContent, success: function (data) {
+            url: hostname + "/api/bing-text-analytics2.php?w=0&q=" + textEntryContent, success: function (data) {
+            //$.ajax({ url: hostname + "/api/binfreg-text-analytics.php?q=" + lastLine, success: function(data) {
 
             var dataFinal = data.split("|");
             var lastRecognizedElement = dataFinal[dataFinal.length - 2];
@@ -907,7 +908,7 @@ function getTopHelp() {
 
                         var dataFinal = data.split("|");
 
-                        if (dataFinal[1]) {
+                        if (dataFinal[3]) {
 
 
                             var nameForGraph = dataFinal[0];
