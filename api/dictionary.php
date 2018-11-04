@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 //$sql = 'select * from textentry where word like "'.$q.'%" and word not like "'.$q.'"  order by rank ASC limit 3';
 
 if ($charLen) {
-    $lenghtLimit = "AND rank<50000 AND (ASCII(word) BETWEEN 97 AND 122) AND CHAR_LENGTH(word) >= ".$charLen." AND word NOT LIKE '% %' AND word NOT LIKE '%.%' AND word NOT LIKE '%-%' AND word NOT LIKE '%s' AND word NOT LIKE '%ed' AND word NOT LIKE '%al' and word NOT LIKE '%z%' and word NOT LIKE '%s%'";
+    $lenghtLimit = "AND (rank>0 and rank<50000) AND (ASCII(word) BETWEEN 97 AND 122) AND CHAR_LENGTH(word) >= ".$charLen." AND word NOT LIKE '% %' AND word NOT LIKE '%.%' AND word NOT LIKE '%s' AND word NOT LIKE '%ed' AND word NOT LIKE '%al' and word NOT LIKE '%z%' and word NOT LIKE '%s%'";
 } else {
     $lenghtLimit = "AND CHAR_LENGTH(word) >= 0";
 }

@@ -1278,9 +1278,9 @@ function saveToDB(response, message) {
     var testtype = 0;
 
     if (document.getElementById("transcriptionSwitch").checked === true) {
-        testtype = 1;
-    } else {
         testtype = 2;
+    } else {
+        testtype = 1;
     }
 
     if ((document.getElementById("creativeWritingSwitch").checked === true) && (document.getElementById("transcriptionSwitch").checked === true)) {
