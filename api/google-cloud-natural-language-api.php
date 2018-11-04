@@ -34,7 +34,7 @@ $result = curl_exec($ch);
 $response = json_decode(curl_exec($ch), true);
 curl_close($ch);
 
-print_r($result);
+//print_r($result);
 
 //echo "<hr>";
 

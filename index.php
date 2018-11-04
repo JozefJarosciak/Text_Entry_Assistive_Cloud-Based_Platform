@@ -10,8 +10,7 @@
     <script src="js/jquery-ui.min.js"></script>
     <script src="js/jquery.mark.min.js"></script>
     <script src="js/vis.min.js"></script>
-    <script src="js/main.js"></script>
-
+    <script src="js/main.js?n=<?php echo rand(1000, 100000);?>"></script>
     <link rel="stylesheet" href="css/main.css" type="text/css">
     <link rel="stylesheet" href="css/vis-network.min.css" type="text/css"/>
 
@@ -98,10 +97,18 @@
 
 
         <table id="topTable">
+
+
+
             <tr>
                 <th><h3>ENTER TEXT</h3> <small id="detailHeader">(use ENTER and ↑↓ arrows to utilize the real-time suggestions)</small></th>
                 <th id="headerDiscovery"><h3>DETAILS</h3> <small id="detailHeader">(click words to add them to text editor)</small></th>
             </tr>
+
+
+
+            </tr>
+
             <tr>
                 <td id="textareatd" style="width:45%;">
 
@@ -109,19 +116,40 @@
                         <textarea id='textarea' spellcheck="false"></textarea>
                     </div>
                 </td>
+
+
                 <td id="quickHelpCell" style="width:50%;">
 
+
+
                     <div id="quickHelp">
+
+
                         <div id="shortHelp" onclick="enableHighlighting()"></div>
+
                        <small>
                             <span id="topHelp" onclick="enableHighlighting()">
                             </span>
                         </small>
+
                     </div>
 
                 </td>
+
             </tr>
+
+            <div id="wikiLookupWrapper">
+            <tr>
+
+                <td>
+                </td>
+                <td>
+                    <div id="appendEnabled2" style="width: 100%;"><b>Load Wikipedia Article: </b><input id="wikiLookup" placeholder="Type Here to Search Wikipedia Directly" style="width: 100%"></div>
+                </td>
+            </tr>
+            </div>
         </table>
+
 
 
 
@@ -184,6 +212,7 @@
 
 
     <div class="row content" id="knowledgeBox">
+
         <h3>RESEARCH AREA <small id="detailHeader">(double click the nodes to load details | drag to re-arrange)</small></h3>
         <div id="mynetwork" ondblclick="showNodeInfo()"></div>
     </div>

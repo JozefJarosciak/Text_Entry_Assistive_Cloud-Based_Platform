@@ -128,6 +128,9 @@ transcribeTextWrapper{
     margin-right: auto;
 }
 
+#wikiLookup{
+    background: #ffebe6;
+}
 
 mark{
     background: #ffcad2;
@@ -149,7 +152,7 @@ mark{
 #shortHelp{
     background-color: #d8e1ff;
     width: 100%;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     text-align: center;
     color: #280000;
