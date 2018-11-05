@@ -604,8 +604,8 @@ function createNodesEdges(name, textForSearch) {
 
     //showNodeInfo();'
     if (initialNetworkVis > 0) {
-        network.focus(nodes.length + 1, {scale: 1.0});
-        network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
+        network.focus(nodes.length + 1);  network.moveTo({position: {x: 0, y: 0}});
+        //network.focus(nodes.length + 1, {scale: 1.0});  network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
         addNodesAround(name, nodes.length, textForSearch);
     }
 
@@ -722,8 +722,8 @@ function addNodesAround(name, id, textForSearch) {
         }
     });
     // if (initialNetworkVis>0) {
-    network.focus(id, {scale: 1.0});
-    network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
+   // network.focus(id, {scale: 1.0});network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
+    network.focus(id);  network.moveTo({position: {x: 0, y: 0}});
 
 }
 
@@ -935,7 +935,7 @@ function getDuckDuckGoArticle(nameForGraph) {
         async: false,
         dataType: "json",
         success: function (data, textStatus, jqXHR) {
-
+        if (data) {
             var markup = data.parse.text["*"];
             var blurb = $('<div></div>').html(markup);
             //   $('#article').html($(blurb).find('p'));
@@ -952,13 +952,13 @@ function getDuckDuckGoArticle(nameForGraph) {
                 document.getElementById("topHelp").innerHTML += " <br> <table id=\"DuckDuckGo\"><tr><td> " + sentence + " <br> ";
             } else {
                 if (sentence.indexOf("Redirect to:")>=0) {
-                document.getElementById("topHelp").innerHTML = " Cannot locate your article!<br><br>If your term contains accented characters, please use them in your search.<br> ";
+               // document.getElementById("topHelp").innerHTML = " Cannot locate your article!<br><br>If your term contains accented characters, please use them in your search.<br> ";
                 } else {
                 document.getElementById("topHelp").innerHTML = "  " + sentence + " <br> ";
                 }
             }
 
-
+        }
         },
         error: function (errorMessage) {
         }
@@ -1001,8 +1001,14 @@ function getTopHelp() {
 
 
             var nameForGraph = lastRecognizedElement;
+
             if (nameForGraph) {
-                getDuckDuckGoArticle(nameForGraph);
+                var isnum = /^\d+$/.test(nameForGraph);
+                if (isnum===false) {
+                if (savedListTerms[savedListTerms.length-1] !== nameForGraph) {
+                    getDuckDuckGoArticle(nameForGraph);
+                }
+                }
             } else {
 
                 /*
