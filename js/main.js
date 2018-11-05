@@ -1,22 +1,19 @@
-var hostname = window.location.href.split('?')[0];
-var network;
-var nodes = new vis.DataSet([]);
-var edges = new vis.DataSet([]);
-var researchList = [];
-var researchSentences = [];
-var researchTopics = [];
-var initialNetworkVis = 0;
-var time2 = 0;
-var running2 = 0;
-var keyPresses = 0;
-var displayHelp = 0;
-var similscoreRun = false;
-var keyPressesRun = false;
-var savedList = [];
-var savedListTerms = [];
-var availTags = [];
-var word = "";
-
+let hostname = window.location.href.split('?')[0];
+let network;
+let nodes = new vis.DataSet([]);
+let edges = new vis.DataSet([]);
+let researchList = [];
+let researchSentences = [];
+let initialNetworkVis = 0;
+let time2 = 0;
+let running2 = 0;
+let keyPresses = 0;
+let displayHelp = 0;
+let similarScoreRun = false;
+let keyPressesRun = false;
+let savedList = [];
+let availTags = [];
+let lastWiki = '';
 $(function () {
 
 
@@ -26,21 +23,22 @@ $(function () {
     document.getElementById("form_container").style.display = "none";
     document.getElementById("wikiLookupWrapper").style.display = "none";
     document.getElementById("appendEnabled2").style.display = "block";
+    document.getElementById("wordCloudWrapper").style.display = "block";
 
 
 
     getRandomWords();
 
-    var availableTags = [];
-    var word;
-    var capitalizedResponse;
-    var lastWord;
-    var totalLength = 0;
+    let availableTags = [];
+    let word;
+    let capitalizedResponse;
+    let lastWord;
+    let totalLength = 0;
 
     /*
-        var url = new URL(window.location.href);
-        var s1 = url.searchParams.get("s1");
-        var s2 = url.searchParams.get("s2");
+        let url = new URL(window.location.href);
+        let s1 = url.searchParams.get("s1");
+        let s2 = url.searchParams.get("s2");
         if (s1 === "1") {s1 = "checked"} else {s1 = ""}
         if (s2 === "1") {s2 = "checked"} else {s2 = ""}
         console.log("PARAMETER 1: "+s1);
@@ -50,7 +48,7 @@ $(function () {
 // Overrides the default autocomplete filter function to
 // search only from the beginning of the string
     $.ui.autocomplete.filter = function (array, term) {
-        var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
+        let matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex(term), "i");
 
         if (array) {
             return $.grep(array, function (value) {
@@ -65,7 +63,7 @@ $(function () {
     document.getElementById('textarea').focus();
 
     // Getter
-    var minLength = $(".selector").autocomplete("option", "minLength");
+    let minLength = $(".selector").autocomplete("option", "minLength");
 
     // Setter
     $(".selector").autocomplete("option", "minLength", 3);
@@ -101,15 +99,20 @@ $(function () {
                     event2.preventDefault();
                 }
 
-                if (event2.keyCode === 13) {
-                    getDuckDuckGoArticle(document.getElementById("wikiLookup").value);
+               if (event2.keyCode === 13) {
+                   var delayInMilliseconds = 500;
+                   setTimeout(function() {
+                       getDuckDuckGoArticle(document.getElementById("wikiLookup").value);
+                   }, delayInMilliseconds);
+
                 }
 
 
+
             }}).autocomplete({
-        delay: 50,
+        delay: 100,
         minLength: 1,
-        multiline: true,
+        multiline: false,
         autoFocus: true,
         appendTo: '#appendEnabled2',
         source: function(request2, response2) {
@@ -119,7 +122,7 @@ $(function () {
                     $.getJSON("https://en.wikipedia.org/w/api.php?action=opensearch&search=" + (request2.term) + "&limit=15&namespace=0&format=json&callback=?&redirects=resolve", function(json2) {
 
                         availTags = json2[1];
-                    })
+                    });
 
                     response2(availTags, request2.term);
                 }
@@ -133,8 +136,7 @@ $(function () {
 
             document.getElementById("wikiLookup").value = ui.item.value;
             $('#wikiLookup').autocomplete('close');
-
-           getDuckDuckGoArticle(ui.item.value);
+            getDuckDuckGoArticle(ui.item.value);
 
             return false;
         }
@@ -143,7 +145,7 @@ $(function () {
 
 
     $("#textarea").keydown(function (e) {
-        var code = e.keyCode || e.which;
+        let code = e.keyCode || e.which;
         if (code == '9') {
             e.preventDefault();
             //placeCaretAtEnd(document.getElementById("textarea"));
@@ -173,9 +175,9 @@ $(function () {
         }
 
         if (document.getElementById("creativeWritingSwitch").checked === false) {
-            var typedText = document.getElementById("textarea").value;
-            var sentencesText = document.getElementById("transcribeText").innerText;
-            var similscore = Math.round(((similarity(typedText.trim(), sentencesText.trim()) * 100)) * 100) / 100;
+            let typedText = document.getElementById("textarea").value;
+            let sentencesText = document.getElementById("transcribeText").innerText;
+            let similscore = Math.round(((similarity(typedText.trim(), sentencesText.trim()) * 100)) * 100) / 100;
             //if (similscore<99.95) {
             document.getElementById("similarityCalculation").innerHTML = similscore + " %";
             //} else {                document.getElementById("similarityCalculation").innerHTML = "100 %" ;            }
@@ -186,12 +188,12 @@ $(function () {
             }
 
 
-            var spaceCounter = (document.getElementById("textarea").value.split(" ").length - 1);
+            let spaceCounter = (document.getElementById("textarea").value.split(" ").length - 1);
 
             if ((spaceCounter >= 50) && (Number(document.getElementById("wordCounter").innerText) >= 50)) {
-                //if ((similscore>=99.99) && (similscoreRun==false)) {
+                //if ((similscore>=99.99) && (similarScoreRun==false)) {
 
-                similscoreRun = true;
+                similarScoreRun = true;
 
                 /*
                 document.getElementById("form_container").innerHTML = "<br><br><h1 id='resultHighlight'>Transcription Test Result:</h1>" +
@@ -213,8 +215,9 @@ $(function () {
         }
         //if (document.getElementById("transcriptionSwitch").checked === true) {
         if ((event.keyCode === 8) || (event.keyCode === 46)) {
-            var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-            var countSaved = currentCountofKeystrokesSaved - 1;
+            let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+            let countSaved = currentCountofKeystrokesSaved - 1;
+            if (countSaved<0) {countSaved=0;}
             document.getElementById("keystrokesSaved").innerText = countSaved;
         }
 
@@ -239,7 +242,7 @@ $(function () {
             if (event.keyCode === 32) {
                 lastWord = getLastWord(document.getElementById("textarea").value);
                 if (lastWord) {
-                    var optionsMark = {"separateWordSearch": true, "value": "exactly"}
+                    let optionsMark = {"separateWordSearch": true, "value": "exactly"};
                     $("#transcribeText").mark(lastWord, optionsMark);
                 }
             }
@@ -278,7 +281,7 @@ $(function () {
 
 
                     lastWordSpace = extractLast(request.term.trim());
-                    var lastChar = request.term.substr(request.term.length - 1);
+                    let lastChar = request.term.substr(request.term.length - 1);
                     //console.log("!!!SPACE PRESSED!!! - '"+lastChar+"'");
 
 
@@ -287,11 +290,11 @@ $(function () {
                         // last sentence
                         textEntryContent = document.getElementById("textarea").value;
 
-                        var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
-                        var lastLine = arrayOfLines.slice(-1)[0];
+                        let arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
+                        let lastLine = arrayOfLines.slice(-1)[0];
 
                         //console.log("log: " + lastLine);
-                        var spaceCount = lastLine.split(" ").length - 1;
+                        let spaceCount = lastLine.split(" ").length - 1;
 
                         if (spaceCount > 1) {
 
@@ -317,8 +320,8 @@ $(function () {
                             // last sentence
                             textEntryContent = document.getElementById("textarea").value;
 
-                            var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
-                            var lastLine = arrayOfLines.slice(-1)[0];
+                            let arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
+                            let lastLine = arrayOfLines.slice(-1)[0];
                             if (lastLine.indexOf('.') > 0) {
                                 lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
                                 //  console.log("LAST SENTENCE: " + lastLine);
@@ -331,9 +334,9 @@ $(function () {
                                 console.log("START SEARCH");
                                 //  availableTags = [];
 
-                                var stopWords = ['known', 'know', 'and', 'also', 'like', 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'need', 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"];
+                                let stopWords = ['known', 'know', 'and', 'also', 'like', 'i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', "you're", "you've", "you'll", "you'd", 'your', 'yours', 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', "she's", 'her', 'hers', 'herself', 'it', "it's", 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves', 'what', 'which', 'who', 'whom', 'this', 'that', "that'll", 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does', 'did', 'doing', 'a', 'an', 'the', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so', 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', "don't", 'should', "should've", 'now', 'd', 'll', 'm', 'o', 're', 've', 'y', 'ain', 'aren', "aren't", 'couldn', "couldn't", 'didn', "didn't", 'doesn', "doesn't", 'hadn', "hadn't", 'hasn', "hasn't", 'haven', "haven't", 'isn', "isn't", 'ma', 'mightn', "mightn't", 'mustn', "mustn't", 'need', 'needn', "needn't", 'shan', "shan't", 'shouldn', "shouldn't", 'wasn', "wasn't", 'weren', "weren't", 'won', "won't", 'wouldn', "wouldn't"];
 
-                                var matches = stopWords.filter(function (windowValue) {
+                                let matches = stopWords.filter(function (windowValue) {
                                     if (windowValue) {
                                         return (windowValue.substring(0, lastWord.toLowerCase().length) === lastWord.toLowerCase());
                                     }
@@ -342,7 +345,7 @@ $(function () {
                                 if (matches.length <= 0) {
                                     //console.log(hostname);
 
-                                    var url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine + "&space=0";
+                                    let url2 = hostname + "api/search.php?q=" + lastWord + "&s=" + lastLine + "&space=0";
 
                                     if (document.getElementById("creativeWritingSwitch").checked === false) {
                                         url2 = hostname + "api/search.php?q=" + lastWord + "&s=&space=0&t=1";
@@ -388,7 +391,7 @@ $(function () {
 
                     if (event.keyCode !== 190) {
 
-                        var str = document.getElementById("textarea").value;
+                        let str = document.getElementById("textarea").value;
 
                         //console.log("STRING: " + str);
 
@@ -419,23 +422,26 @@ $(function () {
                         if (!lastWord) {
                             lastWord = "";
                         }
-                        var countSaved = currentCountofKeystrokesSaved + Number(ui.item.value.length - lastWord.length);
+                        let countSaved = currentCountofKeystrokesSaved + Number(ui.item.value.length - lastWord.length);
                         console.log("Words: " + lastWord + " - " + ui.item.value + " | Saved: " + countSaved);
                         savedList.push(lastWord + "|" + ui.item.value + "|" + Number(ui.item.value.length - lastWord.length));
-                       // savedListTerms.push(ui.item.value);
+
+                        if (countSaved<0) {countSaved=0;}
                         document.getElementById("keystrokesSaved").innerText = countSaved;
 
 
                         // percent saved
 
-                        var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-                        var currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
-                        var percentSaved3 = (Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100));
+                        currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                        let currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
+                        let percentSaved3 = (Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100));
+
+                        if (percentSaved3<0) {percentSaved3=0;}
                         document.getElementById("percentSaved").innerText = percentSaved3.toString();
 
                         /*
-                        var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-                        var percentSaved2 = Math.floor(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100) / 100;
+                        let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+                        let percentSaved2 = Math.floor(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100) / 100;
                         document.getElementById("percentSaved").innerText = percentSaved2.toString();
                         */
                         return false;
@@ -456,16 +462,18 @@ function updateStatistics() {
         document.getElementById("keystrokesSaved").innerText = "0";
         document.getElementById("percentSaved").innerText = "0";
     } else {
-        var totalLength = document.getElementById("textarea").value.length;
+        let totalLength = document.getElementById("textarea").value.length;
         document.getElementById("totalLength").innerText = keyPresses.toString();
         document.getElementById("totalCharacters").innerText = totalLength.toString();
 
 
         // percent saved
-        var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-        var currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
 
-        var percentSaved3 = (Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100));
+        let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+        let currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
+
+        let percentSaved3 = (Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100));
+        if (percentSaved3<0) {percentSaved3=0;}
         document.getElementById("percentSaved").innerText = percentSaved3.toString();
 
         /*
@@ -481,8 +489,8 @@ function updateStatistics() {
         }
 
         // Count Words
-        var matches = (document.getElementById("textarea").value).match(/[\w\d\’\'-]+/gi);
-        var countWordsSaved = matches ? matches.length : 0;
+        let matches = (document.getElementById("textarea").value).match(/[\w\d\’\'-]+/gi);
+        let countWordsSaved = matches ? matches.length : 0;
         document.getElementById("wordCounter").innerText = countWordsSaved.toString();
     }
 }
@@ -493,18 +501,17 @@ function creativeWritingOnOff() {
     } else {
         getRandomWords();
         savedList = [];
-        savedListTerms = [];
-        researchTopics = [];
+        researchList = [];
         keyPresses = 0;
         keyPressesRun = false;
-        similscoreRun = false;
+        similarScoreRun = false;
         reset2();
         document.getElementById("output2").innerHTML = "00:00:00";
         document.getElementById("transcribeTextWrapper").style.display = "block";
         document.getElementById("similarityCalculationWrapper").style.display = "block";
         document.getElementById("wikiLookupWrapper").style.display = "block";
         document.getElementById("appendEnabled2").style.display = "none";
-
+        document.getElementById("wordCloudWrapper").style.display = "none";
 
         document.getElementById("similarityCalculation").style.display = "none";
         document.getElementById("detailStat").style.display = "block";
@@ -531,9 +538,9 @@ function creativeWritingOnOff() {
         nodes = new vis.DataSet([]);
         edges = [];
         edges = new vis.DataSet([]);
-        var container = document.getElementById('mynetwork');
-        var data = {nodes: nodes, edges: edges};
-        var options = {autoResize: true, height: '100%', width: '100%'};
+        let container = document.getElementById('mynetwork');
+        let data = {nodes: nodes, edges: edges};
+        let options = {autoResize: true, height: '100%', width: '100%'};
         network = new vis.Network(container, data, options);
 //        network.update();
         //  network.refresh();
@@ -542,11 +549,10 @@ function creativeWritingOnOff() {
 }
 
 function transcriptionOnOff() {
-    savedList = []; savedListTerms = [];
-    researchTopics = [];
+    savedList = []; researchList = [];
     keyPresses = 0;
     keyPressesRun = false;
-    similscoreRun = false;
+    similarScoreRun = false;
     reset2();
     document.getElementById("output2").innerHTML = "00:00:00";
     document.getElementById("textarea").value = "";
@@ -562,9 +568,9 @@ function transcriptionOnOff() {
     nodes = new vis.DataSet([]);
     edges = [];
     edges = new vis.DataSet([]);
-    var container = document.getElementById('mynetwork');
-    var data = {nodes: nodes, edges: edges};
-    var options = {autoResize: true, height: '100%', width: '100%'};
+    let container = document.getElementById('mynetwork');
+    let data = {nodes: nodes, edges: edges};
+    let options = {autoResize: true, height: '100%', width: '100%'};
     network = new vis.Network(container, data, options);
     //  network.update();
     // network.refresh();
@@ -588,6 +594,20 @@ function capitalizeFirstLetter(string) {
     }
 }
 
+function createWikiLinks() {
+    researchList = uniq(researchList);
+   // console.log("Saved List Terms:"); console.log(researchList);
+    let result = "";
+    for (let i = 0; i < researchList.length; i++) {
+        //result = result + '<a href="javascript:void(0);" onclick="getDuckDuckGoArticle("'+researchList[i].trim()+'");\">'+ researchList[i].trim() + '</a> | ';
+       // result = result + '<a href="javascript:void(0);" id="'+researchList[i].trim()+'" onclick="getDuckDuckGoArticle('+researchList[i].trim()+');">'+researchList[i].trim()+'</a> | ';
+
+        result = result + '<button id="'+researchList[i].trim()+'" onclick="getDuckDuckGoArticle(\''+researchList[i].trim()+'\');">'+researchList[i].trim()+'</button> ';
+
+    };
+    document.getElementById("wordCloud").innerHTML = result;
+}
+
 function createNodesEdges(name, textForSearch) {
     //   if (name!=='I"s') {
 
@@ -595,11 +615,11 @@ function createNodesEdges(name, textForSearch) {
         nodes.add({id: nodes.length + 1, label: name, shape: 'box'});
         edges.add({from: 1, to: nodes.length});
         researchList.push(name);
-        console.log(researchList);
+        createWikiLinks();
     } else {
         nodes.add({id: nodes.length + 1, label: name, shape: 'box'});
         researchList.push(name);
-        console.log(researchList);
+        createWikiLinks();
     }
 
     //showNodeInfo();'
@@ -619,16 +639,16 @@ function addNodesAround(name, id, textForSearch) {
     //   console.log(textForSearch);
 
     try {
-        var splitText = textForSearch.split(".js");
+        let splitText = textForSearch.split(".js");
         textForSearch = splitText[0];
     } catch (e) {
     }
 
 
-    var colorNodes = getRandColor(5);
+    let colorNodes = getRandColor(5);
     /*
-        var matches = (textForSearch).match(/[\w\d\’\'-]+/gi);
-        var countWords = matches ? matches.length : 0;
+        let matches = (textForSearch).match(/[\w\d\’\'-]+/gi);
+        let countWords = matches ? matches.length : 0;
         if (countWords === 1) {
             textForSearch =  "Word%20"+ textForSearch;
         }
@@ -637,23 +657,23 @@ function addNodesAround(name, id, textForSearch) {
     $.ajax({
         url: hostname + "/api/bing-text-analytics2.php?w=1&q=" + textForSearch, success: function (data) {
 
-            var dataFinal = data.split("|");
+            let dataFinal = data.split("|");
 
-            for (var forLoop1 = 0; forLoop1 < dataFinal.length; forLoop1++) {
+            for (let forLoop1 = 0; forLoop1 < dataFinal.length; forLoop1++) {
 
-                var nameForGraph = dataFinal[forLoop1];
+                let nameForGraph = dataFinal[forLoop1];
                 if (nameForGraph) {
 
-                    var foundExist = 0;
-                    for (var xx = 0; xx < nodes.length; xx++) {
-                        var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                    let foundExist = 0;
+                    for (let xx = 0; xx < nodes.length; xx++) {
+                        let nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
                         if (nameForGraph.toLowerCase().trim() === nameFinal) {
                             foundExist++;
                         }
                     }
                     if (foundExist <= 0) {
                         nodes.add({id: nodes.length + 1, label: nameForGraph, shape: 'box', color: colorNodes});
-                        var selectedArray = network.getSelectedNodes();
+                        let selectedArray = network.getSelectedNodes();
 
 
                         if (id) {
@@ -671,17 +691,17 @@ function addNodesAround(name, id, textForSearch) {
                 // network.nodes.update({id:id, x:0, y: 0});
 
                 /*
-                var $this = $('#textarea');
-                var offset = $this.offset();
-                var width = $this.width();
-                var height = $this.height();
+                let $this = $('#textarea');
+                let offset = $this.offset();
+                let width = $this.width();
+                let height = $this.height();
 
-                var centerX = offset.left + width / 2;
-                var centerY = offset.top + height / 2;
+                let centerX = offset.left + width / 2;
+                let centerY = offset.top + height / 2;
 */
                 //network.nodes.focus({id:id, x:0, y: 0});
 
-                for (var xx = 1; xx < nodes.length; xx++) {
+                for (let xx = 1; xx < nodes.length; xx++) {
                     nodes.update({
                         id: xx,
                         x: undefined, y: undefined,
@@ -729,15 +749,15 @@ function addNodesAround(name, id, textForSearch) {
 
 function showKnowledgeGraph(id) {
     // create a network
-    var container = document.getElementById('mynetwork');
-    var data = {
+    let container = document.getElementById('mynetwork');
+    let data = {
         nodes: nodes,
         edges: edges
     };
 
-    // var options = {};
+    // let options = {};
 
-    var options = {
+    let options = {
         //physics: {           barnesHut: {                avoidOverlap: 1            }},
         autoResize: true,
         height: '100%',
@@ -761,12 +781,12 @@ function showKnowledgeGraph(id) {
     if (initialNetworkVis === 1) {
         network = new vis.Network(container, data, options);
     }
-    // var selectedArray = network.getSelectedNodes();
+    // let selectedArray = network.getSelectedNodes();
 
 
     /*
     network.on("selectNode", function (params) {
-        var node = network.body.nodes[id];
+        let node = network.body.nodes[id];
         node.setOptions({
             selected: true
         });
@@ -774,48 +794,48 @@ function showKnowledgeGraph(id) {
 */
     //   console.log("Selected Node: " + id);
 
-    network.focus(id, {scale: 1.0});
-    network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
+    network.focus(id);
+    network.moveTo({position: {x: 0, y: 0}});
 }
 
 function showNodeInfo() {
     //   document.getElementById("shortHelp").innerHTML = "";
 
-    var selectedArray = network.getSelectedNodes();
-    var nodeObj = network.body.data.nodes._data[selectedArray[0]];
+    let selectedArray = network.getSelectedNodes();
+    let nodeObj = network.body.data.nodes._data[selectedArray[0]];
     console.log(selectedArray[0] + " - " + nodeObj.label); //nodeObj.label to get label
-    var selectedNodeID = selectedArray[0];
+    let selectedNodeID = selectedArray[0];
     researchList.push(nodeObj.label);
-    console.log(researchList);
+    createWikiLinks();
     getDuckDuckGoArticle(nodeObj.label);
 
 }
 
 function getRandColor(brightness) {
     // Six levels of brightness from 0 to 5, 0 being the darkest
-    var rgb = [Math.random() * 256, Math.random() * 256, Math.random() * 256];
-    var mix = [brightness * 51, brightness * 51, brightness * 51]; //51 => 255/5
-    var mixedrgb = [rgb[0] + mix[0], rgb[1] + mix[1], rgb[2] + mix[2]].map(function (x) {
+    let rgb = [Math.random() * 256, Math.random() * 256, Math.random() * 256];
+    let mix = [brightness * 51, brightness * 51, brightness * 51]; //51 => 255/5
+    let mixedrgb = [rgb[0] + mix[0], rgb[1] + mix[1], rgb[2] + mix[2]].map(function (x) {
         return Math.round(x / 2.0)
-    })
+    });
     return "rgb(" + mixedrgb.join(",") + ")";
 }
 
 function enableHighlighting() {
-    var s = window.getSelection();
-    var range = s.getRangeAt(0);
-    var node = s.anchorNode;
-    while (range.toString().indexOf(' ') != 0) {
+    let s = window.getSelection();
+    let range = s.getRangeAt(0);
+    let node = s.anchorNode;
+    while (range.toString().indexOf(' ') !== 0) {
         range.setStart(node, (range.startOffset - 1));
     }
     range.setStart(node, range.startOffset + 1);
     do {
         range.setEnd(node, range.endOffset + 1);
 
-    } while (range.toString().indexOf(' ') == -1 && range.toString().trim() != '');
-    var str = range.toString().trim();
+    } while (range.toString().indexOf(' ') === -1 && range.toString().trim() !== '');
+    let str = range.toString().trim();
 
-    var wordHighligted = " " + str;
+    let wordHighligted = " " + str;
     wordHighligted = wordHighligted.replace(/\s\s+/g, ' ');
     wordHighligted = wordHighligted.replace(/ \s*$/, "");
     console.log("SELECTED: " + wordHighligted);
@@ -823,14 +843,15 @@ function enableHighlighting() {
     $("#textarea").val($("#textarea").val().trim() + wordHighligted);
 
 
-    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-    var countSaved = currentCountofKeystrokesSaved + wordHighligted.length;
+    let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+    let countSaved = currentCountofKeystrokesSaved + wordHighligted.length;
+    if (countSaved<0) {countSaved=0;}
     document.getElementById("keystrokesSaved").innerText = countSaved;
 
     /*
     // percent saved
-    var currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-    var percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
+    let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
+    let percentSaved = Math.round(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100);
     document.getElementById("percentSaved").innerText = percentSaved.toString();
 */
 
@@ -847,26 +868,25 @@ function enableHighlighting() {
         }
     }
 
-};
-
+}
 function getDuckDuckGoArticle(nameForGraph) {
-    var descriptionVar = "";
+    let descriptionVariable = "";
     $.ajax({
         url: hostname + "/api/duckduckgo-api.php?q=" + nameForGraph, success: function (data) {
             //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
-            var dataFinal = data.split("|");
+            let dataFinal = data.split("|");
 
-            descriptionVar = dataFinal[3];
+            descriptionVariable = dataFinal[3];
             if (dataFinal[3]) {
 
 
-                var nameForGraph = dataFinal[0];
+                let nameForGraph = dataFinal[0];
                 if (nameForGraph) {
 
-                    var foundExist = 0;
-                    for (var xx = 0; xx < nodes.length; xx++) {
-                        var nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
+                    let foundExist = 0;
+                    for (let xx = 0; xx < nodes.length; xx++) {
+                        let nameFinal = network.body.data.nodes._data[xx + 1].label.toLowerCase().trim();
                         if (nameForGraph.toLowerCase().trim() === nameFinal) {
                             foundExist++;
                             showKnowledgeGraph(xx + 1);
@@ -880,13 +900,16 @@ function getDuckDuckGoArticle(nameForGraph) {
                         }
                     }
                 }
-                researchTopics.push(dataFinal[0]);
+                researchList.push(dataFinal[0]);
+                researchList = uniq(researchList);
+
+                createWikiLinks();
                 document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '  &nbsp;<br><br>';
-                savedListTerms.push(dataFinal[0]);
+
 
                 try {
-                    for (var xx = 4; xx < dataFinal.length; xx++) {
-                        var dataFinal2 = dataFinal[xx].split(":");
+                    for (let xx = 4; xx < dataFinal.length; xx++) {
+                        let dataFinal2 = dataFinal[xx].split(":");
                         if (dataFinal2[1].indexOf('local.js') < 0) {
                             if (dataFinal2[1].indexOf('""') < 0) {
                                 if (dataFinal2[1].indexOf('undefined') < 0) {
@@ -925,7 +948,7 @@ function getDuckDuckGoArticle(nameForGraph) {
     });
 
     //Leading paragraph
-    var urlForMoreInfo ="http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + nameForGraph.replace(" ","_") + "&callback=?";
+    let urlForMoreInfo ="http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + nameForGraph.replace(" ","_") + "&callback=?";
 
 
     $.ajax({
@@ -936,27 +959,32 @@ function getDuckDuckGoArticle(nameForGraph) {
         dataType: "json",
         success: function (data, textStatus, jqXHR) {
         if (data) {
-            var markup = data.parse.text["*"];
-            var blurb = $('<div></div>').html(markup);
-            //   $('#article').html($(blurb).find('p'));
+            try {
+                let markup = data.parse.text["*"];
+                let blurb = $('<div></div>').html(markup);
+                //   $('#article').html($(blurb).find('p'));
 
-            var sentence = $(blurb).find('p').text();
-            if (descriptionVar) {
-                sentence = sentence.substring(sentence.indexOf(". ") + 1);
-            }
-            sentence = sentence.replace(/ *\([^)]*\) */g, " ").trim();
-            sentence = sentence.replace(/(\[.*?\])/g, '').split(". ");
-            sentence = sentence.reduce((prev, next, id) => prev + (id % 4 ? ". " : ". <br><br>") + next);
-
-            if (descriptionVar) {
-                document.getElementById("topHelp").innerHTML += " <br> <table id=\"DuckDuckGo\"><tr><td> " + sentence + " <br> ";
-            } else {
-                if (sentence.indexOf("Redirect to:")>=0) {
-               // document.getElementById("topHelp").innerHTML = " Cannot locate your article!<br><br>If your term contains accented characters, please use them in your search.<br> ";
-                } else {
-                document.getElementById("topHelp").innerHTML = "  " + sentence + " <br> ";
+                let sentence = $(blurb).find('p').text();
+                if (descriptionVariable) {
+                    sentence = sentence.substring(sentence.indexOf(". ") + 1);
                 }
+                sentence = sentence.replace(/ *\([^)]*\) */g, " ").trim();
+                sentence = sentence.replace(/(\[.*?\])/g, '').split(". ");
+                sentence = sentence.reduce((prev, next, id) => prev + (id % 4 ? ". " : ". <br><br>") + next);
+
+                if (descriptionVariable) {
+                    document.getElementById("topHelp").innerHTML += " <br> <table id=\"DuckDuckGo\"><tr><td> " + sentence + " <br> ";
+                } else {
+                    if (sentence.indexOf("Redirect to:")>=0) {
+                        // document.getElementById("topHelp").innerHTML = " Cannot locate your article!<br><br>If your term contains accented characters, please use them in your search.<br> ";
+                    } else {
+                        document.getElementById("topHelp").innerHTML = "  " + sentence + " <br> ";
+                    }
+                }
+            } catch (e) {
+
             }
+
 
         }
         },
@@ -966,15 +994,16 @@ function getDuckDuckGoArticle(nameForGraph) {
 
 
         document.getElementById("topHelp").innerHTML += '</td></tr></table>';
-
+    createWikiLinks();
+    console.log("Saved List Terms:"); console.log(researchList);
 }
 
 function getTopHelp() {
     //  document.getElementById("shortHelp").innerHTML = "";
 
-    var textEntryContent = document.getElementById("textarea").value;
-    var arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
-    var lastLine = arrayOfLines.slice(-1)[0];
+    let textEntryContent = document.getElementById("textarea").value;
+    let arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
+    let lastLine = arrayOfLines.slice(-1)[0];
     if (lastLine.indexOf('.') > 0) {
         lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
         //  console.log("LAST SENTENCE: " + lastLine);
@@ -982,11 +1011,11 @@ function getTopHelp() {
         // console.log("LAST SENTENCE: " + lastLine);
     }
 
-    //var spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
-    var spaceCount = (lastLine.split(" ").length - 1);
+    //let spaceCount = (lastLine.removeStopWords().split(" ").length - 1);
+    let spaceCount = (lastLine.split(" ").length - 1);
     console.log("spaceCount: " + spaceCount);
 
-    var wordNotFound = 0;
+    let wordNotFound = 0;
 
     $.ajax({
        // url: hostname + "/api/wikipedia-api.php?q=" + textEntryContent, success: function (data) {
@@ -994,28 +1023,28 @@ function getTopHelp() {
             url: hostname + "/api/bing-text-analytics2.php?w=0&q=" + textEntryContent, success: function (data) {
             //$.ajax({ url: hostname + "/api/binfreg-text-analytics.php?q=" + lastLine, success: function(data) {
 
-            var dataFinal = data.split("|");
+            let dataFinal = data.split("|");
 
 
-            var lastRecognizedElement = dataFinal[dataFinal.length - 2];
+            let lastRecognizedElement = dataFinal[dataFinal.length - 2];
 
 
-            var nameForGraph = lastRecognizedElement;
+            let nameForGraph = lastRecognizedElement;
 
             if (nameForGraph) {
-                var isnum = /^\d+$/.test(nameForGraph);
+                let isnum = /^\d+$/.test(nameForGraph);
                 if (isnum===false) {
-                if (savedListTerms[savedListTerms.length-1] !== nameForGraph) {
+                if (researchList[researchList.length-1] !== nameForGraph) {
                     getDuckDuckGoArticle(nameForGraph);
                 }
                 }
             } else {
 
                 /*
-                var getString = getLast3Words(lastLine.removeStopWords().replace(/[0-9]/g, '')).replace("undefined","").trim();
+                let getString = getLast3Words(lastLine.removeStopWords().replace(/[0-9]/g, '')).replace("undefined","").trim();
                 $.ajax({
                     url: hostname + "/api/wikipedia-api.php?q=" + getString, success: function (data2) {
-                        var wikiGet = data2.trim();
+                        let wikiGet = data2.trim();
                 if (wikiGet) {
                         getDuckDuckGoArticle(wikiGet);
                 }
@@ -1029,27 +1058,28 @@ function getTopHelp() {
     });
 
     if (spaceCount >= 1) {
-        savedListTerms = uniq(savedListTerms);
+        researchList = uniq(researchList);
+
         if (spaceCount>4) {
 
-            if (savedListTerms[savedListTerms.length-1] === getLast3Words(lastLine).removeStopWords()) {
-                if(typeof savedListTerms[savedListTerms.length-2] !== 'undefined') {
-                lastLine =  savedListTerms[savedListTerms.length-2] + " " + getLast3Words(lastLine).removeStopWords();
+            if (researchList[researchList.length-1] === getLast3Words(lastLine).removeStopWords()) {
+                if(typeof researchList[researchList.length-2] !== 'undefined') {
+                lastLine =  researchList[researchList.length-2] + " " + getLast3Words(lastLine).removeStopWords();
                 }
             }else {
-                lastLine =  savedListTerms[savedListTerms.length-1] + " " + getLast3Words(lastLine).removeStopWords();
+                lastLine =  researchList[researchList.length-1] + " " + getLast3Words(lastLine).removeStopWords();
             }
 
             console.log("Adjusted Last Line:" + lastLine)
         }
 
 
-        var url2 = hostname + "api/bing-parser.php?q=" + lastLine;
+        let url2 = hostname + "api/bing-parser.php?q=" + lastLine;
         console.log(url2);
         $.get(url2, function (json) {
             json = json + '. ';
-            var sentenceArray = json.split(". ")
-            var firstSentence = sentenceArray[0];
+            let sentenceArray = json.split(". ");
+            let firstSentence = sentenceArray[0];
             //if ((json.length > 2) && (json.length < 25)) {
             if (json.length > 2) {
 
@@ -1076,7 +1106,7 @@ function getTopHelp() {
 
 
                 } else {
-                    var firstSentence2 = splitMulti(firstSentence, ['.com', '.net', '.org', '.com', '.edu', '.gov', '.uk', '.au']);
+                    let firstSentence2 = splitMulti(firstSentence, ['.com', '.net', '.org', '.com', '.edu', '.gov', '.uk', '.au']);
 
                     firstSentence = firstSentence2[1];
                     // console.log(researchSentences);
@@ -1089,16 +1119,19 @@ function getTopHelp() {
 
 
                 // try if help comes up with something from wikipedia
-                var wikiLink = firstSentence;
+                let wikiLink = firstSentence;
 
                 if (hasNumber(wikiLink) === false) {
-                    //  var wikiLink2 = firstSentence.replace(/[0-9]/g, '');
+                    //  let wikiLink2 = firstSentence.replace(/[0-9]/g, '');
                     // wikiLink2 = wikiLink2.split(/jan/i).join('').split(/feb/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('');
 
 
                     $.ajax({
                         url: hostname + "/api/wikipedia-api.php?q=" + wikiLink, success: function (data) {
                             console.log("Wikipedia:" + data);
+
+
+
                             //  console.log(researchSentences);//
                             wikiLink = data;
                             if (arrayContains(data, researchSentences) === false) {
@@ -1122,7 +1155,7 @@ function getTopHelp() {
 
 function getRandomWords() {
     document.getElementById("textarea").value = "LOADING...";
-    var url2 = hostname + "api/randomwords.php";
+    let url2 = hostname + "api/randomwords.php";
     $.get(url2, function (randomwords) {
         document.getElementById("transcribeText").innerText = randomwords;
     });
@@ -1132,7 +1165,7 @@ function getRandomWords() {
 
     keyPresses = 0;
     keyPressesRun = false;
-    similscoreRun = false;
+    similarScoreRun = false;
     reset2();
     document.getElementById("output2").innerHTML = "00:00:00";
     document.getElementById("textarea").value = "";
@@ -1148,9 +1181,9 @@ function getRandomWords() {
     nodes = new vis.DataSet([]);
     edges = [];
     edges = new vis.DataSet([]);
-    var container = document.getElementById('mynetwork');
-    var data = {nodes: nodes, edges: edges};
-    var options = {autoResize: true, height: '100%', width: '100%'};
+    let container = document.getElementById('mynetwork');
+    let data = {nodes: nodes, edges: edges};
+    let options = {autoResize: true, height: '100%', width: '100%'};
     network = new vis.Network(container, data, options);
     //  network.update();
     // network.refresh();
@@ -1175,8 +1208,8 @@ function getLast3Words(str) {
 }
 
 function splitMulti(str, tokens) {
-    var tempChar = tokens[0]; // We can use the first token as a temporary join character
-    for (var i = 1; i < tokens.length; i++) {
+    let tempChar = tokens[0]; // We can use the first token as a temporary join character
+    for (let i = 1; i < tokens.length; i++) {
         str = str.split(tokens[i]).join(tempChar);
     }
     str = str.split(tempChar);
@@ -1192,13 +1225,13 @@ function hasNumber(myString) {
 }
 
 function similarity(s1, s2) {
-    var longer = s1;
-    var shorter = s2;
+    let longer = s1;
+    let shorter = s2;
     if (s1.length < s2.length) {
         longer = s2;
         shorter = s1;
     }
-    var longerLength = longer.length;
+    let longerLength = longer.length;
     if (longerLength == 0) {
         return 1.0;
     }
@@ -1209,15 +1242,15 @@ function editDistance(s1, s2) {
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();
 
-    var costs = new Array();
-    for (var i = 0; i <= s1.length; i++) {
-        var lastValue = i;
-        for (var j = 0; j <= s2.length; j++) {
+    let costs = [];
+    for (let i = 0; i <= s1.length; i++) {
+        let lastValue = i;
+        for (let j = 0; j <= s2.length; j++) {
             if (i == 0)
                 costs[j] = j;
             else {
                 if (j > 0) {
-                    var newValue = costs[j - 1];
+                    let newValue = costs[j - 1];
                     if (s1.charAt(i - 1) != s2.charAt(j - 1))
                         newValue = Math.min(Math.min(newValue, lastValue),
                             costs[j]) + 1;
@@ -1254,9 +1287,9 @@ function increment2() {
     if (running2 == 1) {
         setTimeout(function () {
             time2++;
-            var mins2 = Math.floor(time2 / 10 / 60);
-            var secs2 = Math.floor(time2 / 10 % 60);
-            var tenths2 = time2 % 10;
+            let mins2 = Math.floor(time2 / 10 / 60);
+            let secs2 = Math.floor(time2 / 10 % 60);
+            let tenths2 = time2 % 10;
 
             if (mins2 < 10) {
                 mins2 = "0" + mins2;
@@ -1281,7 +1314,7 @@ function increment2() {
 
 function saveToDB(response, message) {
 
-    var testtype = 0;
+    let testtype = 0;
 
     if (document.getElementById("transcriptionSwitch").checked === true) {
         testtype = 2;
@@ -1295,9 +1328,9 @@ function saveToDB(response, message) {
         testtype = 4;
     }
 
-    var postResultUrl = hostname + "api/sendresult.php?";
+    let postResultUrl = hostname + "api/sendresult.php?";
 
-    var gender = "Other";
+    let gender = "Other";
 
     if (document.getElementById("gender1").checked === true) {
         gender = "Male";
@@ -1305,15 +1338,16 @@ function saveToDB(response, message) {
         gender = "Female";
     }
 
-    var lastWrd = getLast5Words(document.getElementById("transcribeText").innerText);
-    var sentencesText = document.getElementById("transcribeText").innerText.replace(lastWrd, "").trim();
-    var typedText = document.getElementById("textarea").value.trim();
+    let lastWrd = getLast5Words(document.getElementById("transcribeText").innerText);
+    let sentencesText = document.getElementById("transcribeText").innerText.replace(lastWrd, "").trim();
+    let typedText = document.getElementById("textarea").value.trim();
     typedText = typedText.replace(/[\n\r]/g, ' ');
 
 
-    var similarityScore = Math.round(((similarity(typedText.trim(), sentencesText.trim()) * 100)) * 100) / 100;
+    let similarityScore = Math.round(((similarity(typedText.trim(), sentencesText.trim()) * 100)) * 100) / 100;
 
-    researchTopics = uniq(researchTopics);
+    researchList = uniq(researchList);
+
 
     $.post(
         postResultUrl,
@@ -1333,8 +1367,8 @@ function saveToDB(response, message) {
             wt: sentencesText,
             wc: savedList.length,
             wp: savedList.join(";"),
-            wlc: researchTopics.length,
-            wl: researchTopics.join(";")
+            wlc: researchList.length,
+            wl: researchList.join(";")
         },
         function (datar) {
             if (response === true) {
@@ -1369,22 +1403,21 @@ function openSaveDialog() {
 }
 
 function uniq(a) {
-    var seen = {};
+    let seen = {};
     return a.filter(function (item) {
         return seen.hasOwnProperty(item) ? false : (seen[item] = true);
     });
 }
 
 String.prototype.removeStopWords = function () {
-    var x;
-    var y;
-    var word;
-    var stop_word;
-    var regex_str;
-    var regex;
-    var cleansed_string = this.valueOf();
-    var stop_words = new Array(
-        'a',
+    let x;
+    let y;
+    let word;
+    let stop_word;
+    let regex_str;
+    let regex;
+    let cleansed_string = this.valueOf();
+    let stop_words = ['a',
         'about',
         'above',
         'across',
@@ -1812,11 +1845,10 @@ String.prototype.removeStopWords = function () {
         'youngest',
         'your',
         'yours',
-        'z'
-    )
+        'z'];
 
     // Split out all the individual words in the phrase
-    var words = cleansed_string.match(/[^\s]+|\s+[^\s+]$/g);
+    let words = cleansed_string.match(/[^\s]+|\s+[^\s+]$/g);
     try {
         // Review all the words
         for (x = 0; x < words.length; x++) {
@@ -1846,18 +1878,18 @@ String.prototype.removeStopWords = function () {
 
     }
     return cleansed_string.replace(/^\s+|\s+$/g, "");
-}
+};
 
 // Applied globally on all textareas with the "autoExpand" class
 $(document)
     .one('focus.autoExpand', 'textarea.autoExpand', function () {
-        var savedValue = this.value;
+        let savedValue = this.value;
         this.value = '';
         this.baseScrollHeight = this.scrollHeight;
         this.value = savedValue;
     })
     .on('input.autoExpand', 'textarea.autoExpand', function () {
-        var minRows = this.getAttribute('data-min-rows') | 0, rows;
+        let minRows = this.getAttribute('data-min-rows') | 0, rows;
         this.rows = minRows;
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
         this.rows = minRows + rows + 1;
@@ -1874,7 +1906,7 @@ function getLast5Words(str) {
 }
 
 function getInnerText(el) {
-    var sel, range, innerText = "";
+    let sel, range, innerText = "";
     if (typeof document.selection != "undefined" && typeof document.body.createTextRange != "undefined") {
         range = document.body.createTextRange();
         range.moveToElementText(el);

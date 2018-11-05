@@ -142,9 +142,16 @@
             <tr>
 
                 <td>
+                    <div id="appendEnabled2" style="width: 99%;"><b>Wikipedia Research: </b><input id="wikiLookup" placeholder="Type here to: Start Your Articles / Research New Topics" style="width: 99%"></div>
+
                 </td>
+
+
                 <td>
-                    <div id="appendEnabled2" style="width: 100%;"><b>Load Wikipedia Article: </b><input id="wikiLookup" placeholder="Type Here to Search Wikipedia Directly" style="width: 100%"></div>
+                    <div id="wordCloudWrapper" style="width: 100%;">
+                        <b>Recently Researched:</b>
+                        <div id="wordCloud" style="width: 100%;"><br></div>
+                    </div>
                 </td>
             </tr>
             </div>

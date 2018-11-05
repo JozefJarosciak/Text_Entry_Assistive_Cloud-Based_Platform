@@ -132,6 +132,10 @@ transcribeTextWrapper{
     background: #ffebe6;
 }
 
+#wordCloud{
+    background: #ffebe6;
+}
+
 mark{
     background: #ffcad2;
     color: black;
