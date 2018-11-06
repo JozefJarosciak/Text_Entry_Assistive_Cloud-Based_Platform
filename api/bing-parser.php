@@ -18,18 +18,18 @@ $dom = new \DOMDocument('1.0');
 
 
 try {
-    $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
-    $b_focusTextMedium = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
     $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextLarge', 'div');
+    $b_focusTextMedium = getElementsByClassName($dom, 'b_focusTextMedium', 'div');
+  //  $b_focusTextLarge = getElementsByClassName($dom, 'b_focusTextLarge', 'div');
     $b_focusTextSmall = getElementsByClassName($dom, 'b_focusTextSmall', 'div');
     $rcExpC =  getElementsByClassName($dom, 'rcExpC', 'div');
     $rcABP =  getElementsByClassName($dom, 'rcABP', 'div');
    // $df_con = getElementsByClassName($dom, 'rwrl rwrl_sec rwrl_padref', 'div');
     // $rwrl = getElementsByClassName($dom, 'rwrl.rwrl_sec.rwrl_padref', 'div');
 
-    $b_secondaryFocus = getElementsByClassName($dom, 'b_secondaryFocus', 'div');
+    //$b_secondaryFocus = getElementsByClassName($dom, 'b_secondaryFocus', 'div');
     $wob_t = getElementsByClassName($dom, 'wtr_currTemp b_focusTextLarge', 'div'); // temperature
-    $accwrapper = getElementsByClassName($dom, 'acc-wrapper', 'div'); // celebrities
+    //$accwrapper = getElementsByClassName($dom, 'acc-wrapper', 'div'); // celebrities
 
 
     //$edu_percent_simplepercentcalc_string_result = $dom->getElementById('edu_percent_simplepercentcalc_string_result')->div;

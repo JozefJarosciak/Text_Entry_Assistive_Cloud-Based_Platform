@@ -47,6 +47,7 @@ if ($transcription>0) {
         'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=1',
         //'http://www.jarosciak.com/textentry/api/dictionary.php?q='.$lastWord.'&f=3',
         $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($lastWord),
+        $path[0].'api/wikipedia-suggest.php2?q=%' . urlencode($lastWord),
         $path[0].'api/google-suggestqueries.php?q=' . urlencode($lastWord),
         //$path[0].'api/google-suggestqueries.php?q=' . urlencode($twoWords),
         $path[0].'api/wikipedia-suggest.php?q=%' . urlencode($twoWords),

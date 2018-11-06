@@ -136,6 +136,42 @@ transcribeTextWrapper{
     background: #ffebe6;
 }
 
+#appendEnabled2{
+    width: 99%;
+    border: 1px solid #c2c2c2;
+}
+
+#wordCloudWrapper{
+    width: 100%;
+    border: 1px solid #c2c2c2;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 1px 1px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    margin: 1px 1px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.button1 {
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
 mark{
     background: #ffcad2;
     color: black;
@@ -157,7 +193,6 @@ mark{
     background-color: #d8e1ff;
     width: 100%;
     font-size: 14px;
-    font-weight: bold;
     text-align: center;
     color: #280000;
 }

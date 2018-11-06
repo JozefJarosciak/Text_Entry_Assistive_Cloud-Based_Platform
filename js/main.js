@@ -594,18 +594,44 @@ function capitalizeFirstLetter(string) {
     }
 }
 
-function createWikiLinks() {
+function createWikiLinks(name) {
     researchList = uniq(researchList);
+    let highlightName = "";
    // console.log("Saved List Terms:"); console.log(researchList);
     let result = "";
     for (let i = 0; i < researchList.length; i++) {
         //result = result + '<a href="javascript:void(0);" onclick="getDuckDuckGoArticle("'+researchList[i].trim()+'");\">'+ researchList[i].trim() + '</a> | ';
        // result = result + '<a href="javascript:void(0);" id="'+researchList[i].trim()+'" onclick="getDuckDuckGoArticle('+researchList[i].trim()+');">'+researchList[i].trim()+'</a> | ';
 
-        result = result + '<button id="'+researchList[i].trim()+'" onclick="getDuckDuckGoArticle(\''+researchList[i].trim()+'\');">'+researchList[i].trim()+'</button> ';
+        let shortenedName = "";
+        if (researchList[i].trim().length > 20){
+            shortenedName = researchList[i].trim().substring(0,20)+'...';
+        } else {
+            shortenedName = researchList[i].trim();
+        }
+
+        result = result + '<button type="button" class="button button1" title="'+researchList[i].trim()+'" id="'+researchList[i].trim()+'" onclick="getDuckDuckGoArticle(\''+researchList[i].trim()+'\');">'+shortenedName+'</button> ';
+     highlightName = researchList[i].trim();
+        document.getElementById("wordCloud").innerHTML = result;
+  //      document.getElementById("wordCloudWrapper").setAttribute("style", "border: 10px solid #4CAF50;");
+    //    document.getElementById("wordCloudWrapper").setAttribute("style", "border: 1px solid #c2c2c2;");
+
+
 
     };
-    document.getElementById("wordCloud").innerHTML = result;
+
+
+
+
+    //   $("#"+highlightName).attr('value', 'dsd');
+}
+function blink(){
+    (function myLoop(i) {
+        setTimeout(function () {
+            document.getElementById("wordCloudWrapper").setAttribute("style", "border: " + i + "px solid #4CAF50;");
+            if (--i) myLoop(i);      //  decrement i and call myLoop again if i > 0
+        }, 20)
+    })(10);
 }
 
 function createNodesEdges(name, textForSearch) {
@@ -614,24 +640,36 @@ function createNodesEdges(name, textForSearch) {
     if (nodes.length > 0) {
         nodes.add({id: nodes.length + 1, label: name, shape: 'box'});
         edges.add({from: 1, to: nodes.length});
-        researchList.push(name);
-        createWikiLinks();
+
+        if (arrayContains(name, researchList) === false) {
+            researchList.push(name);
+            createWikiLinks(name);
+            blink();
+        }
+
+
+
     } else {
         nodes.add({id: nodes.length + 1, label: name, shape: 'box'});
-        researchList.push(name);
-        createWikiLinks();
+        if (arrayContains(name, researchList) === false) {
+            researchList.push(name);
+            createWikiLinks(name);
+            blink();
+        }
     }
 
+
     //showNodeInfo();'
-    if (initialNetworkVis > 0) {
+ //   if (initialNetworkVis > 0) {
         network.focus(nodes.length + 1);  network.moveTo({position: {x: 0, y: 0}});
         //network.focus(nodes.length + 1, {scale: 1.0});  network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
         addNodesAround(name, nodes.length, textForSearch);
-    }
+   // }
 
 
     //
     //   }
+
 }
 
 function addNodesAround(name, id, textForSearch) {
@@ -805,8 +843,13 @@ function showNodeInfo() {
     let nodeObj = network.body.data.nodes._data[selectedArray[0]];
     console.log(selectedArray[0] + " - " + nodeObj.label); //nodeObj.label to get label
     let selectedNodeID = selectedArray[0];
-    researchList.push(nodeObj.label);
-    createWikiLinks();
+
+    if (arrayContains(nodeObj.label, researchList) === false) {
+        researchList.push(nodeObj.label);
+        blink();
+    }
+
+  //  createWikiLinks();
     getDuckDuckGoArticle(nodeObj.label);
 
 }
@@ -842,6 +885,88 @@ function enableHighlighting() {
 
     $("#textarea").val($("#textarea").val().trim() + wordHighligted);
 
+    let textEntryContent = document.getElementById("textarea").value;
+    let arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
+    let lastLine = arrayOfLines.slice(-1)[0];
+   // getDuckDuckGoArticle(lastLine);
+
+    let searchWord1 = getLastWord(lastLine.replace(",","").replace(".","").replace(";",""));
+    let searchWord2 = getLast2Words(lastLine.replace(",","").replace(".","").replace(";",""));
+    let searchWord3 = getLast3Words(lastLine.replace(",","").replace(".","").replace(";",""));
+
+    let keepSearching = false ;
+    if (searchWord3) {
+
+        let spaceCount = searchWord3.split(" ").length - 1;
+
+        if (spaceCount > 1) {
+
+            $.ajax({
+                url: hostname + "/api/duckduckgo-api.php?q=" + searchWord3, success: function (data) {
+                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                    let dataFinal = data.split("|");
+
+                    if (dataFinal[3]) {
+
+                        let isnum = /^\d+$/.test(searchWord3);
+                        if (isnum === false) {
+                            if (hasNumber(searchWord3) === false) {
+                                getTopHelp(searchWord3);
+                                keepSearching = true;
+                            }
+                            //createWikiLinks();
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    if ((searchWord2) && (keepSearching !== true)) {
+        $.ajax({
+            url: hostname + "/api/duckduckgo-api.php?q=" + searchWord2, success: function (data) {
+                //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                let dataFinal = data.split("|");
+
+                if (dataFinal[3]) {
+
+                    let isnum = /^\d+$/.test(searchWord2);
+                    if (isnum===false) {
+                        if (hasNumber(searchWord2) === false) {
+                            getTopHelp(searchWord2);
+                            keepSearching = true;
+                        }
+                        //createWikiLinks();
+                    }
+                }
+            }
+            });
+    }
+
+    if (keepSearching !== true) {
+        if (searchWord1) {
+        $.ajax({
+            url: hostname + "/api/duckduckgo-api.php?q=" + searchWord1, success: function (data) {
+                //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                let dataFinal = data.split("|");
+
+                if (dataFinal[3]) {
+
+                    let isnum = /^\d+$/.test(searchWord1);
+                    if (isnum===false) {
+                        if (hasNumber(searchWord1) === false) {
+                            getTopHelp(searchWord1);
+                        }
+                        //createWikiLinks();
+                    }
+                }
+            }
+        });
+    }
+    }
 
     let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
     let countSaved = currentCountofKeystrokesSaved + wordHighligted.length;
@@ -878,7 +1003,7 @@ function getDuckDuckGoArticle(nameForGraph) {
             let dataFinal = data.split("|");
 
             descriptionVariable = dataFinal[3];
-            if (dataFinal[3]) {
+            if (dataFinal[1]) {
 
 
                 let nameForGraph = dataFinal[0];
@@ -900,10 +1025,15 @@ function getDuckDuckGoArticle(nameForGraph) {
                         }
                     }
                 }
-                researchList.push(dataFinal[0]);
+
+                if (arrayContains(dataFinal[0], researchList) === false) {
+                    researchList.push(dataFinal[0]);
+                    blink();
+                }
+              //  researchList.push(dataFinal[0]);
                 researchList = uniq(researchList);
 
-                createWikiLinks();
+               // createWikiLinks();
                 document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '  &nbsp;<br><br>';
 
 
@@ -923,6 +1053,7 @@ function getDuckDuckGoArticle(nameForGraph) {
 
                 wordNotFound = 1;
             } else {
+                /*
                 if (nameForGraph) {
                     $.ajax({
                         // url: hostname + "/api/bing-parser.php?q=" + nodeObj.label, success: function (data2) {
@@ -939,6 +1070,7 @@ function getDuckDuckGoArticle(nameForGraph) {
                         }
                     });
                 }
+                */
             }
 
 
@@ -970,7 +1102,7 @@ function getDuckDuckGoArticle(nameForGraph) {
                 }
                 sentence = sentence.replace(/ *\([^)]*\) */g, " ").trim();
                 sentence = sentence.replace(/(\[.*?\])/g, '').split(". ");
-                sentence = sentence.reduce((prev, next, id) => prev + (id % 4 ? ". " : ". <br><br>") + next);
+                sentence = sentence.reduce((prev, next, id) => prev + (id % 4 ? ". " : ". <br><br> ") + next);
 
                 if (descriptionVariable) {
                     document.getElementById("topHelp").innerHTML += " <br> <table id=\"DuckDuckGo\"><tr><td> " + sentence + " <br> ";
@@ -978,7 +1110,9 @@ function getDuckDuckGoArticle(nameForGraph) {
                     if (sentence.indexOf("Redirect to:")>=0) {
                         // document.getElementById("topHelp").innerHTML = " Cannot locate your article!<br><br>If your term contains accented characters, please use them in your search.<br> ";
                     } else {
-                        document.getElementById("topHelp").innerHTML = "  " + sentence + " <br> ";
+                        if (sentence.indexOf("Undefined may")<0) {
+                      //  document.getElementById("topHelp").innerHTML = "  " + sentence + " <br> ";
+                        }
                     }
                 }
             } catch (e) {
@@ -994,16 +1128,21 @@ function getDuckDuckGoArticle(nameForGraph) {
 
 
         document.getElementById("topHelp").innerHTML += '</td></tr></table>';
-    createWikiLinks();
-    console.log("Saved List Terms:"); console.log(researchList);
+    setTimeout(function(){
+        $('#quickHelp').scrollTop(0);
+    }, 10);
+
+    // createWikiLinks();
+//    console.log("Saved List Terms:"); console.log(researchList);
 }
 
-function getTopHelp() {
+function getTopHelp(orWord) {
     //  document.getElementById("shortHelp").innerHTML = "";
 
     let textEntryContent = document.getElementById("textarea").value;
     let arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
     let lastLine = arrayOfLines.slice(-1)[0];
+
     if (lastLine.indexOf('.') > 0) {
         lastLine = lastLine.substring(lastLine.lastIndexOf('.') + 1);
         //  console.log("LAST SENTENCE: " + lastLine);
@@ -1017,25 +1156,57 @@ function getTopHelp() {
 
     let wordNotFound = 0;
 
+    let last3words =getLast3Words(lastLine);
+    //last3words = last3words.replace('undefined','');
+
+    if (orWord) {last3words = orWord;}
+
+  //  let gotoURL = hostname + "api/wikipedia-api.php?q=" + last3words.trim().removeStopWords();
     $.ajax({
-       // url: hostname + "/api/wikipedia-api.php?q=" + textEntryContent, success: function (data) {
-            //url: hostname + "/api/google-knowledge-graph.php?q=" + textEntryContent, success: function (data) {
+       // url: hostname + "api/wikipedia-api.php?q=" + last3words.trim().removeStopWords(), success: function (data) {
+          //url: hostname + "/api/google-knowledge-graph.php?q=" + textEntryContent, success: function (data) {
             url: hostname + "/api/bing-text-analytics2.php?w=0&q=" + textEntryContent, success: function (data) {
             //$.ajax({ url: hostname + "/api/binfreg-text-analytics.php?q=" + lastLine, success: function(data) {
 
-            let dataFinal = data.split("|");
-
-
-            let lastRecognizedElement = dataFinal[dataFinal.length - 2];
-
-
+           let dataFinal = data.split("|");
+           let lastRecognizedElement = dataFinal[dataFinal.length - 2];
+            //let lastRecognizedElement = data;
             let nameForGraph = lastRecognizedElement;
 
-            if (nameForGraph) {
+            //let nameForGraph = lastRecognizedElement;
+
+            if (nameForGraph.indexOf("Undefined index")<0) {
                 let isnum = /^\d+$/.test(nameForGraph);
                 if (isnum===false) {
                 if (researchList[researchList.length-1] !== nameForGraph) {
-                    getDuckDuckGoArticle(nameForGraph);
+                    //getDuckDuckGoArticle(nameForGraph);
+
+                    // this should only happen when duckduckgo has picture
+
+                    $.ajax({
+                        url: hostname + "/api/duckduckgo-api.php?q=" + nameForGraph, success: function (data) {
+                            //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+
+                            let dataFinal = data.split("|");
+
+                            if (dataFinal[1]) {
+                                let isnum = /^\d+$/.test(nameForGraph);
+                                if (isnum===false) {
+                                    if (hasNumber(nameForGraph) === false) {
+
+                                        if (arrayContains(nameForGraph, researchList) === false) {
+                                            researchList.push(nameForGraph);
+                                            createWikiLinks(nameForGraph);
+                                            blink();
+                                        }
+                                  //  researchList.push(nameForGraph);
+
+
+                                    }
+                                }
+                            }
+                        }
+                    });
                 }
                 }
             } else {
@@ -1073,8 +1244,12 @@ function getTopHelp() {
             console.log("Adjusted Last Line:" + lastLine)
         }
 
+        lastLine=lastLine.split(' ').filter(function(allItems,i,a){
+            return i==a.indexOf(allItems);
+        }).join(' ');
 
-        let url2 = hostname + "api/bing-parser.php?q=" + lastLine;
+        if (lastLine.removeStopWords()) {
+        let url2 = hostname + "api/bing-parser.php?q=" + lastLine.removeStopWords();
         console.log(url2);
         $.get(url2, function (json) {
             json = json + '. ';
@@ -1100,7 +1275,7 @@ function getTopHelp() {
                 if (firstSentence.indexOf("Image:") < 0) {
                     //  console.log(researchSentences);
                     //if (arrayContains(firstSentence,researchSentences) === false) {
-                    document.getElementById("shortHelp").innerHTML = " Suggestion: " + firstSentence + " <br> "; // check for last 3 words
+                    document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + firstSentence + " </b> <br> ";
                     researchSentences.push(firstSentence);
                     //}
 
@@ -1111,7 +1286,7 @@ function getTopHelp() {
                     firstSentence = firstSentence2[1];
                     // console.log(researchSentences);
                     //if (arrayContains(firstSentence,researchSentences) === false) {
-                    document.getElementById("shortHelp").innerHTML = " Suggestion: " + firstSentence + " <br> ";
+                    document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + firstSentence + " </b> <br> ";
                     researchSentences.push(firstSentence);
                     //}
 
@@ -1136,7 +1311,8 @@ function getTopHelp() {
                             wikiLink = data;
                             if (arrayContains(data, researchSentences) === false) {
                                 if (data.toLowerCase().indexOf("undefined") < 0) {
-                                    document.getElementById("shortHelp").innerHTML = " Suggestion: " + data + " <br> ";
+                                    document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + data + " </b> <br> ";
+                                    //document.getElementById("shortHelp").innerHTML = " Suggestion: " + data + " <br> ";
                                     researchSentences.push(data);
                                 }
                             }
@@ -1148,6 +1324,9 @@ function getTopHelp() {
                 }
             }
         });
+
+        }
+
     }
 
 
@@ -1204,7 +1383,32 @@ function getLast3Words(str) {
     str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
     str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
     // get the last word
-    return str.trim().split(" ").reverse()[2] + " " + str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
+
+    if (str.trim().split(" ").reverse()[2]) {
+        return str.trim().split(" ").reverse()[2] + " " + str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
+    }
+
+    if (str.trim().split(" ").reverse()[1]) {
+        return str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
+    }
+
+    if (str.trim().split(" ").reverse()[0]) {
+        return str.trim().split(" ").reverse()[0];
+    }
+
+
+
+
+}
+
+function getLast2Words(str) {
+    // strip punctuations
+    str = str.replace(/[\.,-\/#!$%\^&\*;:{}=\_`~()]/g, ' ');
+    str = str.replace(/(\r\n\t|\n|\r\t)/gm, " ");
+    // get the last word
+    if (str.trim().split(" ").reverse()[1]) {
+        return str.trim().split(" ").reverse()[1] + " " + str.trim().split(" ").reverse()[0];
+    }
 }
 
 function splitMulti(str, tokens) {

@@ -11,7 +11,7 @@
     <script src="js/jquery.mark.min.js"></script>
     <script src="js/vis.min.js"></script>
     <script src="js/main.js?n=<?php echo rand(1000, 100000);?>"></script>
-    <link rel="stylesheet" href="css/main.css" type="text/css">
+    <link rel="stylesheet" href="css/main.css?n=<?php echo rand(1000, 100000);?>"" type="text/css">
     <link rel="stylesheet" href="css/vis-network.min.css" type="text/css"/>
 
 </head>
@@ -142,14 +142,14 @@
             <tr>
 
                 <td>
-                    <div id="appendEnabled2" style="width: 99%;"><b>Wikipedia Research: </b><input id="wikiLookup" placeholder="Type here to: Start Your Articles / Research New Topics" style="width: 99%"></div>
+                    <div id="appendEnabled2"><b>Wikipedia Research: </b><input id="wikiLookup" placeholder="Type here to: Start Your Articles / Research New Topics" style="width: 99%"></div>
 
                 </td>
 
 
                 <td>
-                    <div id="wordCloudWrapper" style="width: 100%;">
-                        <b>Recently Researched:</b>
+                    <div id="wordCloudWrapper">
+                        <b>Discovered Terms (click buttons to load articles):</b>
                         <div id="wordCloud" style="width: 100%;"><br></div>
                     </div>
                 </td>
