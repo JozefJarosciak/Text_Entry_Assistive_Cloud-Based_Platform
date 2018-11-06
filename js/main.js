@@ -849,7 +849,7 @@ function showNodeInfo() {
         blink();
     }
 
-  //  createWikiLinks();
+    createWikiLinks();
     getDuckDuckGoArticle(nodeObj.label);
 
 }
