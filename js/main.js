@@ -241,7 +241,7 @@ $(function () {
 
             if (event.keyCode === 32) {
                 lastWord = getLastWord(document.getElementById("textarea").value);
-                if (lastWord) {
+                if (lastWord.length >8) {
                     let optionsMark = {"separateWordSearch": true, "value": "exactly"};
                     $("#transcribeText").mark(lastWord, optionsMark);
                 }
