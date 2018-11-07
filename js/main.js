@@ -625,6 +625,7 @@ function createWikiLinks(name) {
 
     //   $("#"+highlightName).attr('value', 'dsd');
 }
+
 function blink(){
     (function myLoop(i) {
         setTimeout(function () {

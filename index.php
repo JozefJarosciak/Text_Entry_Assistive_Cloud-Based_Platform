@@ -225,7 +225,7 @@
     </div>
 
 
-<!--
+
     <div class="row footer">
         <small><b>UOL Dissertation:</b> H00058995; <b>Requirements:</b> Chrome 69+, Min. Resolution: 1024x768; <a
                     href="https://github.com/JozefJarosciak/Text_Entry_Assistive_Cloud-Based_Platform" target="_blank">Open Source</a>
@@ -236,13 +236,8 @@
         </small>
 
         </div>
--->
 
-    <div class="row footer">
-        <small><b>UOL Dissertation:</b> H00058995; <b>Requirements:</b> Chrome 69+, Min. Resolution: 1024x768; Open Source under AGPL-3.0; © <script>document.write(new Date().getFullYear())</script> Jozef Jarosciak.
-        </small>
 
-    </div>
 
 
 </div>
