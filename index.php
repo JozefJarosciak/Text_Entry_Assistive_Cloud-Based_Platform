@@ -90,6 +90,7 @@
 
         <div id="transcribeTextWrapper">
             <b>&nbsp;Transcribe the following randomly selected words or </b><button onclick="getRandomWords()">Select Different Words</button>
+            <br><small><span style="color:red">&nbsp;If you experience issues related to word highlighting (as you type), please ignore it and continue with the test!</span></small>
             <br><br>
             <div id="transcribeText"></div><br>
         </div>

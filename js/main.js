@@ -154,10 +154,32 @@ $(function () {
             return false;
         }
 
+        if (document.getElementById("creativeWritingSwitch").checked === false) {
+            if (event.keyCode === 32) {
+                lastWord = getLastWord(document.getElementById("textarea").value);
+                if (lastWord.length > 9) {
+                    let optionsMark = {"separateWordSearch": true, "value": "exactly"};
+                    $("#transcribeText").mark(lastWord, optionsMark);
+                }
+            }
+        }
+
     });
 
 
     $("#textarea").keyup(function (event) {
+
+
+        if (document.getElementById("creativeWritingSwitch").checked === false) {
+            if (event.keyCode === 32) {
+                lastWord = getLastWord(document.getElementById("textarea").value);
+                if (lastWord.length > 9) {
+                    let optionsMark = {"separateWordSearch": true, "value": "exactly"};
+                    $("#transcribeText").mark(lastWord, optionsMark);
+                }
+            }
+        }
+
 
         keyPresses = keyPresses + 1;
         if ((keyPresses >= 1) && (keyPressesRun == false)) {
@@ -239,13 +261,7 @@ $(function () {
             }
             // get top help ideas
 
-            if (event.keyCode === 32) {
-                lastWord = getLastWord(document.getElementById("textarea").value);
-                if (lastWord.length >8) {
-                    let optionsMark = {"separateWordSearch": true, "value": "exactly"};
-                    $("#transcribeText").mark(lastWord, optionsMark);
-                }
-            }
+
 
         } else {
 
