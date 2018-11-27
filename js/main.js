@@ -15,8 +15,6 @@ let savedList = [];
 let availTags = [];
 let lastWiki = '';
 $(function () {
-
-
     document.getElementById("transcribeTextWrapper").style.display = "none";
     document.getElementById("similarityCalculationWrapper").style.display = "none";
     document.getElementById("detailStat").style.display = "none";
@@ -24,7 +22,6 @@ $(function () {
     document.getElementById("wikiLookupWrapper").style.display = "none";
     document.getElementById("appendEnabled2").style.display = "block";
     document.getElementById("wordCloudWrapper").style.display = "block";
-
 
 
     getRandomWords();
@@ -92,34 +89,34 @@ $(function () {
 
 
     $("#wikiLookup").keydown(function (event2) {
-            if (event2.keyCode === 190) {
-                $('#wikiLookup').autocomplete('close');
-            } else {
-                if (event2.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
-                    event2.preventDefault();
-                }
+        if (event2.keyCode === 190) {
+            $('#wikiLookup').autocomplete('close');
+        } else {
+            if (event2.keyCode === $.ui.keyCode.TAB && $(this).autocomplete("instance").menu.active) {
+                event2.preventDefault();
+            }
 
-               if (event2.keyCode === 13) {
-                   var delayInMilliseconds = 500;
-                   setTimeout(function() {
-                       getDuckDuckGoArticle(document.getElementById("wikiLookup").value);
-                   }, delayInMilliseconds);
+            if (event2.keyCode === 13) {
+                var delayInMilliseconds = 500;
+                setTimeout(function () {
+                    getDuckDuckGoArticle(document.getElementById("wikiLookup").value);
+                }, delayInMilliseconds);
 
-                }
+            }
 
 
-
-            }}).autocomplete({
+        }
+    }).autocomplete({
         delay: 100,
         minLength: 1,
         multiline: false,
         autoFocus: true,
         appendTo: '#appendEnabled2',
-        source: function(request2, response2) {
+        source: function (request2, response2) {
             if ((request2.term)) {
                 if ((request2.term).length >= 2) {
 
-                    $.getJSON("https://en.wikipedia.org/w/api.php?action=opensearch&search=" + (request2.term) + "&limit=15&namespace=0&format=json&callback=?&redirects=resolve", function(json2) {
+                    $.getJSON("https://en.wikipedia.org/w/api.php?action=opensearch&search=" + (request2.term) + "&limit=15&namespace=0&format=json&callback=?&redirects=resolve", function (json2) {
 
                         availTags = json2[1];
                     });
@@ -129,10 +126,10 @@ $(function () {
             }
 
         },
-        focus: function() {
+        focus: function () {
             return false;
         },
-        select: function(event2, ui) {
+        select: function (event2, ui) {
 
             document.getElementById("wikiLookup").value = ui.item.value;
             $('#wikiLookup').autocomplete('close');
@@ -141,7 +138,6 @@ $(function () {
             return false;
         }
     });
-
 
 
     $("#textarea").keydown(function (e) {
@@ -191,7 +187,7 @@ $(function () {
             if (Number(document.getElementById("wordCounter").innerText) >= 100) {
                 //document.getElementById("form_container").style.display = "block";
                 startPause2();
-              //  saveToDB(false, 0);
+                //  saveToDB(false, 0);
                 openSaveDialog();
             }
         }
@@ -216,40 +212,26 @@ $(function () {
                 //if ((similscore>=99.99) && (similarScoreRun==false)) {
 
                 similarScoreRun = true;
-
-                /*
-                document.getElementById("form_container").innerHTML = "<br><br><h1 id='resultHighlight'>Transcription Test Result:</h1>" +
-                    " Total Key Presses: " + keyPresses.toString() +
-                    " | Total Characters: " + document.getElementById("totalCharacters").innerText +
-                    " | Total Words: " + document.getElementById("wordCounter").innerText +
-                    " | Saved Keystrokes: " + document.getElementById("keystrokesSaved").innerText +
-                    " | Time to Complete: " + document.getElementById("output2").innerText ;
-
-                */
                 document.getElementById("detailStat").style.display = "none";
-                //document.getElementById("form_container").style.display = "block";
-
                 startPause2();
-              //  saveToDB(false, 0);
                 openSaveDialog();
             }
 
         }
-        //if (document.getElementById("transcriptionSwitch").checked === true) {
         if ((event.keyCode === 8) || (event.keyCode === 46)) {
             let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
             let countSaved = currentCountofKeystrokesSaved - 1;
-            if (countSaved<0) {countSaved=0;}
+            if (countSaved < 0) {
+                countSaved = 0;
+            }
             document.getElementById("keystrokesSaved").innerText = countSaved;
         }
 
 
         if ((event.keyCode === 13) || (event.keyCode === 190) || (event.keyCode === 188)) {
             displayHelp = 1;
-            // console.log(event.keyCode);
         } else {
             displayHelp = 0;
-            //console.log(event.keyCode);
         }
 
         if ((event.keyCode === 190) || (event.keyCode === 32)) {
@@ -259,10 +241,6 @@ $(function () {
             if (document.getElementById("creativeWritingSwitch").checked === true) {
                 getTopHelp();
             }
-            // get top help ideas
-
-
-
         } else {
 
 
@@ -442,7 +420,9 @@ $(function () {
                         console.log("Words: " + lastWord + " - " + ui.item.value + " | Saved: " + countSaved);
                         savedList.push(lastWord + "|" + ui.item.value + "|" + Number(ui.item.value.length - lastWord.length));
 
-                        if (countSaved<0) {countSaved=0;}
+                        if (countSaved < 0) {
+                            countSaved = 0;
+                        }
                         document.getElementById("keystrokesSaved").innerText = countSaved;
 
 
@@ -452,14 +432,10 @@ $(function () {
                         let currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
                         let percentSaved3 = (Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100));
 
-                        if (percentSaved3<0) {percentSaved3=0;}
+                        if (percentSaved3 < 0) {
+                            percentSaved3 = 0;
+                        }
                         document.getElementById("percentSaved").innerText = percentSaved3.toString();
-
-                        /*
-                        let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
-                        let percentSaved2 = Math.floor(((currentCountofKeystrokesSaved * 100 / totalLength) * 100) / 100) / 100;
-                        document.getElementById("percentSaved").innerText = percentSaved2.toString();
-                        */
                         return false;
                     }
 
@@ -489,15 +465,10 @@ function updateStatistics() {
         let currentCountoftotalCharacters = Number(document.getElementById("totalCharacters").innerText);
 
         let percentSaved3 = (Math.round((currentCountofKeystrokesSaved / currentCountoftotalCharacters) * 100));
-        if (percentSaved3<0) {percentSaved3=0;}
-        document.getElementById("percentSaved").innerText = percentSaved3.toString();
-
-        /*
-        if (totalLength < 4) {
-            document.getElementById("keystrokesSaved").innerText = "0";
-            document.getElementById("percentSaved").innerText = "0";
+        if (percentSaved3 < 0) {
+            percentSaved3 = 0;
         }
-        */
+        document.getElementById("percentSaved").innerText = percentSaved3.toString();
 
         if ((document.getElementById("transcriptionSwitch").checked === false) && (document.getElementById("creativeWritingSwitch").checked === false)) {
             document.getElementById("keystrokesSaved").innerText = "0";
@@ -565,7 +536,8 @@ function creativeWritingOnOff() {
 }
 
 function transcriptionOnOff() {
-    savedList = []; researchList = [];
+    savedList = [];
+    researchList = [];
     keyPresses = 0;
     keyPressesRun = false;
     similarScoreRun = false;
@@ -613,36 +585,23 @@ function capitalizeFirstLetter(string) {
 function createWikiLinks(name) {
     researchList = uniq(researchList);
     let highlightName = "";
-   // console.log("Saved List Terms:"); console.log(researchList);
     let result = "";
     for (let i = 0; i < researchList.length; i++) {
-        //result = result + '<a href="javascript:void(0);" onclick="getDuckDuckGoArticle("'+researchList[i].trim()+'");\">'+ researchList[i].trim() + '</a> | ';
-       // result = result + '<a href="javascript:void(0);" id="'+researchList[i].trim()+'" onclick="getDuckDuckGoArticle('+researchList[i].trim()+');">'+researchList[i].trim()+'</a> | ';
-
-        let shortenedName = "";
-        if (researchList[i].trim().length > 20){
-            shortenedName = researchList[i].trim().substring(0,20)+'...';
+     let shortenedName = "";
+        if (researchList[i].trim().length > 20) {
+            shortenedName = researchList[i].trim().substring(0, 20) + '...';
         } else {
             shortenedName = researchList[i].trim();
         }
 
-        result = result + '<button type="button" class="button button1" title="'+researchList[i].trim()+'" id="'+researchList[i].trim()+'" onclick="getDuckDuckGoArticle(\''+researchList[i].trim()+'\');">'+shortenedName+'</button> ';
-     highlightName = researchList[i].trim();
+        result = result + '<button type="button" class="button button1" title="' + researchList[i].trim() + '" id="' + researchList[i].trim() + '" onclick="getDuckDuckGoArticle(\'' + researchList[i].trim() + '\');">' + shortenedName + '</button> ';
+        highlightName = researchList[i].trim();
         document.getElementById("wordCloud").innerHTML = result;
-  //      document.getElementById("wordCloudWrapper").setAttribute("style", "border: 10px solid #4CAF50;");
-    //    document.getElementById("wordCloudWrapper").setAttribute("style", "border: 1px solid #c2c2c2;");
-
-
-
-    };
-
-
-
-
-    //   $("#"+highlightName).attr('value', 'dsd');
+    }
+    ;
 }
 
-function blink(){
+function blink() {
     (function myLoop(i) {
         setTimeout(function () {
             document.getElementById("wordCloudWrapper").setAttribute("style", "border: " + i + "px solid #4CAF50;");
@@ -665,7 +624,6 @@ function createNodesEdges(name, textForSearch) {
         }
 
 
-
     } else {
         nodes.add({id: nodes.length + 1, label: name, shape: 'box'});
         if (arrayContains(name, researchList) === false) {
@@ -674,19 +632,9 @@ function createNodesEdges(name, textForSearch) {
             blink();
         }
     }
-
-
-    //showNodeInfo();'
- //   if (initialNetworkVis > 0) {
-        network.focus(nodes.length + 1);  network.moveTo({position: {x: 0, y: 0}});
-        //network.focus(nodes.length + 1, {scale: 1.0});  network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
-        addNodesAround(name, nodes.length, textForSearch);
-   // }
-
-
-    //
-    //   }
-
+    network.focus(nodes.length + 1);
+    network.moveTo({position: {x: 0, y: 0}});
+    addNodesAround(name, nodes.length, textForSearch);
 }
 
 function addNodesAround(name, id, textForSearch) {
@@ -797,8 +745,9 @@ function addNodesAround(name, id, textForSearch) {
         }
     });
     // if (initialNetworkVis>0) {
-   // network.focus(id, {scale: 1.0});network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
-    network.focus(id);  network.moveTo({position: {x: 0, y: 0}});
+    // network.focus(id, {scale: 1.0});network.moveTo({position: {x: 0, y: 0}, scale: 1.0});
+    network.focus(id);
+    network.moveTo({position: {x: 0, y: 0}});
 
 }
 
@@ -905,13 +854,13 @@ function enableHighlighting() {
     let textEntryContent = document.getElementById("textarea").value;
     let arrayOfLines = textEntryContent.match(/[^\r\n]+/g);
     let lastLine = arrayOfLines.slice(-1)[0];
-   // getDuckDuckGoArticle(lastLine);
+    // getDuckDuckGoArticle(lastLine);
 
-    let searchWord1 = getLastWord(lastLine.replace(",","").replace(".","").replace(";",""));
-    let searchWord2 = getLast2Words(lastLine.replace(",","").replace(".","").replace(";",""));
-    let searchWord3 = getLast3Words(lastLine.replace(",","").replace(".","").replace(";",""));
+    let searchWord1 = getLastWord(lastLine.replace(",", "").replace(".", "").replace(";", ""));
+    let searchWord2 = getLast2Words(lastLine.replace(",", "").replace(".", "").replace(";", ""));
+    let searchWord3 = getLast3Words(lastLine.replace(",", "").replace(".", "").replace(";", ""));
 
-    let keepSearching = false ;
+    let keepSearching = false;
     if (searchWord3) {
 
         let spaceCount = searchWord3.split(" ").length - 1;
@@ -950,7 +899,7 @@ function enableHighlighting() {
                 if (dataFinal[3]) {
 
                     let isnum = /^\d+$/.test(searchWord2);
-                    if (isnum===false) {
+                    if (isnum === false) {
                         if (hasNumber(searchWord2) === false) {
                             getTopHelp(searchWord2);
                             keepSearching = true;
@@ -959,35 +908,37 @@ function enableHighlighting() {
                     }
                 }
             }
-            });
+        });
     }
 
     if (keepSearching !== true) {
         if (searchWord1) {
-        $.ajax({
-            url: hostname + "/api/duckduckgo-api.php?q=" + searchWord1, success: function (data) {
-                //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+            $.ajax({
+                url: hostname + "/api/duckduckgo-api.php?q=" + searchWord1, success: function (data) {
+                    //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
-                let dataFinal = data.split("|");
+                    let dataFinal = data.split("|");
 
-                if (dataFinal[3]) {
+                    if (dataFinal[3]) {
 
-                    let isnum = /^\d+$/.test(searchWord1);
-                    if (isnum===false) {
-                        if (hasNumber(searchWord1) === false) {
-                            getTopHelp(searchWord1);
+                        let isnum = /^\d+$/.test(searchWord1);
+                        if (isnum === false) {
+                            if (hasNumber(searchWord1) === false) {
+                                getTopHelp(searchWord1);
+                            }
+                            //createWikiLinks();
                         }
-                        //createWikiLinks();
                     }
                 }
-            }
-        });
-    }
+            });
+        }
     }
 
     let currentCountofKeystrokesSaved = Number(document.getElementById("keystrokesSaved").innerText);
     let countSaved = currentCountofKeystrokesSaved + wordHighligted.length;
-    if (countSaved<0) {countSaved=0;}
+    if (countSaved < 0) {
+        countSaved = 0;
+    }
     document.getElementById("keystrokesSaved").innerText = countSaved;
 
     /*
@@ -1005,12 +956,13 @@ function enableHighlighting() {
         if (Number(document.getElementById("wordCounter").innerText) >= 100) {
             //document.getElementById("form_container").style.display = "block";
             startPause2();
-          //  saveToDB(false, 0);
+            //  saveToDB(false, 0);
             openSaveDialog();
         }
     }
 
 }
+
 function getDuckDuckGoArticle(nameForGraph) {
     let descriptionVariable = "";
     $.ajax({
@@ -1047,10 +999,10 @@ function getDuckDuckGoArticle(nameForGraph) {
                     researchList.push(dataFinal[0]);
                     blink();
                 }
-              //  researchList.push(dataFinal[0]);
+                //  researchList.push(dataFinal[0]);
                 researchList = uniq(researchList);
 
-               // createWikiLinks();
+                // createWikiLinks();
                 document.getElementById("topHelp").innerHTML = ' <b> ' + dataFinal[0] + ' </b> <table id="DuckDuckGo"><tr><td><img src="' + dataFinal[1] + '" width="100px"></td><td>' + " " + dataFinal[3] + '  &nbsp;<br><br>';
 
 
@@ -1091,13 +1043,11 @@ function getDuckDuckGoArticle(nameForGraph) {
             }
 
 
-
-
         }
     });
 
     //Leading paragraph
-    let urlForMoreInfo ="http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + nameForGraph.replace(" ","_") + "&callback=?";
+    let urlForMoreInfo = "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + nameForGraph.replace(" ", "_") + "&callback=?";
 
 
     $.ajax({
@@ -1107,45 +1057,45 @@ function getDuckDuckGoArticle(nameForGraph) {
         async: false,
         dataType: "json",
         success: function (data, textStatus, jqXHR) {
-        if (data) {
-            try {
-                let markup = data.parse.text["*"];
-                let blurb = $('<div></div>').html(markup);
-                //   $('#article').html($(blurb).find('p'));
+            if (data) {
+                try {
+                    let markup = data.parse.text["*"];
+                    let blurb = $('<div></div>').html(markup);
+                    //   $('#article').html($(blurb).find('p'));
 
-                let sentence = $(blurb).find('p').text();
-                if (descriptionVariable) {
-                    sentence = sentence.substring(sentence.indexOf(". ") + 1);
-                }
-                sentence = sentence.replace(/ *\([^)]*\) */g, " ").trim();
-                sentence = sentence.replace(/(\[.*?\])/g, '').split(". ");
-                sentence = sentence.reduce((prev, next, id) => prev + (id % 4 ? ". " : ". <br><br> ") + next);
+                    let sentence = $(blurb).find('p').text();
+                    if (descriptionVariable) {
+                        sentence = sentence.substring(sentence.indexOf(". ") + 1);
+                    }
+                    sentence = sentence.replace(/ *\([^)]*\) */g, " ").trim();
+                    sentence = sentence.replace(/(\[.*?\])/g, '').split(". ");
+                    sentence = sentence.reduce((prev, next, id) => prev + (id % 4 ? ". " : ". <br><br> ") + next);
 
-                if (descriptionVariable) {
-                    document.getElementById("topHelp").innerHTML += " <br> <table id=\"DuckDuckGo\"><tr><td> " + sentence + " <br> ";
-                } else {
-                    if (sentence.indexOf("Redirect to:")>=0) {
-                        // document.getElementById("topHelp").innerHTML = " Cannot locate your article!<br><br>If your term contains accented characters, please use them in your search.<br> ";
+                    if (descriptionVariable) {
+                        document.getElementById("topHelp").innerHTML += " <br> <table id=\"DuckDuckGo\"><tr><td> " + sentence + " <br> ";
                     } else {
-                        if (sentence.indexOf("Undefined may")<0) {
-                      //  document.getElementById("topHelp").innerHTML = "  " + sentence + " <br> ";
+                        if (sentence.indexOf("Redirect to:") >= 0) {
+                            // document.getElementById("topHelp").innerHTML = " Cannot locate your article!<br><br>If your term contains accented characters, please use them in your search.<br> ";
+                        } else {
+                            if (sentence.indexOf("Undefined may") < 0) {
+                                //  document.getElementById("topHelp").innerHTML = "  " + sentence + " <br> ";
+                            }
                         }
                     }
+                } catch (e) {
+
                 }
-            } catch (e) {
+
 
             }
-
-
-        }
         },
         error: function (errorMessage) {
         }
     });
 
 
-        document.getElementById("topHelp").innerHTML += '</td></tr></table>';
-    setTimeout(function(){
+    document.getElementById("topHelp").innerHTML += '</td></tr></table>';
+    setTimeout(function () {
         $('#quickHelp').scrollTop(0);
     }, 10);
 
@@ -1173,58 +1123,60 @@ function getTopHelp(orWord) {
 
     let wordNotFound = 0;
 
-    let last3words =getLast3Words(lastLine);
+    let last3words = getLast3Words(lastLine);
     //last3words = last3words.replace('undefined','');
 
-    if (orWord) {last3words = orWord;}
+    if (orWord) {
+        last3words = orWord;
+    }
 
-  //  let gotoURL = hostname + "api/wikipedia-api.php?q=" + last3words.trim().removeStopWords();
+    //  let gotoURL = hostname + "api/wikipedia-api.php?q=" + last3words.trim().removeStopWords();
     $.ajax({
-       // url: hostname + "api/wikipedia-api.php?q=" + last3words.trim().removeStopWords(), success: function (data) {
-          //url: hostname + "/api/google-knowledge-graph.php?q=" + textEntryContent, success: function (data) {
-            url: hostname + "/api/bing-text-analytics2.php?w=0&q=" + textEntryContent, success: function (data) {
+        // url: hostname + "api/wikipedia-api.php?q=" + last3words.trim().removeStopWords(), success: function (data) {
+        //url: hostname + "/api/google-knowledge-graph.php?q=" + textEntryContent, success: function (data) {
+        url: hostname + "/api/bing-text-analytics2.php?w=0&q=" + textEntryContent, success: function (data) {
             //$.ajax({ url: hostname + "/api/binfreg-text-analytics.php?q=" + lastLine, success: function(data) {
 
-           let dataFinal = data.split("|");
-           let lastRecognizedElement = dataFinal[dataFinal.length - 2];
+            let dataFinal = data.split("|");
+            let lastRecognizedElement = dataFinal[dataFinal.length - 2];
             //let lastRecognizedElement = data;
             let nameForGraph = lastRecognizedElement;
 
             //let nameForGraph = lastRecognizedElement;
 
-            if (nameForGraph.indexOf("Undefined index")<0) {
+            if (nameForGraph.indexOf("Undefined index") < 0) {
                 let isnum = /^\d+$/.test(nameForGraph);
-                if (isnum===false) {
-                if (researchList[researchList.length-1] !== nameForGraph) {
-                    //getDuckDuckGoArticle(nameForGraph);
+                if (isnum === false) {
+                    if (researchList[researchList.length - 1] !== nameForGraph) {
+                        //getDuckDuckGoArticle(nameForGraph);
 
-                    // this should only happen when duckduckgo has picture
+                        // this should only happen when duckduckgo has picture
 
-                    $.ajax({
-                        url: hostname + "/api/duckduckgo-api.php?q=" + nameForGraph, success: function (data) {
-                            //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
+                        $.ajax({
+                            url: hostname + "/api/duckduckgo-api.php?q=" + nameForGraph, success: function (data) {
+                                //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
-                            let dataFinal = data.split("|");
+                                let dataFinal = data.split("|");
 
-                            if (dataFinal[1]) {
-                                let isnum = /^\d+$/.test(nameForGraph);
-                                if (isnum===false) {
-                                    if (hasNumber(nameForGraph) === false) {
+                                if (dataFinal[1]) {
+                                    let isnum = /^\d+$/.test(nameForGraph);
+                                    if (isnum === false) {
+                                        if (hasNumber(nameForGraph) === false) {
 
-                                        if (arrayContains(nameForGraph, researchList) === false) {
-                                            researchList.push(nameForGraph);
-                                            createWikiLinks(nameForGraph);
-                                            blink();
+                                            if (arrayContains(nameForGraph, researchList) === false) {
+                                                researchList.push(nameForGraph);
+                                                createWikiLinks(nameForGraph);
+                                                blink();
+                                            }
+                                            //  researchList.push(nameForGraph);
+
+
                                         }
-                                  //  researchList.push(nameForGraph);
-
-
                                     }
                                 }
                             }
-                        }
-                    });
-                }
+                        });
+                    }
                 }
             } else {
 
@@ -1248,99 +1200,98 @@ function getTopHelp(orWord) {
     if (spaceCount >= 1) {
         researchList = uniq(researchList);
 
-        if (spaceCount>4) {
+        if (spaceCount > 4) {
 
-            if (researchList[researchList.length-1] === getLast3Words(lastLine).removeStopWords()) {
-                if(typeof researchList[researchList.length-2] !== 'undefined') {
-                lastLine =  researchList[researchList.length-2] + " " + getLast3Words(lastLine).removeStopWords();
+            if (researchList[researchList.length - 1] === getLast3Words(lastLine).removeStopWords()) {
+                if (typeof researchList[researchList.length - 2] !== 'undefined') {
+                    lastLine = researchList[researchList.length - 2] + " " + getLast3Words(lastLine).removeStopWords();
                 }
-            }else {
-                lastLine =  researchList[researchList.length-1] + " " + getLast3Words(lastLine).removeStopWords();
+            } else {
+                lastLine = researchList[researchList.length - 1] + " " + getLast3Words(lastLine).removeStopWords();
             }
 
             console.log("Adjusted Last Line:" + lastLine)
         }
 
-        lastLine=lastLine.split(' ').filter(function(allItems,i,a){
-            return i==a.indexOf(allItems);
+        lastLine = lastLine.split(' ').filter(function (allItems, i, a) {
+            return i == a.indexOf(allItems);
         }).join(' ');
 
         if (lastLine.removeStopWords()) {
-        let url2 = hostname + "api/bing-parser.php?q=" + lastLine.removeStopWords();
-        console.log(url2);
-        $.get(url2, function (json) {
-            json = json + '. ';
-            let sentenceArray = json.split(". ");
-            let firstSentence = sentenceArray[0];
-            //if ((json.length > 2) && (json.length < 25)) {
-            if (json.length > 2) {
+            let url2 = hostname + "api/bing-parser.php?q=" + lastLine.removeStopWords();
+            console.log(url2);
+            $.get(url2, function (json) {
+                json = json + '. ';
+                let sentenceArray = json.split(". ");
+                let firstSentence = sentenceArray[0];
+                //if ((json.length > 2) && (json.length < 25)) {
+                if (json.length > 2) {
 
-                firstSentence = firstSentence.split(' ').slice(0, 10).join(' ');
+                    firstSentence = firstSentence.split(' ').slice(0, 10).join(' ');
 
-                if (firstSentence.slice(-3) === "...") {
-                    firstSentence = firstSentence.substring(0, firstSentence.length - 3);
-                }
+                    if (firstSentence.slice(-3) === "...") {
+                        firstSentence = firstSentence.substring(0, firstSentence.length - 3);
+                    }
 
-                if (firstSentence.slice(-2) === ", ") {
-                    firstSentence = firstSentence.substring(0, firstSentence.length - 2);
-                }
+                    if (firstSentence.slice(-2) === ", ") {
+                        firstSentence = firstSentence.substring(0, firstSentence.length - 2);
+                    }
 
-                if (firstSentence.slice(-1) === ",") {
-                    firstSentence = firstSentence.substring(0, firstSentence.length - 1);
-                }
+                    if (firstSentence.slice(-1) === ",") {
+                        firstSentence = firstSentence.substring(0, firstSentence.length - 1);
+                    }
 
-                if (firstSentence.indexOf("Image:") < 0) {
-                    //  console.log(researchSentences);
-                    //if (arrayContains(firstSentence,researchSentences) === false) {
-                    document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + firstSentence + " </b> <br> ";
-                    researchSentences.push(firstSentence);
-                    //}
-
-
-                } else {
-                    let firstSentence2 = splitMulti(firstSentence, ['.com', '.net', '.org', '.com', '.edu', '.gov', '.uk', '.au']);
-
-                    firstSentence = firstSentence2[1];
-                    // console.log(researchSentences);
-                    //if (arrayContains(firstSentence,researchSentences) === false) {
-                    document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + firstSentence + " </b> <br> ";
-                    researchSentences.push(firstSentence);
-                    //}
-
-                }
+                    if (firstSentence.indexOf("Image:") < 0) {
+                        //  console.log(researchSentences);
+                        //if (arrayContains(firstSentence,researchSentences) === false) {
+                        document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + firstSentence + " </b> <br> ";
+                        researchSentences.push(firstSentence);
+                        //}
 
 
-                // try if help comes up with something from wikipedia
-                let wikiLink = firstSentence;
+                    } else {
+                        let firstSentence2 = splitMulti(firstSentence, ['.com', '.net', '.org', '.com', '.edu', '.gov', '.uk', '.au']);
 
-                if (hasNumber(wikiLink) === false) {
-                    //  let wikiLink2 = firstSentence.replace(/[0-9]/g, '');
-                    // wikiLink2 = wikiLink2.split(/jan/i).join('').split(/feb/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('');
+                        firstSentence = firstSentence2[1];
+                        // console.log(researchSentences);
+                        //if (arrayContains(firstSentence,researchSentences) === false) {
+                        document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + firstSentence + " </b> <br> ";
+                        researchSentences.push(firstSentence);
+                        //}
+
+                    }
 
 
-                    $.ajax({
-                        url: hostname + "/api/wikipedia-api.php?q=" + wikiLink, success: function (data) {
-                            console.log("Wikipedia:" + data);
+                    // try if help comes up with something from wikipedia
+                    let wikiLink = firstSentence;
+
+                    if (hasNumber(wikiLink) === false) {
+                        //  let wikiLink2 = firstSentence.replace(/[0-9]/g, '');
+                        // wikiLink2 = wikiLink2.split(/jan/i).join('').split(/feb/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('').split(/jan/i).join('');
 
 
+                        $.ajax({
+                            url: hostname + "/api/wikipedia-api.php?q=" + wikiLink, success: function (data) {
+                                console.log("Wikipedia:" + data);
 
-                            //  console.log(researchSentences);//
-                            wikiLink = data;
-                            if (arrayContains(data, researchSentences) === false) {
-                                if (data.toLowerCase().indexOf("undefined") < 0) {
-                                    document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + data + " </b> <br> ";
-                                    //document.getElementById("shortHelp").innerHTML = " Suggestion: " + data + " <br> ";
-                                    researchSentences.push(data);
+
+                                //  console.log(researchSentences);//
+                                wikiLink = data;
+                                if (arrayContains(data, researchSentences) === false) {
+                                    if (data.toLowerCase().indexOf("undefined") < 0) {
+                                        document.getElementById("shortHelp").innerHTML = " Suggestion: <b> " + data + " </b> <br> ";
+                                        //document.getElementById("shortHelp").innerHTML = " Suggestion: " + data + " <br> ";
+                                        researchSentences.push(data);
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
 
 
-                    console.log("Wiki: " + wikiLink);
+                        console.log("Wiki: " + wikiLink);
+                    }
                 }
-            }
-        });
+            });
 
         }
 
@@ -1412,8 +1363,6 @@ function getLast3Words(str) {
     if (str.trim().split(" ").reverse()[0]) {
         return str.trim().split(" ").reverse()[0];
     }
-
-
 
 
 }
@@ -2115,7 +2064,6 @@ $(document)
         rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
         this.rows = minRows + rows + 1;
     });
-
 
 
 function getLast5Words(str) {

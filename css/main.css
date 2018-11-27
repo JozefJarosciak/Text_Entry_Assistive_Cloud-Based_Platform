@@ -6,7 +6,6 @@ body {
     max-width: 1366px;
 }
 
-
 .container {
 }
 
@@ -14,10 +13,8 @@ body {
     min-width: 10rem;
 }
 
-
-
 #topHeaderTable {
-    width:100%;
+    width: 100%;
 }
 
 #form_container {
@@ -25,7 +22,7 @@ body {
 }
 
 #statsBox {
-    width:560px;
+    width: 560px;
     align-text: left;
     border: 1px solid #e7e7e7;
     align-content: end;
@@ -59,12 +56,12 @@ body {
     flex: 0 1 20px;
     /*justify-content: center;*/
     background: #b0ebfa;
-    margin:auto;
+    margin: auto;
 }
 
-#mynetwork{
+#mynetwork {
     height: 800px;
-    margin:fill;
+    margin: fill;
     display: flex;
     flex-flow: column;
     flex: 1 1 auto;
@@ -75,7 +72,7 @@ body {
     border: 1px dotted grey;
 }
 
-transcribeTextWrapper{
+transcribeTextWrapper {
     text-align: center;
     display: block;
     margin-left: auto;
@@ -91,12 +88,11 @@ transcribeTextWrapper{
     margin-right: auto;
 }
 
-
 #transcribeText {
     font-family: "Helvetica", Times, serif;
     font-size: 16px;
-    border:1px solid lightblue;
-    width:98%;
+    border: 1px solid lightblue;
+    width: 98%;
     text-align: left;
     display: block;
     margin-left: auto;
@@ -104,14 +100,14 @@ transcribeTextWrapper{
     padding: 5px;
 }
 
-#resultHighlight{
+#resultHighlight {
     color: #008000;
 }
 
 #similarityCalculation {
-    border:1px solid #e68580;
+    border: 1px solid #e68580;
     height: 20px;
-    width:200px;
+    width: 200px;
     text-align: center;
     display: block;
     margin-left: auto;
@@ -119,29 +115,29 @@ transcribeTextWrapper{
 }
 
 #output2 {
-    border:1px solid #e68580;
+    border: 1px solid #e68580;
     height: 20px;
-    width:200px;
+    width: 200px;
     text-align: center;
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
 
-#wikiLookup{
+#wikiLookup {
     background: #ffebe6;
 }
 
-#wordCloud{
+#wordCloud {
     background: #ffebe6;
 }
 
-#appendEnabled2{
+#appendEnabled2 {
     width: 99%;
     border: 1px solid #c2c2c2;
 }
 
-#wordCloudWrapper{
+#wordCloudWrapper {
     width: 100%;
     border: 1px solid #c2c2c2;
 }
@@ -172,7 +168,7 @@ transcribeTextWrapper{
     color: white;
 }
 
-mark{
+mark {
     background: #ffcad2;
     color: black;
     text-decoration: line-through;
@@ -183,13 +179,13 @@ mark{
     max-height: 250px;
 }
 
-#topTable{
-    width:100%;
-    min-width:100%;
-    max-height:250px;
+#topTable {
+    width: 100%;
+    min-width: 100%;
+    max-height: 250px;
 }
 
-#shortHelp{
+#shortHelp {
     background-color: #d8e1ff;
     width: 100%;
     font-size: 14px;
@@ -197,10 +193,10 @@ mark{
     color: #280000;
 }
 
-h1,h2 {
+h1, h2 {
     color: #4a9aff;
     margin-bottom: 0;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 h3 {
@@ -211,14 +207,13 @@ h3 {
     font-size: 16px;
 }
 
-
-#detailHeader{
+#detailHeader {
     color: #494949;
     font-size: 12px;
     display: inline;
 }
 
-textarea{
+textarea {
     font-family: "Helvetica", Times, serif;
     font-size: 16px;
     overflow-x: hidden;
@@ -236,19 +231,20 @@ textarea{
     margin-left: auto;
     margin-right: auto;
 }
+
 .ui-menu .ui-menu-item {
     width: 99%;
 
-        font-family: "Helvetica", Times, serif;
-        font-size: 16px;
-        color: #222222;
-        box-shadow: 0 0 10px 100px #f0e0c3 inset;
-        text-align: center;
+    font-family: "Helvetica", Times, serif;
+    font-size: 16px;
+    color: #222222;
+    box-shadow: 0 0 10px 100px #f0e0c3 inset;
+    text-align: center;
 }
 
 th {
-font-size: 16px;
-align-content: right;
+    font-size: 16px;
+    align-content: right;
 }
 
 #quickHelp {
@@ -264,13 +260,14 @@ align-content: right;
     padding: 5px;
     overflow-y: auto;
     height: 250px;
-    float:left;
+    float: left;
 }
 
-#container{
+#container {
     width: 100%;
 }
-#floated{
+
+#floated {
     float: left;
     width: 100px;
     padding: 10px;
@@ -293,7 +290,7 @@ align-content: right;
     width: 100%;
 }
 
-#leftcolumn,#rightcolumn {
+#leftcolumn, #rightcolumn {
     border: 1px solid white;
     float: left;
     min-height: 250px;
@@ -301,47 +298,79 @@ align-content: right;
 }
 
 .onoffswitch {
-    position: relative; width: 60px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    position: relative;
+    width: 60px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
+
 .onoffswitch-checkbox {
     display: none;
 }
+
 .onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #999999; border-radius: 20px;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #999999;
+    border-radius: 20px;
 }
+
 .onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
+    display: block;
+    width: 200%;
+    margin-left: -100%;
     transition: margin 0.3s ease-in 0s;
 }
+
 .onoffswitch-inner:before, .onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 17px; padding: 0; line-height: 17px;
-    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+    display: block;
+    float: left;
+    width: 50%;
+    height: 17px;
+    padding: 0;
+    line-height: 17px;
+    font-size: 14px;
+    color: white;
+    font-family: Trebuchet, Arial, sans-serif;
+    font-weight: bold;
     box-sizing: border-box;
 }
+
 .onoffswitch-inner:before {
     content: "ON";
     padding-left: 10px;
-    background-color: #34A7C1; color: #FFFFFF;
+    background-color: #34A7C1;
+    color: #FFFFFF;
 }
+
 .onoffswitch-inner:after {
     content: "OFF";
     padding-right: 10px;
-    background-color: #EEEEEE; color: #999999;
+    background-color: #EEEEEE;
+    color: #999999;
     text-align: right;
 }
+
 .onoffswitch-switch {
-    display: block; width: 11px; margin: 3px;
+    display: block;
+    width: 11px;
+    margin: 3px;
     background: #FFFFFF;
-    position: absolute; top: 0; bottom: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
     right: 39px;
-    border: 2px solid #999999; border-radius: 20px;
+    border: 2px solid #999999;
+    border-radius: 20px;
     transition: all 0.3s ease-in 0s;
 }
+
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
     margin-left: 0;
 }
+
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px;
 }

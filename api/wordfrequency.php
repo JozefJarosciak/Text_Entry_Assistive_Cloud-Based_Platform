@@ -1,51 +1,29 @@
 <?php
 error_reporting(0);
-
-
 $data = htmlspecialchars(($_POST["q"]));
-
-//$data = 'Ottawa - Wikipedia Ottawa is the Ottawa capital Ottawa-bb city of the the Canada. It stands on the south bank of the Ottawa River ... O Origin of the names of Canada’s provincial and territorial ... Origin of the names of Canada’s provincial and territorial capitals. Ottawa, Canada; ... The city adopted its name from ... It became the capital of the Northwest ... O Capital Cities of Canada - ThoughtCo Canada has 10 provinces and three territories, each with its own capital. Here are quick facts about the history and lifestyle of each. C';
 $data = removeCommonWords($data);
-//$data = preg_replace("/[^[:alnum:][:space:]]/u", '', $data);
 $data = preg_replace('/[^ \w-]/', '', $data);
-
-//echo $data."<hr>";
-
-
-
-$words = explode(' ',$data);
+$words = explode(' ', $data);
 $finArray = array_count_values($words);
 arsort($finArray);
-
-foreach ($finArray as $key=>&$value) {
+foreach ($finArray as $key => &$value) {
     if (strlen($key) <= 3) {
         unset($finArray[$key]);
     }
 }
-
-/*
-print "<pre>";
-print_r( $finArray );
-print "</pre>";
-*/
-
-
-
 $sentence = "";
-$ii=0;
-foreach($finArray as $key => $val) {
+$ii = 0;
+foreach ($finArray as $key => $val) {
     $ii++;
-    if ($ii<=6) {
-        if (strlen(trim($key))>0) {
-        $sentence .= trim($key)." ";
+    if ($ii <= 6) {
+        if (strlen(trim($key)) > 0) {
+            $sentence .= trim($key) . " ";
         }
     }
 }
-
 echo trim($sentence);
-
-
-function removeCommonWords($input){
+function removeCommonWords($input)
+{
     $stopwords = array(
         'a',
         'about',
@@ -228,10 +206,7 @@ function removeCommonWords($input){
         'yourselves',
         'zero'
     );
-    return preg_replace('/\b('.implode('|',$stopwords).')\b/','',$input);
+    return preg_replace('/\b(' . implode('|', $stopwords) . ')\b/', '', $input);
 }
-
-
-
 
 ?>
