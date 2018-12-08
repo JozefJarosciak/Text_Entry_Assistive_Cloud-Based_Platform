@@ -967,13 +967,11 @@ function getDuckDuckGoArticle(nameForGraph) {
     let descriptionVariable = "";
     $.ajax({
         url: hostname + "/api/duckduckgo-api.php?q=" + nameForGraph, success: function (data) {
-            //$.ajax({ url: hostname + "/api/bing-text-analytics.php?q=" + lastLine, success: function(data) {
 
             let dataFinal = data.split("|");
-
             descriptionVariable = dataFinal[3];
-            if (dataFinal[1]) {
 
+            if (dataFinal[1]) {
 
                 let nameForGraph = dataFinal[0];
                 if (nameForGraph) {
@@ -1049,13 +1047,13 @@ function getDuckDuckGoArticle(nameForGraph) {
     //Leading paragraph
     let urlForMoreInfo = "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + nameForGraph.replace(" ", "_") + "&callback=?";
 
-
     $.ajax({
         type: "GET",
         url: urlForMoreInfo,
         contentType: "application/json; charset=utf-8",
         async: false,
         dataType: "json",
+
         success: function (data, textStatus, jqXHR) {
             if (data) {
                 try {

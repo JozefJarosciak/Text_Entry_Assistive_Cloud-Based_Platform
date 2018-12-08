@@ -17,7 +17,6 @@ $data = json_decode($json, true);
 try {
     if ($data) {
         if ($data['query']['search'][0]['title']) {
-            // $result =  str_replace(" ","_",$data['query']['search'][0]['title']);
             $result = $data['query']['search'][0]['title'];
             echo $result;
         }
