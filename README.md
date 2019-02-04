@@ -5,5 +5,11 @@ The primary goal of this alpha prototype prototype is to create a real-time text
 # Project Information
 Prototype for the UOL dissertation project by Jozef Jarosciak (H00058995). 
 
+# Screenshot
+![alt text](https://www.joe0.com/wp-content/uploads/2019/02/img_5c58b6cb16a0d-1024x822.png)
+
+# Video Demo
+![alt text](https://www.youtube.com/watch?v=HM33M4QMMos)
+
 # Licensing
 GNU Affero General Public License v3.0.
